@@ -41,6 +41,12 @@ public class EnemyOneController : MonoBehaviour
         this.transform.position = Vector2.MoveTowards(this.transform.position, destination, moveSpeed*Time.deltaTime);
     }
 
+    //プレイヤー追尾範囲をSceneビューに表示
+    void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(this.transform.position, serchRadius);
+    }
+
     //衝突判定
     void OnCollisionEnter2D(Collision2D collision2D){
         if(collision2D.gameObject.tag == "Player"){//プレイヤーと衝突したら
