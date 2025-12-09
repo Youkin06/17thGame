@@ -4,35 +4,86 @@ using UnityEngine;
 
 public class JoystickMove : MonoBehaviour
 {
-    public float speed;
+    public float acceleration = 5f; // 加速力
+    public float maxSpeed = 10f;    // 最大速度
+    public float turnSpeed = 10f;   // 旋回速度（値が大きいほどキビキビ曲がる）
+
+    public float dashMultiplier = 1.5f;
+
+    private bool isMaxSpeed = false;
+    private float defaultDashDuration = 0.2f;
+    private float dashDuration = 0f;
     public DynamicJoystick dynamicJoystick;
     public Rigidbody2D rb;
 
-    public void FixedUpdate()
+    void FixedUpdate()
     {
-        // ジョイスティック入力値を取得
-        Vector3 direction = GetJoystickInput(dynamicJoystick);
+        Vector2 input = new Vector2(dynamicJoystick.Horizontal, dynamicJoystick.Vertical);
 
-        // 入力がある場合のみ処理
-        if (direction.sqrMagnitude > 0.01f) 
+        if (input.sqrMagnitude > 0.01f)
         {
-            // 1. 移動処理
-            rb.AddForce(direction * speed, ForceMode2D.Force);
-            
-            // 2. 回転処理
-            // 第1引数: Z軸をどこに向けるか（画面の奥 = Vector3.forward）
-            // 第2引数: Y軸（頭のてっぺん）をどこに向けるか（進行方向 = direction）
-            Quaternion targetRotation = Quaternion.LookRotation(Vector3.forward, direction);
+            rb.drag = 0.5f;
 
-            // 3. スムーズに回転
-            float turnSpeed = 5f; 
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
+            // 1. 入力方向（行きたい方向）
+            Vector2 targetDir = input.normalized;
+
+            // 2. 現在の速度（大きさ）を取得
+            float currentSpeed = rb.velocity.magnitude;
+
+            // 3. 速度の「大きさ」だけを計算（方向転換中でも加速させる）
+            //    現在の速度に加速分を足す。ただし0からスタートする場合も考慮して最低限の初速を与えるか、
+            //    シンプルに現在の速度+加速で計算する
+            float nextSpeed = Mathf.Min(currentSpeed + acceleration * Time.fixedDeltaTime, maxSpeed);
+
+            // もし停止状態からなら、最低限の動き出し速度を保証（オプション）
+            if (nextSpeed < 1f) nextSpeed = 1f;
+
+            // 4. 「向き」だけを滑らかに変える
+            //    LerpではなくRotateTowardsを使うことで、ベクトルの長さを保ったまま回転させる
+            //    Vector2はVector3として扱えるため、Vector3.RotateTowardsを使用
+            Vector2 currentDir = rb.velocity.normalized;
+            if (currentDir == Vector2.zero) currentDir = targetDir; // 停止時は入力方向を現在地とする
+
+            Vector2 newDir = Vector3.RotateTowards(currentDir, targetDir, turnSpeed * Time.fixedDeltaTime, 0f);
+            newDir.Normalize(); // 念のため正規化
+
+            // 5. 新しい向き × 計算した速度 を適用
+            rb.velocity = newDir * nextSpeed;
+
+            // 6. 見た目（画像の回転）
+            float angle = Mathf.Atan2(newDir.y, newDir.x) * Mathf.Rad2Deg - 90f;
+            transform.rotation = Quaternion.RotateTowards(
+                transform.rotation,
+                Quaternion.Euler(0, 0, angle),
+                720 * Time.deltaTime
+            );
+            if (nextSpeed >= maxSpeed)
+            {
+                isMaxSpeed = true;
+                dashDuration = defaultDashDuration;
+                Debug.Log("最高速度に到達");
+
+            }
+        }
+        else
+        {
+            if (isMaxSpeed&&dashDuration>0)
+            {
+            
+                rb.velocity = rb.velocity.normalized * maxSpeed* dashMultiplier;
+                dashDuration-=Time.fixedDeltaTime;
+            }
+            else{
+                dashDuration = defaultDashDuration;
+                isMaxSpeed = false;
+                rb.drag = 7.5f;
+            }
         }
     }
 
-    public Vector3 GetJoystickInput(DynamicJoystick dynamicJoystick)
+    public Vector2 GetJoystickInput(DynamicJoystick dynamicJoystick)
     {
-        Vector3 direction = Vector3.up * dynamicJoystick.Vertical + Vector3.right * dynamicJoystick.Horizontal;
-        return direction.normalized; // 正規化して方向ベクトルに
+        Vector2 direction = new Vector2(dynamicJoystick.Horizontal, dynamicJoystick.Vertical);
+        return direction.normalized;
     }
 }

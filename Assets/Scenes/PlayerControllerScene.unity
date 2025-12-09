@@ -221,7 +221,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d442ca9367c3e40d5a9e314afd30c43b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
+  speed: 10
+  maxSpeed: 10
   dynamicJoystick: {fileID: 162252394}
   rb: {fileID: 152552187}
 --- !u!50 &152552187
