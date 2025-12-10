@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class JoystickMove : MonoBehaviour
 {
     public float acceleration = 5f; // 加速力
-    public float maxSpeed = 10f;    // 最大速度
-    public float turnSpeed = 10f;   // 旋回速度（値が大きいほどキビキビ曲がる）
+    public float maxSpeed = 10f; // 最大速度
+    public float turnSpeed = 10f; // 旋回速度（値が大きいほどキビキビ曲がる）
 
     public float dashMultiplier = 1.5f;
 
@@ -31,8 +32,7 @@ public class JoystickMove : MonoBehaviour
             float currentSpeed = rb.velocity.magnitude;
 
             // 3. 速度の「大きさ」だけを計算（方向転換中でも加速させる）
-            //    現在の速度に加速分を足す。ただし0からスタートする場合も考慮して最低限の初速を与えるか、
-            //    シンプルに現在の速度+加速で計算する
+            //    現在の速度に加速分を足す。accelerationは1秒あたりの速度増加量（線形加速）
             float nextSpeed = Mathf.Min(currentSpeed + acceleration * Time.fixedDeltaTime, maxSpeed);
 
             // もし停止状態からなら、最低限の動き出し速度を保証（オプション）
@@ -77,6 +77,7 @@ public class JoystickMove : MonoBehaviour
                 dashDuration = defaultDashDuration;
                 isMaxSpeed = false;
                 rb.drag = 7.5f;
+                rb.angularDrag = 7.5f;
             }
         }
     }
@@ -85,5 +86,11 @@ public class JoystickMove : MonoBehaviour
     {
         Vector2 direction = new Vector2(dynamicJoystick.Horizontal, dynamicJoystick.Vertical);
         return direction.normalized;
+    }
+
+    public void OnCollisionEnter2D(Collision2D collision){
+        if(collision.gameObject.tag == "Enemy" && isMaxSpeed&&dashDuration>0){
+            Debug.Log("ダッシュ状態でEnemyに衝突した");
+        }
     }
 }
