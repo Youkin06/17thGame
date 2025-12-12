@@ -55,30 +55,55 @@ public class JoystickMove : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 状態遷移を一元管理するメソッド
+    /// </summary>
+    /// <param name="newState">遷移先の状態</param>
+    /// <param name="reason">状態遷移の理由（ログ出力用、オプション）</param>
+    private void ChangeState(PlayerMoveState newState, string reason = "")
+    {
+        if (currentState == newState) return; // 同じ状態への遷移は無視
+
+        previousState = currentState;
+        currentState = newState;
+
+        // 状態遷移のログ出力
+        string logMessage = $"状態遷移: {previousState} -> {currentState}";
+        if (!string.IsNullOrEmpty(reason))
+        {
+            logMessage += $" ({reason})";
+        }
+        Debug.Log(logMessage);
+
+        // 将来的に追加できる処理例：
+        // - アニメーションの切り替え
+        // - SEの再生
+        // - イベントの発火
+        // OnStateChanged?.Invoke(previousState, currentState);
+    }
+
     private void UpdateState(bool hasInput)
     {
-        previousState = currentState;
-
         switch (currentState)
         {
             case PlayerMoveState.Idle:
                 if (hasInput)
                 {
-                    currentState = PlayerMoveState.Accelerating;
+                    ChangeState(PlayerMoveState.Accelerating);
                 }
                 break;
 
             case PlayerMoveState.Accelerating:
                 if (!hasInput)
                 {
-                    currentState = PlayerMoveState.Idle;
+                    ChangeState(PlayerMoveState.Idle);
                 }
                 break;
 
             case PlayerMoveState.MaxSpeed:
                 if (!hasInput)
                 {
-                    currentState = PlayerMoveState.Dashing;
+                    ChangeState(PlayerMoveState.Dashing);
                 }
                 break;
 
@@ -86,16 +111,10 @@ public class JoystickMove : MonoBehaviour
                 dashDuration -= Time.fixedDeltaTime;
                 if (dashDuration <= 0)
                 {
-                    currentState = PlayerMoveState.Idle;
+                    ChangeState(PlayerMoveState.Idle, "突進時間終了");
                 }
                 // 突進中は操作不能のため、入力による状態遷移を無視
                 break;
-        }
-
-        // 状態が変わったときにログを出力
-        if (previousState != currentState)
-        {
-            Debug.Log($"状態遷移: {previousState} -> {currentState}");
         }
     }
 
@@ -140,10 +159,8 @@ public class JoystickMove : MonoBehaviour
         // 最高速度到達チェック
         if (nextSpeed >= maxSpeed)
         {
-            previousState = currentState;
-            currentState = PlayerMoveState.MaxSpeed;
+            ChangeState(PlayerMoveState.MaxSpeed, "最高速度に到達");
             dashDuration = defaultDashDuration;
-            Debug.Log($"状態遷移: {previousState} -> {currentState} (最高速度に到達)");
         }
     }
 
@@ -206,6 +223,20 @@ public class JoystickMove : MonoBehaviour
         if (collision.gameObject.tag == "Enemy" && currentState == PlayerMoveState.Dashing)
         {
             Debug.Log("ダッシュ状態でEnemyに衝突した");
+            rb.velocity = Vector2.zero;
+            
+            // 入力があれば即座にAccelerating状態に遷移、なければIdle状態に遷移
+            Vector2 input = new Vector2(dynamicJoystick.Horizontal, dynamicJoystick.Vertical);
+            bool hasInput = input.sqrMagnitude > 0.01f;
+            
+            if (hasInput)
+            {
+                ChangeState(PlayerMoveState.Accelerating, "Enemy衝突後、入力あり");
+            }
+            else
+            {
+                ChangeState(PlayerMoveState.Idle, "Enemy衝突により中断");
+            }
         }
     }
 }
