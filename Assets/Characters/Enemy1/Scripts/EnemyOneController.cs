@@ -9,7 +9,6 @@ public class EnemyOneController : MonoBehaviour
     [SerializeField]float serchRadius = 5.0f;//移動を始める距離
     [SerializeField]float moveSpeed = 1.0f;//移動するスピード
     [SerializeField]float angleOffset = 270f;//回転の調整(初期の向き)
-    [SerializeField] Transform target;
     NavMeshAgent agent;
     // Start is called before the first frame update
     void Start()
@@ -31,7 +30,7 @@ public class EnemyOneController : MonoBehaviour
         if (distance < serchRadius)//距離が指定距離以下なら
         {
             RotateToTarget(playerPos);//プレイヤーの方向を向かせる
-            MoveToPlayer();//プレイヤーの位置まで移動
+            MoveToPlayer(playerPos);//プレイヤーの位置まで移動
         }
         else
         {
@@ -59,11 +58,11 @@ public class EnemyOneController : MonoBehaviour
     }
 
     //スクリプトのオブジェクトの位置を引数の位置まで移動するメソッド
-    void MoveToPlayer()
+    void MoveToPlayer(Vector3 targetPos)
     {
         // this.transform.position = Vector2.MoveTowards(this.transform.position, destination, moveSpeed*Time.deltaTime);
         agent.speed=moveSpeed;
-        agent.destination = target.position;
+        agent.destination = targetPos;
     }
 
     void StopMove()
