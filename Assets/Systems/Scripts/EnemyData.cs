@@ -2,6 +2,8 @@ using UnityEngine;
 
 public enum EnemyType {
     Normal,     // ただ歩くだけ
+
+    Fast,       // 早く移動する
     Dasher,     // プレイヤーを見たら突進する
     Shooter     // 弾を撃つ
 }

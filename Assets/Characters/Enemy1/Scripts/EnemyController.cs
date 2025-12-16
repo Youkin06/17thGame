@@ -4,20 +4,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyOneController : MonoBehaviour
+public class EnemyController : MonoBehaviour
 {
-    public EnemyData myData;
+    public EnemyData enemyData;
     [SerializeField]float serchRadius = 5.0f;//移動を始める距離
-    [SerializeField]float moveSpeed = 1.0f;//移動するスピード
     [SerializeField]float angleOffset = 270f;//回転の調整(初期の向き)
+    private float moveSpeed;//移動するスピード
+
     NavMeshAgent agent;
     // Start is called before the first frame update
     void Start()
     {
-        if (myData != null)
+        if (enemyData != null)
         {
-            Debug.Log($"この敵のタイプは: {myData.enemyType} です");
-            Debug.Log($"移動スピードは: {myData.moveSpeed} です");
+            Debug.Log($"この敵のタイプは: {enemyData.enemyType} です");
+            Debug.Log($"移動スピードは: {enemyData.moveSpeed} です");
+            moveSpeed = enemyData.moveSpeed;
         }
 
 

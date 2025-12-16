@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 31ab3fb5f00e245378775e31702ba603, type: 3}
-  m_Name: Enemy1Data
+  m_Name: FastEnemy
   m_EditorClassIdentifier: 
-  enemyType: 0
-  moveSpeed: 1
+  enemyType: 1
+  moveSpeed: 2
   bodyColor: {r: 1, g: 0, b: 0, a: 0}
   hijackDuration: 10
