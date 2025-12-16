@@ -6,6 +6,7 @@ using UnityEngine.AI;
 
 public class EnemyOneController : MonoBehaviour
 {
+    public EnemyData myData;
     [SerializeField]float serchRadius = 5.0f;//移動を始める距離
     [SerializeField]float moveSpeed = 1.0f;//移動するスピード
     [SerializeField]float angleOffset = 270f;//回転の調整(初期の向き)
@@ -13,6 +14,13 @@ public class EnemyOneController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (myData != null)
+        {
+            Debug.Log($"この敵のタイプは: {myData.enemyType} です");
+            Debug.Log($"移動スピードは: {myData.moveSpeed} です");
+        }
+
+
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;//2DなのでNavMeshAgentの自動回転はオフにする
         agent.updateUpAxis = false;//2DなのでNavMeshAgentの立ち上がりはオフにする
