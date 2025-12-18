@@ -156,7 +156,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: b881418953c1349f3a143811649d9c54, type: 2}
-  serchRadius: 5
+  serchRadius: 6
+  attackRadius: 3
   turnSpeed: 180
   angleOffset: 270
   dashSpeed: 5
@@ -480,6 +481,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: b881418953c1349f3a143811649d9c54, type: 2}
   serchRadius: 5
+  attackRadius: 3
   turnSpeed: 180
   angleOffset: 270
   dashSpeed: 5

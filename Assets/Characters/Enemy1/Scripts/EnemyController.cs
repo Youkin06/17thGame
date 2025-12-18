@@ -7,7 +7,8 @@ using UnityEngine.AI;
 public class EnemyController : MonoBehaviour
 {
     public EnemyData enemyData;
-    [SerializeField] float serchRadius = 5.0f;//移動を始める距離
+    [SerializeField] float serchRadius = 6.0f;//移動を始める距離
+    [SerializeField] float attackRadius = 3.0f;//移動を始める距離
     [SerializeField] float turnSpeed = 180f;//回転速度
     [SerializeField] float angleOffset = 270f;//回転の調整(初期の向き)
     [SerializeField] float dashSpeed = 5.0f;//突進速度
@@ -43,11 +44,18 @@ public class EnemyController : MonoBehaviour
 
         float distance = CheckDistance(thisPos, playerPos);//プレイヤーまでの距離を算出
 
-        if (distance < serchRadius)//距離が指定距離以下なら
+        if (distance < attackRadius)
         {
             if (!isAttacking)
             {
                 StartCoroutine(AttackToTarget(playerPos));
+            }
+        }
+        else if (distance < serchRadius)//距離が指定距離以下なら
+        {
+            if (!isAttacking)
+            {
+                MoveToTarget(playerPos);
             }
         }
         else
@@ -65,7 +73,7 @@ public class EnemyController : MonoBehaviour
     }
 
     //ターゲットに向きを合わせる(2DなのでNavMeshAgentでは動かない)
-    IEnumerator RotateToTarget(Vector3 targetPosition)
+    bool RotateToTarget(Vector3 targetPosition)
     {
         //ターゲットとこのオブジェクトの座標の距離をベクターで求める
         Vector3 direction = targetPosition - transform.position;
@@ -73,16 +81,15 @@ public class EnemyController : MonoBehaviour
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         // Z軸（2Dの回転軸）を回す
         Quaternion targetRotation = Quaternion.Euler(0, 0, angle + angleOffset);//何度回転すればいいかを求める
-        while (transform.rotation != targetRotation)//目標の角度になるまで繰り返す
-        {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);//turnSpeedの速度で目標の角度まで徐々に回転
-            yield return null;//1フレーム待機
-        }
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);//turnSpeedの速度で目標の角度まで徐々に回転
+
+        return Quaternion.Angle(transform.rotation, targetRotation) > 0.1f;
     }
 
     //スクリプトのオブジェクトの位置を引数の位置まで移動するメソッド
     void MoveToTarget(Vector3 targetPos)
     {
+        RotateToTarget(targetPos);
         // this.transform.position = Vector2.MoveTowards(this.transform.position, destination, moveSpeed*Time.deltaTime);
         agent.speed = moveSpeed;
         agent.destination = targetPos;
@@ -111,7 +118,10 @@ public class EnemyController : MonoBehaviour
 
         //1.プレイヤーの向きに回転する
         Debug.Log("回転");
-        yield return StartCoroutine(RotateToTarget(attackTargetPos));//回転のコルーチンの開始
+        while (RotateToTarget(attackTargetPos))
+        {
+            yield return null;
+        }
 
         //2.待機
         Debug.Log("待機");
@@ -140,6 +150,10 @@ public class EnemyController : MonoBehaviour
         //探索範囲の表示
         Gizmos.color = Color.black;
         Gizmos.DrawWireSphere(this.transform.position, serchRadius);
+
+        //探索範囲の表示
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(this.transform.position, attackRadius);
 
         //敵の向きの表示(初期は上向き)
         float rayLength = 3.0f;
