@@ -282,12 +282,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 158122056}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a1dc58f5c8f041238e88e3b61be4dcd, type: 3}
+  m_Script: {fileID: 11500000, guid: e94fe9cbb26854404ac877be5955be9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myData: {fileID: 0}
+  enemyData: {fileID: 11400000, guid: b881418953c1349f3a143811649d9c54, type: 2}
   serchRadius: 5
-  moveSpeed: 1
   angleOffset: 270
 --- !u!195 &158122062
 NavMeshAgent:
