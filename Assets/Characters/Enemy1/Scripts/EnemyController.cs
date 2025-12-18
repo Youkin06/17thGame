@@ -8,6 +8,7 @@ public class EnemyController : MonoBehaviour
 {
     public EnemyData enemyData;
     [SerializeField]float serchRadius = 5.0f;//移動を始める距離
+    [SerializeField]float turnSpeed = 180f;//回転速度
     [SerializeField]float angleOffset = 270f;//回転の調整(初期の向き)
     private float moveSpeed;//移動するスピード
 
@@ -64,7 +65,8 @@ public class EnemyController : MonoBehaviour
         //x方向の距離とy方向の距離を使って三角関数で間の角度を求める(度数に変換)
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         // Z軸（2Dの回転軸）を回す
-        transform.rotation = Quaternion.Euler(0, 0, angle + angleOffset);
+        Quaternion targetRotation = Quaternion.Euler(0, 0, angle + angleOffset);//何度回転すればいいかを求める
+        transform.rotation = Quaternion.RotateTowards(transform.rotation,targetRotation,turnSpeed*Time.deltaTime);//turnSpeedの速度で目標の角度まで徐々に回転
     }
 
     //スクリプトのオブジェクトの位置を引数の位置まで移動するメソッド
