@@ -25,11 +25,50 @@ public class JoystickMove : MonoBehaviour
     private float dashDuration = 0f;
     public DynamicJoystick dynamicJoystick;
     public Rigidbody2D rb;
+    public PlayerUIController playerUIController; // UIコントローラーへの参照
+    
+    // 移動距離の追跡
+    private float totalDistanceMoved = 0f;
+    private Vector2 lastPosition;
+    
+    void Start()
+    {
+        lastPosition = rb.position;
+    }
+    
+    /// <summary>
+    /// 累積移動距離を取得
+    /// </summary>
+    public float GetTotalDistanceMoved()
+    {
+        return totalDistanceMoved;
+    }
+    
+    /// <summary>
+    /// 移動距離をリセット
+    /// </summary>
+    public void ResetDistance()
+    {
+        totalDistanceMoved = 0f;
+        lastPosition = rb.position;
+    }
 
     void FixedUpdate()
     {
         Vector2 input = new Vector2(dynamicJoystick.Horizontal, dynamicJoystick.Vertical);
         bool hasInput = input.sqrMagnitude > 0.01f;
+
+        // 移動距離の計算
+        Vector2 currentPosition = rb.position;
+        float distanceThisFrame = Vector2.Distance(lastPosition, currentPosition);
+        totalDistanceMoved += distanceThisFrame;
+        lastPosition = currentPosition;
+
+        // 移動があった場合、UIを更新
+        if (distanceThisFrame > 0.001f && playerUIController != null)
+        {
+            playerUIController.OnPlayerMoved(distanceThisFrame);
+        }
 
         // 状態遷移の処理
         UpdateState(hasInput);
