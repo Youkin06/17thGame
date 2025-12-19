@@ -7,7 +7,7 @@ public class PlayerUIController : MonoBehaviour
 {
     public bool isHijacking = false;
     public Slider slider;
-    public float hpDecreaseRate = 0.1f;
+    public float timeDecreaseRate = 0.1f;
     public float distanceDecreaseRate = 0.01f; // 移動距離1単位あたりの減少率
 
     void Start(){
@@ -21,7 +21,7 @@ public class PlayerUIController : MonoBehaviour
     {
         if (isHijacking)
         {
-            slider.value -= Time.deltaTime * hpDecreaseRate;
+            slider.value -= Time.deltaTime * timeDecreaseRate;
         }
 
         if (slider.value <= 0)
