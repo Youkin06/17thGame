@@ -228,6 +228,7 @@ MonoBehaviour:
   dashMultiplier: 1.5
   dynamicJoystick: {fileID: 162252394}
   rb: {fileID: 152552187}
+  playerUIController: {fileID: 0}
 --- !u!50 &152552187
 Rigidbody2D:
   serializedVersion: 4
