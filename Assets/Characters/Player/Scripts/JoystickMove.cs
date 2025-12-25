@@ -95,6 +95,9 @@ public class JoystickMove : MonoBehaviour
             {
                 ReleaseHijackedEnemy();
             }
+            
+            // 乗っ取り中は敵の向きをプレイヤーに合わせる（親子関係を利用）
+            hijackedEnemy.transform.localRotation = Quaternion.identity;
         }
 
         // 状態遷移の処理
