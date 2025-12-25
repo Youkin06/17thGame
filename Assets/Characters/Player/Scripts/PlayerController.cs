@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
         // カーブが未設定の場合は初期化
         if (zoomCurve == null || zoomCurve.length < 2)
         {
-            zoomCurve = AnimationCurve.Linear(0, minZoomSize, joystickMove.maxSpeed, maxZoomSize);
+            zoomCurve = AnimationCurve.Linear(0, minZoomSize, joystickMove.playerMaxSpeed, maxZoomSize);
         }
         else
         {
@@ -54,8 +54,8 @@ public class PlayerController : MonoBehaviour
             keys[0].time = 0;
             keys[0].value = minZoomSize;
 
-            // 最後のキー: (maxSpeed, maxZoomSize)
-            keys[keys.Length - 1].time = joystickMove.maxSpeed;
+            // 最後のキー: (playerMaxSpeed, maxZoomSize)
+            keys[keys.Length - 1].time = joystickMove.playerMaxSpeed;
             keys[keys.Length - 1].value = maxZoomSize;
 
             // 更新したキーを適用

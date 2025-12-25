@@ -17,8 +17,10 @@ public class EnemyController : MonoBehaviour
     [SerializeField] float attackCoolDown = 3f;//攻撃してから次に攻撃を始めるまでの時間
     private float moveSpeed;//移動するスピード
     private bool isAttacking;
+    private bool isHijacked = false; // 乗っ取り中フラグ
 
     NavMeshAgent agent;
+    private Rigidbody2D enemyRb; // Rigidbody2Dへの参照
     // Start is called before the first frame update
     void Start()
     {
@@ -33,11 +35,15 @@ public class EnemyController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;//2DなのでNavMeshAgentの自動回転はオフにする
         agent.updateUpAxis = false;//2DなのでNavMeshAgentの立ち上がりはオフにする
+        enemyRb = GetComponent<Rigidbody2D>(); // Rigidbody2Dを取得
     }
 
     // Update is called once per frame
     void Update()
     {
+        // 乗っ取り中は処理をスキップ
+        if (isHijacked) return;
+
         GameObject player = GameObject.FindWithTag("Player");//プレイヤーオブジェクトの取得
         Vector2 thisPos = this.gameObject.transform.position;//オブジェクト自身の位置
         Vector2 playerPos = player.transform.position;//プレイヤーの位置
@@ -162,13 +168,40 @@ public class EnemyController : MonoBehaviour
         Gizmos.DrawRay(currentPos, transform.up * rayLength);
     }
 
-    //衝突判定
-    void OnCollisionEnter2D(Collision2D collision2D)
+
+
+    /// <summary>
+    /// 追跡動作を停止（乗っ取り時に呼ばれる）
+    /// </summary>
+    public void StopTracking()
     {
-        if (collision2D.gameObject.tag == "Player")
-        {//プレイヤーと衝突したら
-            Debug.Log("プレイヤーと衝突");
-            Destroy(this.gameObject);//このオブジェクト自身を消す
+        isHijacked = true;
+        if (agent != null)
+        {
+            agent.enabled = false;
         }
+        if (enemyRb != null)
+        {
+            enemyRb.simulated = false; // 物理シミュレーションを無効化
+        }
+        StopAllCoroutines();
+        isAttacking = false;
+    }
+
+    /// <summary>
+    /// 乗っ取り解除時に呼ばれる
+    /// </summary>
+    public void ReleaseEnemy()
+    {
+        isHijacked = false;
+        if (agent != null)
+        {
+            agent.enabled = true;
+        }
+        if (enemyRb != null)
+        {
+            enemyRb.simulated = true; // 物理シミュレーションを再有効化
+        }
+        transform.SetParent(null);
     }
 }
