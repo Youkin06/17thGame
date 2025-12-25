@@ -42,4 +42,12 @@ public class PlayerUIController : MonoBehaviour
             slider.value -= distanceDelta * distanceDecreaseRate;
         }
     }
+    
+    /// <summary>
+    /// スライダー値を全回復（1.0）にリセット
+    /// </summary>
+    public void ResetHijackTimer()
+    {
+        slider.value = 1f;
+    }
 }

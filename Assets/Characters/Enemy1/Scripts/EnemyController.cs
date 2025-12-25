@@ -17,6 +17,8 @@ public class EnemyController : MonoBehaviour
     [SerializeField] float attackCoolDown = 3f;//攻撃してから次に攻撃を始めるまでの時間
     private float moveSpeed;//移動するスピード
     private bool isAttacking;
+    private bool isHijacked = false; // 乗っ取り中フラグ
+    private Rigidbody2D enemyRb; // Rigidbody2Dへの参照
 
     NavMeshAgent agent;
     // Start is called before the first frame update
@@ -33,11 +35,15 @@ public class EnemyController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;//2DなのでNavMeshAgentの自動回転はオフにする
         agent.updateUpAxis = false;//2DなのでNavMeshAgentの立ち上がりはオフにする
+        enemyRb = GetComponent<Rigidbody2D>(); // Rigidbody2Dを取得
     }
 
     // Update is called once per frame
     void Update()
     {
+        // 乗っ取り中は処理をスキップ
+        if (isHijacked) return;
+
         GameObject player = GameObject.FindWithTag("Player");//プレイヤーオブジェクトの取得
         Vector2 thisPos = this.gameObject.transform.position;//オブジェクト自身の位置
         Vector2 playerPos = player.transform.position;//プレイヤーの位置
@@ -89,6 +95,12 @@ public class EnemyController : MonoBehaviour
     //スクリプトのオブジェクトの位置を引数の位置まで移動するメソッド
     void MoveToTarget(Vector3 targetPos)
     {
+        // NavMeshAgentが有効で、NavMesh上に配置されている場合のみSetDestinationを呼ぶ
+        if (agent == null || !agent.enabled || !agent.isOnNavMesh)
+        {
+            return;
+        }
+        
         RotateToTarget(targetPos);
         // this.transform.position = Vector2.MoveTowards(this.transform.position, destination, moveSpeed*Time.deltaTime);
         agent.speed = moveSpeed;
@@ -134,7 +146,30 @@ public class EnemyController : MonoBehaviour
         //4.クールタイム
         Debug.Log("クールタイム");
         yield return new WaitForSeconds(attackCoolDown);//クールタイムの秒数まつ
-        agent.enabled = true;//NavMeshAgentを有効に
+        
+        // NavMesh上に最も近い位置を探す
+        UnityEngine.AI.NavMeshHit hit;
+        Vector3 currentPos = transform.position;
+        float searchRadius = 5f; // 検索半径
+        
+        if (UnityEngine.AI.NavMesh.SamplePosition(currentPos, out hit, searchRadius, UnityEngine.AI.NavMesh.AllAreas))
+        {
+            // NavMesh上に近い位置が見つかった場合、その位置に移動
+            transform.position = hit.position;
+            agent.enabled = true;//NavMeshAgentを有効に
+            // NavMesh上に強制的に再配置（Warpを使用）
+            if (!agent.isOnNavMesh)
+            {
+                agent.Warp(hit.position);
+            }
+        }
+        else
+        {
+            // NavMesh上に近い位置が見つからない場合、エージェントを有効化しない
+            Debug.LogWarning($"攻撃終了後、NavMesh上に近い位置が見つかりませんでした。現在位置: {currentPos}");
+            // エージェントを有効化しないまま、攻撃フラグをオフにする
+        }
+        
         isAttacking = false;//攻撃中のフラッグをオフ
         Debug.Log("攻撃ループ終了");
     }
@@ -162,13 +197,58 @@ public class EnemyController : MonoBehaviour
         Gizmos.DrawRay(currentPos, transform.up * rayLength);
     }
 
-    //衝突判定
-    void OnCollisionEnter2D(Collision2D collision2D)
+
+
+    /// <summary>
+    /// 追跡動作を停止（乗っ取り時に呼ばれる）
+    /// </summary>
+    public void StopTracking()
     {
-        if (collision2D.gameObject.tag == "Player")
-        {//プレイヤーと衝突したら
-            Debug.Log("プレイヤーと衝突");
-            Destroy(this.gameObject);//このオブジェクト自身を消す
+        isHijacked = true;
+        if (agent != null)
+        {
+            agent.enabled = false;
+        }
+        if (enemyRb != null)
+        {
+            enemyRb.simulated = false; // 物理シミュレーションを無効化
+        }
+        // Collider2Dを無効化（プレイヤー本体が次の敵に衝突できるようにする）
+        Collider2D col = GetComponent<Collider2D>();
+        if (col != null)
+        {
+            col.enabled = false;
+        }
+        StopAllCoroutines();
+        isAttacking = false;
+    }
+
+    /// <summary>
+    /// 乗っ取り解除時に呼ばれる
+    /// </summary>
+    public void ReleaseEnemy()
+    {
+        isHijacked = false;
+        transform.SetParent(null);
+        
+        if (agent != null)
+        {
+            agent.enabled = true;
+            // NavMesh上に強制的に再配置（Warpを使用）
+            if (!agent.isOnNavMesh)
+            {
+                agent.Warp(transform.position);
+            }
+        }
+        if (enemyRb != null)
+        {
+            enemyRb.simulated = true; // 物理シミュレーションを再有効化
+        }
+        // Collider2Dを再有効化
+        Collider2D col = GetComponent<Collider2D>();
+        if (col != null)
+        {
+            col.enabled = true;
         }
     }
 }

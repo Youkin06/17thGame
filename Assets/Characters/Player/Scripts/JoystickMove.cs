@@ -14,7 +14,8 @@ public enum PlayerMoveState
 public class JoystickMove : MonoBehaviour
 {
     public float acceleration = 5f; // 加速力
-    public float maxSpeed = 10f; // 最大速度
+    public float playerMaxSpeed = 10f; // プレイヤーのデフォルト速度（インスペクタで設定可能）
+    private float maxSpeed; // 実際に使用される速度値（内部管理）
     public float turnSpeed = 10f; // 旋回速度（値が大きいほどキビキビ曲がる）
 
     public float dashMultiplier = 1.5f;
@@ -31,9 +32,14 @@ public class JoystickMove : MonoBehaviour
     private float totalDistanceMoved = 0f;
     private Vector2 lastPosition;
     
+    // 乗っ取り関連
+    private EnemyController hijackedEnemy = null; // 乗っ取った敵への参照（nullチェックで乗っ取り状態を判定）
+    private float hijackTimer = 0f; // 乗っ取りタイマー
+    
     void Start()
     {
         lastPosition = rb.position;
+        maxSpeed = playerMaxSpeed; // 初期化
     }
     
     /// <summary>
@@ -68,6 +74,30 @@ public class JoystickMove : MonoBehaviour
         if (distanceThisFrame > 0.001f && playerUIController != null)
         {
             playerUIController.OnPlayerMoved(distanceThisFrame);
+        }
+
+        // maxSpeedの更新：乗っ取り中なら敵の速度、そうでなければプレイヤーのデフォルト速度
+        if (hijackedEnemy != null && hijackedEnemy.enemyData != null)
+        {
+            maxSpeed = hijackedEnemy.enemyData.moveSpeed; // 敵の速度を使用
+        }
+        else
+        {
+            maxSpeed = playerMaxSpeed; // プレイヤーのデフォルト速度を使用
+        }
+
+        // 乗っ取りタイマーの更新
+        if (hijackedEnemy != null)
+        {
+            hijackTimer += Time.fixedDeltaTime;
+            if (hijackedEnemy.enemyData != null
+                && hijackTimer >= hijackedEnemy.enemyData.hijackDuration)
+            {
+                ReleaseHijackedEnemy();
+            }
+            
+            // 乗っ取り中は敵の向きをプレイヤーに合わせる（親子関係を利用）
+            hijackedEnemy.transform.localRotation = Quaternion.identity;
         }
 
         // 状態遷移の処理
@@ -261,21 +291,118 @@ public class JoystickMove : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy" && currentState == PlayerMoveState.Dashing)
         {
-            Debug.Log("ダッシュ状態でEnemyに衝突した");
-            rb.velocity = Vector2.zero;
+            EnemyController enemy = collision.gameObject.GetComponent<EnemyController>();
             
-            // 入力があれば即座にAccelerating状態に遷移、なければIdle状態に遷移
-            Vector2 input = new Vector2(dynamicJoystick.Horizontal, dynamicJoystick.Vertical);
-            bool hasInput = input.sqrMagnitude > 0.01f;
+            // EnemyControllerがない場合の既存処理
+            if (enemy == null)
+            {
+                Debug.Log("ダッシュ状態でEnemyに衝突した");
+                rb.velocity = Vector2.zero;
+                
+                // 入力があれば即座にAccelerating状態に遷移、なければIdle状態に遷移
+                Vector2 input = new Vector2(dynamicJoystick.Horizontal, dynamicJoystick.Vertical);
+                bool hasInput = input.sqrMagnitude > 0.01f;
+                
+                if (hasInput)
+                {
+                    ChangeState(PlayerMoveState.Accelerating, "Enemy衝突後、入力あり");
+                }
+                else
+                {
+                    ChangeState(PlayerMoveState.Idle, "Enemy衝突により中断");
+                }
+                return;
+            }
             
-            if (hasInput)
+            // 衝突したオブジェクトが既にプレイヤーの子オブジェクト（乗っ取っている敵）の場合はスキップ
+            if (collision.gameObject.transform.parent == this.transform)
             {
-                ChangeState(PlayerMoveState.Accelerating, "Enemy衝突後、入力あり");
+                return;
             }
-            else
+            
+            // 既に同じ敵を乗っ取っている場合は処理をスキップ
+            if (hijackedEnemy == enemy)
             {
-                ChangeState(PlayerMoveState.Idle, "Enemy衝突により中断");
+                return;
             }
+            
+            // 既に別の敵を乗っ取り中なら前の敵の参照を保存してから解放
+            EnemyController previousEnemy = null;
+            if (hijackedEnemy != null)
+            {
+                previousEnemy = hijackedEnemy; // 解放前の参照を保存
+                ReleaseHijackedEnemy();
+            }
+            
+            // 解放した直後の敵と同じ敵の場合はスキップ（再乗っ取りを防ぐ）
+            if (previousEnemy == enemy)
+            {
+                return;
+            }
+            
+            // 新しい敵を乗っ取る
+            HijackEnemy(enemy);
         }
+    }
+
+    /// <summary>
+    /// 敵を乗っ取る処理
+    /// </summary>
+    private void HijackEnemy(EnemyController enemy)
+    {
+        // 1. 敵の追跡動作を停止
+        enemy.StopTracking();
+        
+        // 2. 敵の位置を取得
+        Vector2 enemyPosition = enemy.transform.position;
+        
+        // 3. プレイヤーを敵の中心に移動
+        rb.position = enemyPosition;
+        
+        // 4. 敵をPlayerの子オブジェクトにする
+        enemy.transform.SetParent(this.transform);
+        enemy.transform.localPosition = Vector3.zero; // 相対位置を0に設定
+        
+        // 5. 参照を保持
+        hijackedEnemy = enemy;
+        hijackTimer = 0f;
+        
+        // 6. UIを乗っ取りモードに
+        if (playerUIController != null)
+        {
+            playerUIController.isHijacking = true;
+            playerUIController.ResetHijackTimer();
+        }
+        
+        // 7. Dashing状態を終了（次のフレームで自動的にIdle状態に遷移）
+        dashDuration = 0f;
+        
+        Debug.Log($"敵を乗っ取りました: {enemy.enemyData?.enemyType}");
+    }
+
+    /// <summary>
+    /// 乗っ取り解除処理
+    /// </summary>
+    private void ReleaseHijackedEnemy()
+    {
+        if (hijackedEnemy == null) return;
+        
+        // 1. 敵を解放
+        hijackedEnemy.ReleaseEnemy();
+
+
+        // 2. 参照をクリア（maxSpeedはFixedUpdate()で自動的にplayerMaxSpeedに戻る）
+        hijackedEnemy = null;
+        hijackTimer = 0f;
+        
+        // 3. UIを通常モードに
+        if (playerUIController != null)
+        {
+                        playerUIController.ResetHijackTimer();
+
+            playerUIController.isHijacking = false;
+        }
+        
+        Debug.Log("敵を解放しました");
     }
 }
