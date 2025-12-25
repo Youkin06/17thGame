@@ -314,16 +314,30 @@ public class JoystickMove : MonoBehaviour
                 return;
             }
             
+            // 衝突したオブジェクトが既にプレイヤーの子オブジェクト（乗っ取っている敵）の場合はスキップ
+            if (collision.gameObject.transform.parent == this.transform)
+            {
+                return;
+            }
+            
             // 既に同じ敵を乗っ取っている場合は処理をスキップ
             if (hijackedEnemy == enemy)
             {
                 return;
             }
             
-            // 既に別の敵を乗っ取り中なら前の敵を解放
+            // 既に別の敵を乗っ取り中なら前の敵の参照を保存してから解放
+            EnemyController previousEnemy = null;
             if (hijackedEnemy != null)
             {
+                previousEnemy = hijackedEnemy; // 解放前の参照を保存
                 ReleaseHijackedEnemy();
+            }
+            
+            // 解放した直後の敵と同じ敵の場合はスキップ（再乗っ取りを防ぐ）
+            if (previousEnemy == enemy)
+            {
+                return;
             }
             
             // 新しい敵を乗っ取る
