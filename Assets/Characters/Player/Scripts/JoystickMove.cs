@@ -389,7 +389,8 @@ public class JoystickMove : MonoBehaviour
         
         // 1. 敵を解放
         hijackedEnemy.ReleaseEnemy();
-        
+
+
         // 2. 参照をクリア（maxSpeedはFixedUpdate()で自動的にplayerMaxSpeedに戻る）
         hijackedEnemy = null;
         hijackTimer = 0f;
@@ -397,6 +398,8 @@ public class JoystickMove : MonoBehaviour
         // 3. UIを通常モードに
         if (playerUIController != null)
         {
+                        playerUIController.ResetHijackTimer();
+
             playerUIController.isHijacking = false;
         }
         
