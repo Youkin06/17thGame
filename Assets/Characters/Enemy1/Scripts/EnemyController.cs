@@ -3,7 +3,6 @@ using System.Collections.Generic;
 // using System.Numerics;
 using UnityEngine;
 using UnityEngine.AI;
-using System.IO;
 
 public class EnemyController : MonoBehaviour
 {
@@ -42,13 +41,6 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // #region agent log
-        try {
-            File.AppendAllText("/Users/ryoma/Desktop/17thGame/.cursor/debug.log", 
-                $"{{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"A\",\"location\":\"EnemyController.Update:42\",\"message\":\"Update開始\",\"data\":{{\"isHijacked\":{isHijacked.ToString().ToLower()},\"agentEnabled\":{(agent != null ? agent.enabled.ToString().ToLower() : "null")},\"isOnNavMesh\":{(agent != null ? agent.isOnNavMesh.ToString().ToLower() : "null")},\"hasParent\":{(transform.parent != null).ToString().ToLower()}}},\"timestamp\":{System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}}}\n");
-        } catch {}
-        // #endregion
-        
         // 乗っ取り中は処理をスキップ
         if (isHijacked) return;
 
@@ -69,12 +61,6 @@ public class EnemyController : MonoBehaviour
         {
             if (!isAttacking)
             {
-                // #region agent log
-                try {
-                    File.AppendAllText("/Users/ryoma/Desktop/17thGame/.cursor/debug.log", 
-                        $"{{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"A\",\"location\":\"EnemyController.Update:64\",\"message\":\"MoveToTarget呼び出し前\",\"data\":{{\"agentEnabled\":{(agent != null ? agent.enabled.ToString().ToLower() : "null")},\"isOnNavMesh\":{(agent != null ? agent.isOnNavMesh.ToString().ToLower() : "null")},\"agentNull\":{(agent == null).ToString().ToLower()}}},\"timestamp\":{System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}}}\n");
-                } catch {}
-                // #endregion
                 MoveToTarget(playerPos);
             }
         }
@@ -109,36 +95,15 @@ public class EnemyController : MonoBehaviour
     //スクリプトのオブジェクトの位置を引数の位置まで移動するメソッド
     void MoveToTarget(Vector3 targetPos)
     {
-        // #region agent log
-        try {
-            File.AppendAllText("/Users/ryoma/Desktop/17thGame/.cursor/debug.log", 
-                $"{{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"A\",\"location\":\"EnemyController.MoveToTarget:96\",\"message\":\"MoveToTarget開始\",\"data\":{{\"agentEnabled\":{(agent != null ? agent.enabled.ToString().ToLower() : "null")},\"isOnNavMesh\":{(agent != null ? agent.isOnNavMesh.ToString().ToLower() : "null")},\"agentNull\":{(agent == null).ToString().ToLower()}}},\"timestamp\":{System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}}}\n");
-        } catch {}
-        // #endregion
-        
         // NavMeshAgentが有効で、NavMesh上に配置されている場合のみSetDestinationを呼ぶ
         if (agent == null || !agent.enabled || !agent.isOnNavMesh)
         {
-            // #region agent log
-            try {
-                File.AppendAllText("/Users/ryoma/Desktop/17thGame/.cursor/debug.log", 
-                    $"{{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"A\",\"location\":\"EnemyController.MoveToTarget:102\",\"message\":\"SetDestinationをスキップ\",\"data\":{{\"agentNull\":{(agent == null).ToString().ToLower()},\"agentEnabled\":{(agent != null ? agent.enabled.ToString().ToLower() : "null")},\"isOnNavMesh\":{(agent != null ? agent.isOnNavMesh.ToString().ToLower() : "null")}}},\"timestamp\":{System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}}}\n");
-            } catch {}
-            // #endregion
             return;
         }
         
         RotateToTarget(targetPos);
         // this.transform.position = Vector2.MoveTowards(this.transform.position, destination, moveSpeed*Time.deltaTime);
         agent.speed = moveSpeed;
-        
-        // #region agent log
-        try {
-            File.AppendAllText("/Users/ryoma/Desktop/17thGame/.cursor/debug.log", 
-                $"{{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"A\",\"location\":\"EnemyController.MoveToTarget:115\",\"message\":\"SetDestination直前\",\"data\":{{\"agentEnabled\":{(agent != null ? agent.enabled.ToString().ToLower() : "null")},\"isOnNavMesh\":{(agent != null ? agent.isOnNavMesh.ToString().ToLower() : "null")}}},\"timestamp\":{System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}}}\n");
-        } catch {}
-        // #endregion
-        
         agent.destination = targetPos;
     }
 
@@ -239,13 +204,6 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     public void StopTracking()
     {
-        // #region agent log
-        try {
-            File.AppendAllText("/Users/ryoma/Desktop/17thGame/.cursor/debug.log", 
-                $"{{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"B\",\"location\":\"EnemyController.StopTracking:176\",\"message\":\"StopTracking開始\",\"data\":{{\"agentEnabled\":{(agent != null ? agent.enabled.ToString().ToLower() : "null")},\"isOnNavMesh\":{(agent != null ? agent.isOnNavMesh.ToString().ToLower() : "null")}}},\"timestamp\":{System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}}}\n");
-        } catch {}
-        // #endregion
-        
         isHijacked = true;
         if (agent != null)
         {
@@ -263,13 +221,6 @@ public class EnemyController : MonoBehaviour
         }
         StopAllCoroutines();
         isAttacking = false;
-        
-        // #region agent log
-        try {
-            File.AppendAllText("/Users/ryoma/Desktop/17thGame/.cursor/debug.log", 
-                $"{{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"B\",\"location\":\"EnemyController.StopTracking:195\",\"message\":\"StopTracking終了\",\"data\":{{\"agentEnabled\":{(agent != null ? agent.enabled.ToString().ToLower() : "null")}}},\"timestamp\":{System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}}}\n");
-        } catch {}
-        // #endregion
     }
 
     /// <summary>
@@ -277,13 +228,6 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     public void ReleaseEnemy()
     {
-        // #region agent log
-        try {
-            File.AppendAllText("/Users/ryoma/Desktop/17thGame/.cursor/debug.log", 
-                $"{{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"C\",\"location\":\"EnemyController.ReleaseEnemy:200\",\"message\":\"ReleaseEnemy開始\",\"data\":{{\"hasParent\":{(transform.parent != null).ToString().ToLower()},\"agentEnabled\":{(agent != null ? agent.enabled.ToString().ToLower() : "null")},\"isOnNavMesh\":{(agent != null ? agent.isOnNavMesh.ToString().ToLower() : "null")}}},\"timestamp\":{System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}}}\n");
-        } catch {}
-        // #endregion
-        
         isHijacked = false;
         transform.SetParent(null);
         
@@ -306,12 +250,5 @@ public class EnemyController : MonoBehaviour
         {
             col.enabled = true;
         }
-        
-        // #region agent log
-        try {
-            File.AppendAllText("/Users/ryoma/Desktop/17thGame/.cursor/debug.log", 
-                $"{{\"sessionId\":\"debug-session\",\"runId\":\"run1\",\"hypothesisId\":\"C\",\"location\":\"EnemyController.ReleaseEnemy:225\",\"message\":\"ReleaseEnemy終了\",\"data\":{{\"hasParent\":{(transform.parent != null).ToString().ToLower()},\"agentEnabled\":{(agent != null ? agent.enabled.ToString().ToLower() : "null")},\"isOnNavMesh\":{(agent != null ? agent.isOnNavMesh.ToString().ToLower() : "null")}}},\"timestamp\":{System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}}}\n");
-        } catch {}
-        // #endregion
     }
 }
