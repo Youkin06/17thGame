@@ -119,6 +119,12 @@ public class JoystickMove : MonoBehaviour
                 HandleDashing();
                 break;
         }
+
+        // 乗っ取り中は敵の向きをプレイヤーに合わせる
+        if (hijackedEnemy != null)
+        {
+            hijackedEnemy.transform.rotation = transform.rotation;
+        }
     }
 
     /// <summary>
