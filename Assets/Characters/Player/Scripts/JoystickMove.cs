@@ -119,12 +119,6 @@ public class JoystickMove : MonoBehaviour
                 HandleDashing();
                 break;
         }
-
-        // 乗っ取り中は敵の向きをプレイヤーに合わせる
-        if (hijackedEnemy != null)
-        {
-            hijackedEnemy.transform.rotation = transform.rotation;
-        }
     }
 
     /// <summary>
@@ -294,20 +288,11 @@ public class JoystickMove : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy" && currentState == PlayerMoveState.Dashing)
         {
-            // 既に乗っ取り中なら前の敵を解放
-            if (hijackedEnemy != null)
-            {
-                ReleaseHijackedEnemy();
-            }
-
             EnemyController enemy = collision.gameObject.GetComponent<EnemyController>();
-            if (enemy != null)
+            
+            // EnemyControllerがない場合の既存処理
+            if (enemy == null)
             {
-                HijackEnemy(enemy);
-            }
-            else
-            {
-                // EnemyControllerがない場合の既存処理
                 Debug.Log("ダッシュ状態でEnemyに衝突した");
                 rb.velocity = Vector2.zero;
                 
@@ -323,7 +308,23 @@ public class JoystickMove : MonoBehaviour
                 {
                     ChangeState(PlayerMoveState.Idle, "Enemy衝突により中断");
                 }
+                return;
             }
+            
+            // 既に同じ敵を乗っ取っている場合は処理をスキップ
+            if (hijackedEnemy == enemy)
+            {
+                return;
+            }
+            
+            // 既に別の敵を乗っ取り中なら前の敵を解放
+            if (hijackedEnemy != null)
+            {
+                ReleaseHijackedEnemy();
+            }
+            
+            // 新しい敵を乗っ取る
+            HijackEnemy(enemy);
         }
     }
 

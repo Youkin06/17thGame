@@ -18,9 +18,9 @@ public class EnemyController : MonoBehaviour
     private float moveSpeed;//移動するスピード
     private bool isAttacking;
     private bool isHijacked = false; // 乗っ取り中フラグ
+    private Rigidbody2D enemyRb; // Rigidbody2Dへの参照
 
     NavMeshAgent agent;
-    private Rigidbody2D enemyRb; // Rigidbody2Dへの参照
     // Start is called before the first frame update
     void Start()
     {
