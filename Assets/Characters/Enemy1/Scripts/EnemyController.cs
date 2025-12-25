@@ -184,6 +184,12 @@ public class EnemyController : MonoBehaviour
         {
             enemyRb.simulated = false; // 物理シミュレーションを無効化
         }
+        // Collider2Dを無効化（プレイヤー本体が次の敵に衝突できるようにする）
+        Collider2D col = GetComponent<Collider2D>();
+        if (col != null)
+        {
+            col.enabled = false;
+        }
         StopAllCoroutines();
         isAttacking = false;
     }
@@ -201,6 +207,12 @@ public class EnemyController : MonoBehaviour
         if (enemyRb != null)
         {
             enemyRb.simulated = true; // 物理シミュレーションを再有効化
+        }
+        // Collider2Dを再有効化
+        Collider2D col = GetComponent<Collider2D>();
+        if (col != null)
+        {
+            col.enabled = true;
         }
         transform.SetParent(null);
     }
