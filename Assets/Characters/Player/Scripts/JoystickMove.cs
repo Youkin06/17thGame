@@ -374,6 +374,9 @@ public class JoystickMove : MonoBehaviour
             playerUIController.ResetHijackTimer();
         }
         
+        // 7. Dashing状態を終了（次のフレームで自動的にIdle状態に遷移）
+        dashDuration = 0f;
+        
         Debug.Log($"敵を乗っ取りました: {enemy.enemyData?.enemyType}");
     }
 
