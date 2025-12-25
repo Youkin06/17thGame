@@ -357,6 +357,7 @@ public class JoystickMove : MonoBehaviour
         if (playerUIController != null)
         {
             playerUIController.isHijacking = true;
+            playerUIController.ResetHijackTimer();
         }
         
         Debug.Log($"敵を乗っ取りました: {enemy.enemyData?.enemyType}");
