@@ -20,7 +20,7 @@ public class JoystickMove : MonoBehaviour
 
     public float dashMultiplier = 1.5f;
 
-    private PlayerMoveState currentState = PlayerMoveState.Idle;
+    public PlayerMoveState currentState {get; private set;} = PlayerMoveState.Idle; //外部参照可，変更不可
     private PlayerMoveState previousState = PlayerMoveState.Idle;
     private float defaultDashDuration = 0.2f;
     private float dashDuration = 0f;

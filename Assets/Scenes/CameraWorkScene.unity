@@ -223,7 +223,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   acceleration: 5
-  maxSpeed: 10
+  playerMaxSpeed: 10
   turnSpeed: 10
   dashMultiplier: 1.5
   dynamicJoystick: {fileID: 162252394}
@@ -268,8 +268,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31d1aff275b5c9547a1f86e50bbf8bbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  virtualCamScript: {fileID: 396401652}
+  virtualCam: {fileID: 396401652}
   joystickMove: {fileID: 152552186}
+  mainCamera: {fileID: 519420028}
   maxZoomSize: 10
   minZoomSize: 3
   zoomStartSpeed: 2
@@ -279,8 +280,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 3
-      inSlope: 0
-      outSlope: 0
+      inSlope: 1
+      outSlope: 1
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
@@ -288,8 +289,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 10
       value: 10
-      inSlope: 0
-      outSlope: 0
+      inSlope: 1
+      outSlope: 1
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
@@ -392,7 +393,7 @@ Transform:
   m_GameObject: {fileID: 234997929}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.383, y: 2.0948, z: 0}
+  m_LocalPosition: {x: 2.383, y: 2.0948, z: 0.91}
   m_LocalScale: {x: 10.971517, y: 5.7024055, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -906,7 +907,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1460185833}
   - component: {fileID: 1460185836}
-  - component: {fileID: 1460185838}
   - component: {fileID: 1460185837}
   m_Layer: 0
   m_Name: cm
@@ -969,8 +969,8 @@ MonoBehaviour:
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0
   m_UnlimitedSoftZone: 0
-  m_SoftZoneWidth: 0.108
-  m_SoftZoneHeight: 0.192
+  m_SoftZoneWidth: 0
+  m_SoftZoneHeight: 0
   m_BiasX: 0
   m_BiasY: 0
   m_CenterOnActivate: 1
@@ -985,33 +985,6 @@ MonoBehaviour:
   m_MaximumFOV: 60
   m_MinimumOrthoSize: 1
   m_MaximumOrthoSize: 5000
---- !u!114 &1460185838
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1460185832}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4044717213e31446939f7bd49c896ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_TrackedObjectOffset: {x: 0, y: 0, z: 0}
-  m_LookaheadTime: 0
-  m_LookaheadSmoothing: 0
-  m_LookaheadIgnoreY: 0
-  m_HorizontalDamping: 0.5
-  m_VerticalDamping: 0.5
-  m_ScreenX: 0.5
-  m_ScreenY: 0.5
-  m_DeadZoneWidth: 0
-  m_DeadZoneHeight: 0
-  m_SoftZoneWidth: 0.8
-  m_SoftZoneHeight: 0.8
-  m_BiasX: 0
-  m_BiasY: 0
-  m_CenterOnActivate: 1
 --- !u!1001 &1680141160
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1046,11 +1019,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8135886326569738822, guid: 56fae09712773584fb63896d473a98ee, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 960
+      value: 1920
       objectReference: {fileID: 0}
     - target: {fileID: 8135886326569738822, guid: 56fae09712773584fb63896d473a98ee, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 645
+      value: 1080
       objectReference: {fileID: 0}
     - target: {fileID: 8135886326569738822, guid: 56fae09712773584fb63896d473a98ee, type: 3}
       propertyPath: m_LocalPosition.x
