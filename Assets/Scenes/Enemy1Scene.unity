@@ -164,6 +164,14 @@ MonoBehaviour:
   waitTime: 2
   attackDuration: 3
   attackCoolDown: 3
+  patrolMinX: -8
+  patrolMaxX: 8
+  patrolMinY: -4
+  patrolMaxY: 4
+  patrolWaitTimeMin: 2
+  patrolWaitTimeMax: 5
+  patrolSpeed: 2
+  arrivalDistance: 0.5
 --- !u!195 &45131191
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -488,6 +496,14 @@ MonoBehaviour:
   waitTime: 270
   attackDuration: 270
   attackCoolDown: 270
+  patrolMinX: -8
+  patrolMaxX: 8
+  patrolMinY: -4
+  patrolMaxY: 4
+  patrolWaitTimeMin: 2
+  patrolWaitTimeMax: 5
+  patrolSpeed: 2
+  arrivalDistance: 0.5
 --- !u!195 &158122062
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1918,11 +1934,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   acceleration: 10
-  maxSpeed: 10
+  playerMaxSpeed: 10
   turnSpeed: 10
   dashMultiplier: 1.5
   dynamicJoystick: {fileID: 1852955337}
   rb: {fileID: 1877532239}
+  playerUIController: {fileID: 0}
 --- !u!58 &1877532238
 CircleCollider2D:
   m_ObjectHideFlags: 0
