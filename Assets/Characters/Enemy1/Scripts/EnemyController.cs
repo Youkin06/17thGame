@@ -18,7 +18,19 @@ public class EnemyController : MonoBehaviour
     private float moveSpeed;//移動するスピード
     private bool isAttacking;
     private bool isHijacked = false; // 乗っ取り中フラグ
+    private bool isWandering = false; // 徘徊中フラグ
     private Rigidbody2D enemyRb; // Rigidbody2Dへの参照
+    //test
+    [Header("徘徊関係")]
+    [SerializeField] float wanderRadius = 4f;         // 徘徊の半径
+    [SerializeField] float wandervelocity = 0.3f;   //徘徊する速度 0.3~0.6くらいがいいかも
+    [SerializeField] float wanderMinWait = 0.5f;      // 到着後の待機(min)
+    [SerializeField] float wanderMaxWait = 1.5f;      // 到着後の待機(max)
+    [SerializeField] float wanderPointTimeout = 4f;   // 1目的地あたりのタイムアウト
+    [SerializeField] float arriveThreshold = 0.25f;   // 到着判定の距離
+
+    Coroutine wanderCo;
+
 
     NavMeshAgent agent;
     // Start is called before the first frame update
@@ -52,6 +64,7 @@ public class EnemyController : MonoBehaviour
 
         if (distance < attackRadius)
         {
+            StopWander();
             if (!isAttacking)
             {
                 StartCoroutine(AttackToTarget(playerPos));
@@ -59,6 +72,7 @@ public class EnemyController : MonoBehaviour
         }
         else if (distance < serchRadius)//距離が指定距離以下なら
         {
+            StopWander();
             if (!isAttacking)
             {
                 MoveToTarget(playerPos);
@@ -66,7 +80,10 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            StopMove();
+            if (!isWandering && !isAttacking)
+            {
+                StartWander();
+            }
         }
     }
 
@@ -85,7 +102,7 @@ public class EnemyController : MonoBehaviour
         Vector3 direction = targetPosition - transform.position;
         //x方向の距離とy方向の距離を使って三角関数で間の角度を求める(度数に変換)
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        // Z軸（2Dの回転軸）を回す
+        // Z軸(2Dの回転軸)を回す
         Quaternion targetRotation = Quaternion.Euler(0, 0, angle + angleOffset);//何度回転すればいいかを求める
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);//turnSpeedの速度で目標の角度まで徐々に回転
 
@@ -100,6 +117,9 @@ public class EnemyController : MonoBehaviour
         {
             return;
         }
+        
+        // 移動を再開（徘徊で停止していた場合のため）
+        agent.isStopped = false;
         
         RotateToTarget(targetPos);
         // this.transform.position = Vector2.MoveTowards(this.transform.position, destination, moveSpeed*Time.deltaTime);
@@ -157,7 +177,7 @@ public class EnemyController : MonoBehaviour
             // NavMesh上に近い位置が見つかった場合、その位置に移動
             transform.position = hit.position;
             agent.enabled = true;//NavMeshAgentを有効に
-            // NavMesh上に強制的に再配置（Warpを使用）
+            // NavMesh上に強制的に再配置(Warpを使用)
             if (!agent.isOnNavMesh)
             {
                 agent.Warp(hit.position);
@@ -165,9 +185,9 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            // NavMesh上に近い位置が見つからない場合、エージェントを有効化しない
+            // NavMesh上に近い位置が見つからない場合でもエージェントは有効化
+            agent.enabled = true;
             Debug.LogWarning($"攻撃終了後、NavMesh上に近い位置が見つかりませんでした。現在位置: {currentPos}");
-            // エージェントを有効化しないまま、攻撃フラグをオフにする
         }
         
         isAttacking = false;//攻撃中のフラッグをオフ
@@ -200,7 +220,7 @@ public class EnemyController : MonoBehaviour
 
 
     /// <summary>
-    /// 追跡動作を停止（乗っ取り時に呼ばれる）
+    /// 追跡動作を停止(乗っ取り時に呼ばれる)
     /// </summary>
     public void StopTracking()
     {
@@ -213,7 +233,7 @@ public class EnemyController : MonoBehaviour
         {
             enemyRb.simulated = false; // 物理シミュレーションを無効化
         }
-        // Collider2Dを無効化（プレイヤー本体が次の敵に衝突できるようにする）
+        // Collider2Dを無効化(プレイヤー本体が次の敵に衝突できるようにする)
         Collider2D col = GetComponent<Collider2D>();
         if (col != null)
         {
@@ -221,6 +241,7 @@ public class EnemyController : MonoBehaviour
         }
         StopAllCoroutines();
         isAttacking = false;
+        StopWander();
     }
 
     /// <summary>
@@ -234,7 +255,7 @@ public class EnemyController : MonoBehaviour
         if (agent != null)
         {
             agent.enabled = true;
-            // NavMesh上に強制的に再配置（Warpを使用）
+            // NavMesh上に強制的に再配置(Warpを使用)
             if (!agent.isOnNavMesh)
             {
                 agent.Warp(transform.position);
@@ -251,4 +272,143 @@ public class EnemyController : MonoBehaviour
             col.enabled = true;
         }
     }
+    
+    public void StartWander()
+    {
+        if (wanderCo != null) return; // 既に徘徊中なら何もしない
+        isWandering = true;
+        wanderCo = StartCoroutine(WanderRoutine());
+    }
+
+    public void StopWander()
+    {
+        if (wanderCo != null)
+        {
+            StopCoroutine(wanderCo);
+            wanderCo = null;
+        }
+        isWandering = false;
+
+        if (agent != null && agent.enabled)
+        {
+            agent.ResetPath();
+            agent.isStopped = true;
+        }
+    }
+    
+    IEnumerator WanderRoutine()
+    {
+        // 安全チェック
+        if (agent == null) yield break;
+
+        // 2D前提：回転は自前
+        agent.updateRotation = false;
+        agent.updateUpAxis = false;
+
+        while (true)
+        {
+            // 乗っ取り or 攻撃中は徘徊しない
+            if (isHijacked || isAttacking || !agent.enabled || !agent.isOnNavMesh)
+            {
+                yield return null;
+                continue;
+            }
+
+            // ランダム徘徊先をNavMesh上から探す
+            Vector3 dest;
+            if (!TryGetRandomNavMeshPoint(transform.position, wanderRadius, out dest))
+            {
+                yield return new WaitForSeconds(0.2f);
+                continue;
+            }
+
+            // ★回転中に動き出さないように、いったん完全停止
+            agent.isStopped = true;
+            agent.ResetPath();
+
+            // ★向き終わるまで待つ（攻撃と同じやり方）
+            // 無限回転保険（角度やturnSpeedが変なときのため）
+            float rotTimer = 0f;
+            const float rotTimeout = 0.8f;
+
+            while (RotateToTarget(dest))
+            {
+                if (isHijacked || isAttacking || !agent.enabled || !agent.isOnNavMesh)
+                    break;
+
+                rotTimer += Time.deltaTime;
+                if (rotTimer >= rotTimeout) break;
+
+                yield return null;
+            }
+
+            // 回転中に状態が変わったら次のループへ
+            if (isHijacked || isAttacking || !agent.enabled || !agent.isOnNavMesh)
+            {
+                yield return null;
+                continue;
+            }
+
+            // ★向けたので移動開始（この順が大事）
+            // ★徘徊はゆっくり
+            float wanderSpeed = moveSpeed * wandervelocity;   // 0.3〜0.6くらいで調整
+            agent.speed = wanderSpeed;
+
+            agent.SetDestination(dest);
+            agent.isStopped = false;
+
+            // 到着 or タイムアウトまで待つ
+            float timer = 0f;
+            while (true)
+            {
+                if (isHijacked || isAttacking || !agent.enabled || !agent.isOnNavMesh)
+                    break;
+
+                timer += Time.deltaTime;
+
+                if (!agent.pathPending)
+                {
+                    if (agent.remainingDistance <= arriveThreshold)
+                        break;
+                }
+
+                if (timer >= wanderPointTimeout)
+                    break;
+
+                yield return null;
+            }
+
+            // 一旦停止＆待機
+            if (agent.enabled)
+            {
+                agent.isStopped = true;
+                agent.ResetPath();
+            }
+
+            float wait = Random.Range(wanderMinWait, wanderMaxWait);
+            yield return new WaitForSeconds(wait);
+        }
+    }
+
+
+    bool TryGetRandomNavMeshPoint(Vector3 origin, float radius, out Vector3 result)
+    {
+        // ランダム円内
+        for (int i = 0; i < 8; i++)
+        {
+            Vector2 r = Random.insideUnitCircle * radius;
+            Vector3 randomPoint = origin + new Vector3(r.x, r.y, 0f);
+
+            UnityEngine.AI.NavMeshHit hit;
+            if (UnityEngine.AI.NavMesh.SamplePosition(randomPoint, out hit, 1.0f, UnityEngine.AI.NavMesh.AllAreas))
+            {
+                result = hit.position;
+                return true;
+            }
+        }
+
+        result = origin;
+        return false;
+    }
+
 }
