@@ -8,7 +8,7 @@ public class CameraController : MonoBehaviour
     [Header("参照コンポーネント")]
     [SerializeField] private CinemachineVirtualCamera virtualCam;
     private CinemachineFramingTransposer transposer;
-    [SerializeField] private JoystickMove joystickMove;
+    [SerializeField] private PlayerController playerController;
     private Rigidbody2D rb;
 
     [Header("ダッシュ調整")]
@@ -63,12 +63,12 @@ public class CameraController : MonoBehaviour
     void OnValidate()
     {
         // 必須コンポーネントが割り当てられていない場合は処理しない
-        if (joystickMove == null) return;
+        if (playerController == null) return;
 
         // カーブが未設定の場合は初期化
         if (zoomCurve == null || zoomCurve.length < 2)
         {
-            zoomCurve = AnimationCurve.Linear(0, minZoomSize, joystickMove.playerMaxSpeed, maxZoomSize);
+            zoomCurve = AnimationCurve.Linear(0, minZoomSize, playerController.playerMaxSpeed, maxZoomSize);
         }
         else
         {
@@ -81,7 +81,7 @@ public class CameraController : MonoBehaviour
             keys[0].value = minZoomSize;
 
             // 最後のキー: (playerMaxSpeed, maxZoomSize)
-            keys[keys.Length - 1].time = joystickMove.playerMaxSpeed;
+            keys[keys.Length - 1].time = playerController.playerMaxSpeed;
             keys[keys.Length - 1].value = maxZoomSize;
 
             // 更新したキーを適用
@@ -96,15 +96,15 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        if (virtualCam == null || joystickMove == null) return;
+        if (virtualCam == null || playerController == null) return;
         
         // ターゲットのズームサイズを計算（適用はLateUpdateで状態に合わせて行う）
         CalculateTargetLOS();
 
-        if (joystickMove.currentState == PlayerMoveState.Dashing)
+        if (playerController.currentState == PlayerMoveState.Dashing)
         {
             
-            if (joystickMove.currentState != PlayerMoveState.Dashing)
+            if (playerController.currentState != PlayerMoveState.Dashing)
             {
                 
             }
@@ -129,7 +129,7 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
-        if (cameraTarget == null || joystickMove == null) return;
+        if (cameraTarget == null || playerController == null) return;
 
         switch (cameraFollowState)
         {
@@ -142,7 +142,7 @@ public class CameraController : MonoBehaviour
                 virtualCam.m_Lens.OrthographicSize = currentLOS;
 
                 // ダッシュ開始を検知してLocked状態へ
-                if (joystickMove.currentState == PlayerMoveState.Dashing)
+                if (playerController.currentState == PlayerMoveState.Dashing)
                 {
                     ChangeCameraState(CameraFollowState.Locked);
                 }
@@ -152,12 +152,12 @@ public class CameraController : MonoBehaviour
                 // 位置は更新しない（固定）
 
                 // 状態監視
-                if (joystickMove.currentState == PlayerMoveState.Dashing)
+                if (playerController.currentState == PlayerMoveState.Dashing)
                 {
                     // ダッシュ中はタイマーリセット
                     cameraWaitTimer = 0f;
                 }
-                else if (joystickMove.currentState == PlayerMoveState.Idle)
+                else if (playerController.currentState == PlayerMoveState.Idle)
                 {
                     // アイドル状態になったら0.5秒待つ
                     cameraWaitTimer += Time.deltaTime;
@@ -166,7 +166,7 @@ public class CameraController : MonoBehaviour
                         StartRejoining();
                     }
                 }
-                else if (joystickMove.currentState == PlayerMoveState.Accelerating || joystickMove.currentState == PlayerMoveState.MaxSpeed)
+                else if (playerController.currentState == PlayerMoveState.Accelerating || playerController.currentState == PlayerMoveState.MaxSpeed)
                 {
                     // 0.5秒待たずに再合流開始
                     StartRejoining();
@@ -195,7 +195,7 @@ public class CameraController : MonoBehaviour
                 }
                 
                 // 再合流中に再度ダッシュしたらまた止める
-                if (joystickMove.currentState == PlayerMoveState.Dashing)
+                if (playerController.currentState == PlayerMoveState.Dashing)
                 {
                     ChangeCameraState(CameraFollowState.Locked);
                 }
@@ -220,7 +220,7 @@ public class CameraController : MonoBehaviour
         cameraRejoinTimer = 0f;
 
         // 近づけるスピードは playerMaxSpeed + 1
-        float catchUpSpeed = joystickMove.playerMaxSpeed + 1f;
+        float catchUpSpeed = playerController.playerMaxSpeed + 1f;
         float distance = Vector3.Distance(cameraRejoinStartPos, transform.position);
         
         // 時間 = 距離 / 速さ
