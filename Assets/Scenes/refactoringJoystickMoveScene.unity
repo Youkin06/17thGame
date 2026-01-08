@@ -2068,7 +2068,7 @@ MonoBehaviour:
   m_BuildHeightMesh: 0
   m_MinRegionArea: 0
   m_HideEditorLogs: 0
-  m_NavMeshData: {fileID: 23800000, guid: 6bd1f56888ca2474a87b3e1c8be1dd60, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 9ef1bc8f40d4d2646b75a0785a9e7bab, type: 2}
 --- !u!4 &1002037004
 Transform:
   m_ObjectHideFlags: 0
@@ -2188,22 +2188,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d442ca9367c3e40d5a9e314afd30c43b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  acceleration: 10
-  playerMaxSpeed: 10
-  maxSpeed: 0
-  turnSpeed: 10
-  dashMultiplier: 1.5
-  <currentState>k__BackingField: 0
-  previousState: 0
-  defaultDashDuration: 0.2
-  dashDuration: 0
-  dynamicJoystick: {fileID: 129699017}
-  rb: {fileID: 1136345622}
-  playerUIController: {fileID: 1136345626}
-  totalDistanceMoved: 0
-  lastPosition: {x: 0, y: 0}
-  hijackedEnemy: {fileID: 0}
-  hijackTimer: 0
 --- !u!212 &1136345624
 SpriteRenderer:
   m_ObjectHideFlags: 0
