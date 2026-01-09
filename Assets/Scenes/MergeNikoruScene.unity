@@ -1033,6 +1033,12 @@ MonoBehaviour:
   waitTime: 2
   attackDuration: 3
   attackCoolDown: 3
+  wanderRadius: 4
+  wandervelocity: 0.3
+  wanderMinWait: 0.5
+  wanderMaxWait: 1.5
+  wanderPointTimeout: 4
+  arriveThreshold: 0.25
 --- !u!195 &423611039
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1356,7 +1362,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   acceleration: 10
-  maxSpeed: 10
+  playerMaxSpeed: 10
   turnSpeed: 10
   dashMultiplier: 1.5
   dynamicJoystick: {fileID: 129699017}
@@ -1486,7 +1492,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1160466210}
@@ -1504,8 +1510,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31d1aff275b5c9547a1f86e50bbf8bbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  virtualCamScript: {fileID: 2128649257}
+  virtualCam: {fileID: 2128649257}
   joystickMove: {fileID: 674153143}
+  mainCamera: {fileID: 1857545119}
   maxZoomSize: 10
   minZoomSize: 3
   zoomStartSpeed: 2
@@ -2094,8 +2101,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31d1aff275b5c9547a1f86e50bbf8bbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  virtualCamScript: {fileID: 2128649257}
+  virtualCam: {fileID: 0}
   joystickMove: {fileID: 1136345623}
+  mainCamera: {fileID: 0}
   maxZoomSize: 10
   minZoomSize: 3
   zoomStartSpeed: 2
@@ -2164,7 +2172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   acceleration: 10
-  maxSpeed: 10
+  playerMaxSpeed: 10
   turnSpeed: 10
   dashMultiplier: 1.5
   dynamicJoystick: {fileID: 129699017}
@@ -2982,6 +2990,12 @@ MonoBehaviour:
   waitTime: 2
   attackDuration: 3
   attackCoolDown: 3
+  wanderRadius: 4
+  wandervelocity: 0.3
+  wanderMinWait: 0.5
+  wanderMaxWait: 1.5
+  wanderPointTimeout: 4
+  arriveThreshold: 0.25
 --- !u!195 &1738208493
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3176,6 +3190,12 @@ MonoBehaviour:
   waitTime: 2
   attackDuration: 3
   attackCoolDown: 3
+  wanderRadius: 4
+  wandervelocity: 0.3
+  wanderMinWait: 0.5
+  wanderMaxWait: 1.5
+  wanderPointTimeout: 4
+  arriveThreshold: 0.25
 --- !u!195 &1759338077
 NavMeshAgent:
   m_ObjectHideFlags: 0
