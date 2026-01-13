@@ -329,7 +329,7 @@ public class EnemyController : MonoBehaviour
             // ★向き終わるまで待つ（攻撃と同じやり方）
             // 無限回転保険（角度やturnSpeedが変なときのため）
             float rotTimer = 0f;
-            const float rotTimeout = 0.8f;
+            const float rotTimeout = 1f;
 
             while (RotateToTarget(dest))
             {
