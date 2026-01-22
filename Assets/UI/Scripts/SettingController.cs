@@ -59,6 +59,9 @@ public class SettingController : MonoBehaviour
         vibrationObj = GameObject.Find("VibrationButton");
         vibrationObj.GetComponent<CheckButton>().Setup(false,VibrationChanged);
 
+        //非表示にしておく
+        settingContainer.SetActive(false);
+
         //BGMの初期値
         bgmAudioSource.volume = bgmSlider.value;
         //音量が変わった時だけ変更
