@@ -133,7 +133,16 @@ public class EnemyController : MonoBehaviour
         float timer = 0f;
         while (timer < duration)
         {
-            transform.position += direction * speed * Time.deltaTime;
+            //transform.position += direction * speed * Time.deltaTime;
+            //↑↑これをするとNavMesh範囲外に行ってしまうため、コメントアウトしました
+
+            //↓NavMeshを使った策
+            if (agent.enabled)
+            {
+                agent.Move(direction * speed * Time.deltaTime);
+            }
+            //↑NavMeshを使った策
+
             timer += Time.deltaTime;
             yield return null; // 1フレーム待機
         }
@@ -144,7 +153,8 @@ public class EnemyController : MonoBehaviour
         //0.ターゲットを検知したら開始
         Debug.Log("攻撃ループ開始");
         isAttacking = true;//攻撃中のフラッグをオン(重複したコルーチン開始の防止)
-        agent.enabled = false;//NavMeshAgentを無効に
+        //agent.enabled = false;//NavMeshAgentを無効に
+        //↑↑これをするとNavMesh範囲外に行ってしまうため、コメントアウトしました
         Vector3 attackTargetPos = targetPos;//ターゲットの座標を固定
         Vector3 direction = (attackTargetPos - this.transform.position).normalized;//ターゲットまでの移動方向
 
