@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [ExecuteAlways]
 public class UIController : MonoBehaviour
 {
+    [SerializeField] private GameObject settingObj;
+    [SerializeField] private GameObject settingContainer;
     RectTransform rectTransform;
 
     Vector3 delayLocalPosition;
@@ -13,7 +16,14 @@ public class UIController : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        Transform container = transform.Find("UIContainer");
+        GameObject containerObj = GameObject.Find("UIContainer");
+        Transform container = containerObj.transform;
+
+        settingContainer = GameObject.Find("SettingScrollView");
+
+        settingObj = GameObject.Find("SettingButton");
+        Button settingButton = settingObj.GetComponent<Button>();
+        settingButton.onClick.AddListener(PushSettingButton);
 
         if(container != null)
         {
@@ -67,4 +77,9 @@ public class UIController : MonoBehaviour
 		rectTransform.anchorMin = Vector2.zero;
 		rectTransform.anchorMax = Vector2.one;
 	}
+
+    void PushSettingButton()
+    {
+        settingContainer.SetActive(true);
+    }
 }
