@@ -13,35 +13,44 @@ public enum PlayerMoveState
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("当たり判定")]
+    public bool bigHitBox;
+    [SerializeField] private Collider2D hitBoxCollider;
+    [SerializeField] private Collider2D playerCollider;
+    [SerializeField] private float aimAssistStrength = 20f;
+
     [Header("移動設定")]
-    public float acceleration = 5f; // 加速力
-    public float playerMaxSpeed = 10f; // プレイヤーのデフォルト速度（インスペクタで設定可能）
-    private float maxSpeed; // 実際に使用される速度値（内部管理）
-    public float turnSpeed = 10f; // 旋回速度（値が大きいほどキビキビ曲がる）
-    public float dashMultiplier = 1.5f;
+    public float acceleration = 5f; 
+    public float playerMaxSpeed = 10f; 
+    private float maxSpeed; 
+    public float turnSpeed = 10f; 
+    public float dashMultiplier = 1.5f; 
     
     [Header("状態管理")]
     private PlayerMoveState previousState = PlayerMoveState.Idle;
-    public PlayerMoveState currentState { get; private set; } = PlayerMoveState.Idle; // 外部参照可、変更不可
+    public PlayerMoveState currentState { get; private set; } = PlayerMoveState.Idle; 
     private float defaultDashDuration = 0.2f;
     private float dashDuration = 0f;
     
     [Header("参照コンポーネント")]
     public DynamicJoystick dynamicJoystick;
     public Rigidbody2D rb;
-    public PlayerUIController playerUIController; // UIコントローラーへの参照
+    public PlayerUIController playerUIController; 
     [SerializeField] private HijackSystemController hijackSystemController;
     
-    // 移動距離の追跡
     private float totalDistanceMoved = 0f;
     private Vector2 lastPosition;
     
     void Start()
     {
-        lastPosition = rb.position;
-        maxSpeed = playerMaxSpeed; // 初期化
+        playerCollider.enabled = true;
         
-        // 参照が未設定の場合は自動取得を試みる
+        hitBoxCollider.isTrigger = true;
+        hitBoxCollider.enabled = true;
+
+        lastPosition = rb.position;
+        maxSpeed = playerMaxSpeed; 
+        
         if (hijackSystemController == null)
         {
             hijackSystemController = GetComponent<HijackSystemController>();
@@ -296,37 +305,92 @@ public class PlayerController : MonoBehaviour
     
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Enemy" && currentState == PlayerMoveState.Dashing)
-        {
+        // CompareTagにしました
+        if (collision.gameObject.CompareTag("Enemy") && currentState == PlayerMoveState.Dashing)
+        {            
             EnemyController enemy = collision.gameObject.GetComponent<EnemyController>();
             
-            // EnemyControllerがない場合の既存処理
             if (enemy == null)
             {
-                Debug.Log("ダッシュ状態でEnemyに衝突した");
+                Debug.Log("ダッシュ状態でEnemy(scriptなし)に衝突した");
                 rb.velocity = Vector2.zero;
                 
-                // 入力があれば即座にAccelerating状態に遷移、なければIdle状態に遷移
                 Vector2 input = new Vector2(dynamicJoystick.Horizontal, dynamicJoystick.Vertical);
                 bool hasInput = input.sqrMagnitude > 0.01f;
                 
-                if (hasInput)
-                {
-                    ChangeState(PlayerMoveState.Accelerating, "Enemy衝突後、入力あり");
-                }
-                else
-                {
-                    ChangeState(PlayerMoveState.Idle, "Enemy衝突により中断");
-                }
+                if (hasInput) ChangeState(PlayerMoveState.Accelerating, "Enemy衝突後、入力あり");
+                else ChangeState(PlayerMoveState.Idle, "Enemy衝突により中断");
                 return;
             }
             
-            // 乗っ取り判定はHijackSystemControllerに委譲
             if (hijackSystemController != null)
             {
                 hijackSystemController.TryHijackEnemy(collision, this);
             }
         }
     }
-}
 
+    //##################################################
+    private void ApplyAimSuction(Transform target)
+    {
+        Vector2 currentVelocity = rb.velocity;
+        Vector2 currentPos = rb.position;
+        Vector2 targetPos = target.position;
+
+        Vector2 vectorToTarget = targetPos - currentPos;
+
+        if (vectorToTarget.sqrMagnitude < 0.0001f || currentVelocity.sqrMagnitude < 0.0001f) return;
+        
+        // 【追加】敵が真後ろにいる場合は吸い付かない（事故防止）
+        if (Vector2.Dot(currentVelocity.normalized, vectorToTarget.normalized) < 0) return;
+
+        Vector2 velocityParallel = (Vector2)Vector3.Project(currentVelocity, vectorToTarget);
+        Vector2 velocityPerpendicular = currentVelocity - velocityParallel;
+
+        // ■ 修正ポイント2：normalized を外す！
+        // normalizedすると、0.1mmのズレでも全力で修正してしまい、ガタガタ震えます。
+        // 外すことで「ズレが大きいほど強く、小さいほど優しく」なり、ヌルっと吸い付きます。
+        Vector2 correctionDir = -velocityPerpendicular; // .normalized を削除
+
+        rb.AddForce(correctionDir * aimAssistStrength);
+
+        Debug.DrawRay(currentPos, vectorToTarget, Color.green);
+        Debug.DrawRay(currentPos, correctionDir * 2f, Color.red);
+    }
+
+    public void OnTriggerStay2D(Collider2D other)
+    {
+        if (bigHitBox) return; // bigHitBoxのときは吸い付き無効
+
+        if (currentState == PlayerMoveState.Dashing && other.CompareTag("Enemy"))
+        {
+            ApplyAimSuction(other.transform);
+        }
+    }
+
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!bigHitBox) return; // bigHitBoxのときだけ判定
+
+        if (other.CompareTag("Enemy") && currentState == PlayerMoveState.Dashing)
+        {
+            EnemyController enemy = other.GetComponent<EnemyController>();
+            
+            // EnemyControllerがない場合
+            if (enemy == null)
+            {
+                // ■ 修正ポイント3：Triggerで「停止処理」はしない！
+                // ここで止めてしまうと、「敵（または敵タグの壁）」の判定枠にかすった瞬間に
+                // プレイヤーが空中で急停止してしまいます。
+                // 物理的な停止は OnCollisionEnter2D（本体の衝突）に任せましょう。
+                return; 
+            }
+            
+            if (hijackSystemController != null)
+            {
+                // ここで乗っ取り処理（TryHijackEnemy_Trigger の実装が必要）
+                hijackSystemController.TryHijackEnemy_Trigger(other, this);
+            }
+        }
+    }
+}
