@@ -6,6 +6,23 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+<<<<<<< Updated upstream
     path: Assets/Scenes/UIWorkScene.unity
     guid: 03aa56c017f1943588b782bca584c8f5
+=======
+    path: Assets/Scenes/GameOverScene_heaven.unity
+    guid: 2e164cd09a6b85a4594a117e93f99c48
+  - enabled: 1
+    path: Assets/Scenes/GameScene_heaven.unity
+    guid: f11d151249d63f0438f0387dfb519bbf
+  - enabled: 1
+    path: Assets/Scenes/ResultScene_heaven.unity
+    guid: d6037dc1e33a6cd449885fe013534f3f
+  - enabled: 1
+    path: Assets/Scenes/StageSelectScene_heaven.unity
+    guid: 81df6467b22459c499d2539950e8df89
+  - enabled: 1
+    path: Assets/Scenes/TitleScene_heaven.unity
+    guid: abf5f0d0d9165084a9330edf303671f2
+>>>>>>> Stashed changes
   m_configObjects: {}
