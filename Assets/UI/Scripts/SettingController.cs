@@ -6,58 +6,44 @@ using UnityEngine.UI;
 
 public class SettingController : MonoBehaviour
 {
-    public GameObject joyStick;
+    [SerializeField] private GameObject joyStick;
     [SerializeField] private GameObject settingContainer;
-    [SerializeField] private GameObject bgmObj;
-    [SerializeField] private GameObject bgmAudioObj;
-    [SerializeField] private GameObject seObj;
-    [SerializeField] private GameObject backObj;
-    [SerializeField] private GameObject resetObj;
-    [SerializeField] private GameObject muteObj;
-    [SerializeField] private GameObject displayObj;
-    [SerializeField] private GameObject fixedObj;
-    [SerializeField] private GameObject sizeObj;
-
-    [SerializeField] private GameObject vibrationObj;
+    [Tooltip("Slider, Buttonなどが入っている親オブジェクトを指定")]
+    [SerializeField] private GameObject settingRoot;
+    private AudioSource bgmAudioSource;
+    private Slider bgmSlider;
+    private Slider seSlider;
+    private Slider sizeSlider;
+    private Button backButton;
+    private CheckButton muteButton;
+    private CheckButton displayButton;
+    private CheckButton fixedButton;
+    private CheckButton vibrationButton;
 
     // Start is called before the first frame update
     void Start()
     {
-        joyStick = GameObject.Find("Dynamic Joystick");
+        bgmAudioSource = GameObject.Find("BGMAudioSource").GetComponent<AudioSource>();
+        bgmSlider = settingRoot.transform.Find("BGMSlider").GetComponent<Slider>();
+        seSlider = settingRoot.transform.Find("SESlider").GetComponent<Slider>();
+        sizeSlider = settingRoot.transform.Find("SizeSlider").GetComponent<Slider>();
+        backButton = settingRoot.transform.Find("BackButton").GetComponent<Button>();
+        muteButton = settingRoot.transform.Find("MuteButton").GetComponent<CheckButton>();
+        displayButton = settingRoot.transform.Find("DisplayButton").GetComponent<CheckButton>();
+        fixedButton = settingRoot.transform.Find("FixedButton").GetComponent<CheckButton>();
+        vibrationButton = settingRoot.transform.Find("VibrationButton").GetComponent<CheckButton>();
 
-        settingContainer = GameObject.Find("SettingScrollView");
-
-        bgmObj = GameObject.Find("BGMSlider");
-        Slider bgmSlider = bgmObj.GetComponent<Slider>();
-        bgmAudioObj = GameObject.Find("BGMAudioSource");
-        AudioSource bgmAudioSource = bgmAudioObj.GetComponent<AudioSource>();
-
-        seObj = GameObject.Find("SESlider");
-        Slider seSlider = seObj.GetComponent<Slider>();
-
-        sizeObj = GameObject.Find("SizeSlider");
-        Slider sizeSlider = sizeObj.GetComponent<Slider>();
-
-        backObj = GameObject.Find("BackButton");
-        Button backButton = backObj.GetComponent<Button>();
+        // 戻るボタンにクリックイベントを登録
         backButton.onClick.AddListener(PushBackButton);
 
-        resetObj = GameObject.Find("ResetButton");
-        Button resetButton = resetObj.GetComponent<Button>();
+        //いったん起動
+        settingContainer.SetActive(true);
 
-
-        //オンオフボタン
-        muteObj = GameObject.Find("MuteButton");
-        muteObj.GetComponent<CheckButton>().Setup(false,MuteChanged);
-
-        displayObj = GameObject.Find("DisplayButton");
-        displayObj.GetComponent<CheckButton>().Setup(true,DisplayChanged);
-
-        fixedObj = GameObject.Find("FixedButton");
-        fixedObj.GetComponent<CheckButton>().Setup(false,FixedChanged);
-
-        vibrationObj = GameObject.Find("VibrationButton");
-        vibrationObj.GetComponent<CheckButton>().Setup(false,VibrationChanged);
+        // オンオフボタンにそれぞれのメソッドを紐付ける
+        muteButton.Setup(false, MuteChanged);
+        displayButton.Setup(true, DisplayChanged);
+        fixedButton.Setup(false, FixedChanged);
+        vibrationButton.Setup(false, VibrationChanged);
 
         //非表示にしておく
         settingContainer.SetActive(false);
