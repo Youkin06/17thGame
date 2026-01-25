@@ -640,7 +640,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8135886326569738823, guid: 56fae09712773584fb63896d473a98ee, type: 3}
   m_PrefabInstance: {fileID: 129699015}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 474594917}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ba0d0e7a039f526499c356a3c5cd6d3f, type: 3}
@@ -946,18 +946,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7696b3f4e39a4a45819ee987fc2cf37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  joyStick: {fileID: 0}
-  settingContainer: {fileID: 0}
-  bgmObj: {fileID: 0}
-  bgmAudioObj: {fileID: 0}
-  seObj: {fileID: 0}
-  backObj: {fileID: 0}
-  resetObj: {fileID: 0}
-  muteObj: {fileID: 0}
-  displayObj: {fileID: 0}
-  fixedObj: {fileID: 0}
-  sizeObj: {fileID: 0}
-  vibrationObj: {fileID: 0}
+  joyStick: {fileID: 474594917}
+  settingContainer: {fileID: 338608097}
+  settingRoot: {fileID: 1955936576}
 --- !u!4 &225849707
 Transform:
   m_ObjectHideFlags: 0
@@ -1698,6 +1689,12 @@ MonoBehaviour:
   waitTime: 2
   attackDuration: 3
   attackCoolDown: 3
+  wanderRadius: 4
+  wandervelocity: 0.3
+  wanderMinWait: 0.5
+  wanderMaxWait: 1.5
+  wanderPointTimeout: 4
+  arriveThreshold: 0.25
 --- !u!195 &423611039
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2031,6 +2028,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7891968822304839724, guid: ecd62347879682a4ea3894a30016ddfd, type: 3}
   m_PrefabInstance: {fileID: 467162550}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &474594917 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8135886326569738825, guid: 56fae09712773584fb63896d473a98ee, type: 3}
+  m_PrefabInstance: {fileID: 129699015}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &561827360
 GameObject:
   m_ObjectHideFlags: 0
@@ -2334,9 +2336,10 @@ GameObject:
   - component: {fileID: 674153146}
   - component: {fileID: 674153145}
   - component: {fileID: 674153144}
-  - component: {fileID: 674153143}
   - component: {fileID: 674153142}
   - component: {fileID: 674153148}
+  - component: {fileID: 674153150}
+  - component: {fileID: 674153149}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2360,25 +2363,6 @@ MonoBehaviour:
   slider: {fileID: 372209891}
   timeDecreaseRate: 0.1
   distanceDecreaseRate: 0.01
---- !u!114 &674153143
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 674153141}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d442ca9367c3e40d5a9e314afd30c43b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  acceleration: 10
-  playerMaxSpeed: 10
-  turnSpeed: 10
-  dashMultiplier: 1.5
-  dynamicJoystick: {fileID: 129699017}
-  rb: {fileID: 674153145}
-  playerUIController: {fileID: 674153142}
 --- !u!58 &674153144
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -2521,8 +2505,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31d1aff275b5c9547a1f86e50bbf8bbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  virtualCamScript: {fileID: 2128649257}
-  joystickMove: {fileID: 674153143}
+  virtualCam: {fileID: 2128649257}
+  playerController: {fileID: 674153149}
+  mainCamera: {fileID: 1857545119}
   maxZoomSize: 10
   minZoomSize: 3
   zoomStartSpeed: 2
@@ -2551,6 +2536,45 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   zoomSmoothTime: 0.5
+--- !u!114 &674153149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 674153141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 837cb74b61ad5437b83d173ef1fbdfa3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bigHitBox: 0
+  hitBoxCollider: {fileID: 674153144}
+  playerCollider: {fileID: 674153144}
+  aimAssistStrength: 20
+  acceleration: 5
+  playerMaxSpeed: 10
+  turnSpeed: 10
+  dashMultiplier: 1.5
+  dynamicJoystick: {fileID: 129699017}
+  rb: {fileID: 674153145}
+  playerUIController: {fileID: 674153142}
+  hijackSystemController: {fileID: 674153150}
+--- !u!114 &674153150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 674153141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7de3fb24d906c4dc8ac140e166f0106b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerController: {fileID: 674153149}
+  playerUIController: {fileID: 674153142}
+  rb: {fileID: 674153145}
 --- !u!1 &687520972
 GameObject:
   m_ObjectHideFlags: 0
@@ -3066,7 +3090,7 @@ RectTransform:
   m_Father: {fileID: 128343096}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0.9491228}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -3670,8 +3694,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31d1aff275b5c9547a1f86e50bbf8bbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  virtualCamScript: {fileID: 2128649257}
-  joystickMove: {fileID: 1136345623}
+  virtualCam: {fileID: 0}
+  playerController: {fileID: 0}
+  mainCamera: {fileID: 0}
   maxZoomSize: 10
   minZoomSize: 3
   zoomStartSpeed: 2
@@ -3739,13 +3764,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d442ca9367c3e40d5a9e314afd30c43b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  acceleration: 10
-  playerMaxSpeed: 10
-  turnSpeed: 10
-  dashMultiplier: 1.5
-  dynamicJoystick: {fileID: 129699017}
-  rb: {fileID: 1136345622}
-  playerUIController: {fileID: 1136345626}
 --- !u!212 &1136345624
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4748,7 +4766,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1620321579}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 225849705}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1620321579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5023,6 +5053,12 @@ MonoBehaviour:
   waitTime: 2
   attackDuration: 3
   attackCoolDown: 3
+  wanderRadius: 4
+  wandervelocity: 0.3
+  wanderMinWait: 0.5
+  wanderMaxWait: 1.5
+  wanderPointTimeout: 4
+  arriveThreshold: 0.25
 --- !u!195 &1738208493
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -5217,6 +5253,12 @@ MonoBehaviour:
   waitTime: 2
   attackDuration: 3
   attackCoolDown: 3
+  wanderRadius: 4
+  wandervelocity: 0.3
+  wanderMinWait: 0.5
+  wanderMaxWait: 1.5
+  wanderPointTimeout: 4
+  arriveThreshold: 0.25
 --- !u!195 &1759338077
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -5608,7 +5650,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 687520973}
   m_Direction: 0
   m_Value: 1
-  m_Size: 0.9999998
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5942,7 +5984,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 2134524892}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9999999
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

@@ -19,9 +19,9 @@ public class UIController : MonoBehaviour
         GameObject containerObj = GameObject.Find("UIContainer");
         Transform container = containerObj.transform;
 
-        settingContainer = GameObject.Find("SettingScrollView");
+        //settingContainer = GameObject.Find("SettingScrollView");
 
-        settingObj = GameObject.Find("SettingButton");
+        //settingObj = GameObject.Find("SettingButton");
         Button settingButton = settingObj.GetComponent<Button>();
         settingButton.onClick.AddListener(PushSettingButton);
 
