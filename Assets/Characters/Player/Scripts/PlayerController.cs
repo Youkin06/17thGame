@@ -188,7 +188,13 @@ public class PlayerController : MonoBehaviour
             case PlayerMoveState.MaxSpeed:
                 if (!hasInput)
                 {
-                    ChangeState(PlayerMoveState.Dashing);
+                    // Shooter 乗っ取り中は突進不可、Dasher または乗っ取り中でなければ突進可能
+                    bool canDash = hijackSystemController == null || !hijackSystemController.IsHijacking()
+                        || hijackSystemController.GetHijackedEnemyType() == EnemyType.Dasher;
+                    if (canDash)
+                        ChangeState(PlayerMoveState.Dashing);
+                    else
+                        ChangeState(PlayerMoveState.Idle);
                 }
                 break;
                 
@@ -308,7 +314,7 @@ public class PlayerController : MonoBehaviour
         // CompareTagにしました
         if (collision.gameObject.CompareTag("Enemy") && currentState == PlayerMoveState.Dashing)
         {            
-            EnemyController enemy = collision.gameObject.GetComponent<EnemyController>();
+            BaseEnemyController enemy = collision.gameObject.GetComponent<BaseEnemyController>();
             
             if (enemy == null)
             {
@@ -374,9 +380,9 @@ public class PlayerController : MonoBehaviour
 
         if (other.CompareTag("Enemy") && currentState == PlayerMoveState.Dashing)
         {
-            EnemyController enemy = other.GetComponent<EnemyController>();
+            BaseEnemyController enemy = other.GetComponent<BaseEnemyController>();
             
-            // EnemyControllerがない場合
+            // BaseEnemyControllerがない場合
             if (enemy == null)
             {
                 // ■ 修正ポイント3：Triggerで「停止処理」はしない！
