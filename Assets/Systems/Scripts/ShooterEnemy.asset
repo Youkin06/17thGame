@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: ShooterEnemy
   m_EditorClassIdentifier: 
   enemyType: 3
-  moveSpeed: 10
+  moveSpeed: 4
   bodyColor: {r: 1, g: 0, b: 0, a: 0}
   hijackDuration: 10
