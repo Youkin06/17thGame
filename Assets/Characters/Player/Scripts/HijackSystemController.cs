@@ -10,7 +10,7 @@ public class HijackSystemController : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     
     // 乗っ取り関連
-    private EnemyController hijackedEnemy = null; // 乗っ取った敵への参照（nullチェックで乗っ取り状態を判定）
+    private BaseEnemyController hijackedEnemy = null; // 乗っ取った敵への参照（nullチェックで乗っ取り状態を判定）
     private float hijackTimer = 0f; // 乗っ取りタイマー
     
     void Start()
@@ -54,9 +54,9 @@ public class HijackSystemController : MonoBehaviour
         if (collision.gameObject.tag != "Enemy") return;
         if (controller.currentState != PlayerMoveState.Dashing) return;
         
-        EnemyController enemy = collision.gameObject.GetComponent<EnemyController>();
+        BaseEnemyController enemy = collision.gameObject.GetComponent<BaseEnemyController>();
         
-        // EnemyControllerがない場合の処理はPlayerControllerで行う
+        // BaseEnemyControllerがない場合の処理はPlayerControllerで行う
         if (enemy == null)
         {
             return;
@@ -75,7 +75,7 @@ public class HijackSystemController : MonoBehaviour
         }
         
         // 既に別の敵を乗っ取り中なら前の敵の参照を保存してから解放
-        EnemyController previousEnemy = null;
+        BaseEnemyController previousEnemy = null;
         if (hijackedEnemy != null)
         {
             previousEnemy = hijackedEnemy; // 解放前の参照を保存
@@ -98,9 +98,9 @@ public class HijackSystemController : MonoBehaviour
         if (collider.gameObject.tag != "Enemy") return;
         if (controller.currentState != PlayerMoveState.Dashing) return;
         
-        EnemyController enemy = collider.gameObject.GetComponent<EnemyController>();
+        BaseEnemyController enemy = collider.gameObject.GetComponent<BaseEnemyController>();
         
-        // EnemyControllerがない場合の処理はPlayerControllerで行う
+        // BaseEnemyControllerがない場合の処理はPlayerControllerで行う
         if (enemy == null)
         {
             return;
@@ -119,7 +119,7 @@ public class HijackSystemController : MonoBehaviour
         }
         
         // 既に別の敵を乗っ取り中なら前の敵の参照を保存してから解放
-        EnemyController previousEnemy = null;
+        BaseEnemyController previousEnemy = null;
         if (hijackedEnemy != null)
         {
             previousEnemy = hijackedEnemy; // 解放前の参照を保存
@@ -140,7 +140,7 @@ public class HijackSystemController : MonoBehaviour
     /// <summary>
     /// 敵を乗っ取る処理
     /// </summary>
-    private void HijackEnemy(EnemyController enemy)
+    private void HijackEnemy(BaseEnemyController enemy)
     {
         // 1. 敵の追跡動作を停止
         enemy.StopTracking();
@@ -214,6 +214,15 @@ public class HijackSystemController : MonoBehaviour
     public bool IsHijacking()
     {
         return hijackedEnemy != null;
+    }
+
+    /// <summary>
+    /// 乗っ取っている敵の種類を取得（突進可否の判定に使用）
+    /// </summary>
+    public EnemyType? GetHijackedEnemyType()
+    {
+        if (hijackedEnemy == null || hijackedEnemy.enemyData == null) return null;
+        return hijackedEnemy.enemyData.enemyType;
     }
 }
 
