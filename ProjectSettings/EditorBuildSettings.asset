@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/Scenes/GameScene_heaven.unity
     guid: f11d151249d63f0438f0387dfb519bbf
   - enabled: 1
-    path: Assets/Scenes/Merge6Scene.unity
+    path: Assets/Scenes/UIDesignScene_youkin.unity
     guid: 51bd34c4b00847b4a9f1158697dc21c7
   - enabled: 1
     path: Assets/Scenes/GameOverScene_merge6.unity
