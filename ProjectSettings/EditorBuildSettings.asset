@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/StageSelectScene_merge6.unity
     guid: 81df6467b22459c499d2539950e8df89
   - enabled: 1
+    path: Assets/Scenes/TutorialScene_tefu.unity
+    guid: fd09af7409bea714a9475b07b157e9d4
+  - enabled: 1
     path: Assets/Scenes/GameScene_heaven.unity
     guid: f11d151249d63f0438f0387dfb519bbf
   - enabled: 1
