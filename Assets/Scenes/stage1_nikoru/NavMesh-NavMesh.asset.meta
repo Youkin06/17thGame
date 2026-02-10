@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scenes/backgroundShaderScene_keity/NavMesh-NavMesh.asset.meta
+guid: f2ff4eea57d561748a4fd8723e14220a
+========
+guid: b936ccb1fe0b9e4488f56deb31665dcf
+>>>>>>>> b597c2e054c73b04c7cc9eea7345fa7d986952ce:Assets/Scenes/stage1_nikoru/NavMesh-NavMesh.asset.meta
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 23800000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
