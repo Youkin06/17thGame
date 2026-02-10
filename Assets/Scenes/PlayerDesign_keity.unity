@@ -437,7 +437,7 @@ GameObject:
   m_Component:
   - component: {fileID: 86628341}
   m_Layer: 0
-  m_Name: lefteyebrow
+  m_Name: bone_11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5780,7 +5780,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1406512403}
   m_Layer: 0
-  m_Name: righteyebrow
+  m_Name: bone_13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7560,7 +7560,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1973248645}
   m_Layer: 0
-  m_Name: body
+  m_Name: bone_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
