@@ -535,19 +535,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: b881418953c1349f3a143811649d9c54, type: 2}
   serchRadius: 6
-  attackRadius: 3
   turnSpeed: 180
   angleOffset: 270
-  dashSpeed: 5
-  waitTime: 2
-  attackDuration: 3
-  attackCoolDown: 3
   wanderRadius: 4
   wandervelocity: 0.3
   wanderMinWait: 0.5
   wanderMaxWait: 1.5
   wanderPointTimeout: 4
   arriveThreshold: 0.25
+  attackRadius: 3
+  dashSpeed: 5
+  waitTime: 2
+  attackDuration: 3
+  attackCoolDown: 3
 --- !u!195 &110924137
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1005,19 +1005,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: b881418953c1349f3a143811649d9c54, type: 2}
   serchRadius: 6
-  attackRadius: 3
   turnSpeed: 180
   angleOffset: 270
-  dashSpeed: 5
-  waitTime: 2
-  attackDuration: 3
-  attackCoolDown: 3
   wanderRadius: 4
   wandervelocity: 0.3
   wanderMinWait: 0.5
   wanderMaxWait: 1.5
   wanderPointTimeout: 4
   arriveThreshold: 0.25
+  attackRadius: 3
+  dashSpeed: 5
+  waitTime: 2
+  attackDuration: 3
+  attackCoolDown: 3
 --- !u!195 &262636034
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3030,7 +3030,7 @@ MonoBehaviour:
   m_BuildHeightMesh: 0
   m_MinRegionArea: 0
   m_HideEditorLogs: 0
-  m_NavMeshData: {fileID: 23800000, guid: f2ff4eea57d561748a4fd8723e14220a, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: eb69915c9f344a143a888f921e01835f, type: 2}
 --- !u!4 &830487503
 Transform:
   m_ObjectHideFlags: 0
@@ -3550,8 +3550,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 555340633}
   sceneHandler: {fileID: 403415265}
-  ResultSceneName: ResultScene_merge6
-  GameOverSceneName: GameOverScene_merge6
+  gameOverPopUp: {fileID: 0}
+  gameClearPopUp: {fileID: 0}
 --- !u!114 &1026336417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7121,19 +7121,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: b881418953c1349f3a143811649d9c54, type: 2}
   serchRadius: 6
-  attackRadius: 3
   turnSpeed: 180
   angleOffset: 270
-  dashSpeed: 5
-  waitTime: 2
-  attackDuration: 3
-  attackCoolDown: 3
   wanderRadius: 4
   wandervelocity: 0.3
   wanderMinWait: 0.5
   wanderMaxWait: 1.5
   wanderPointTimeout: 4
   arriveThreshold: 0.25
+  attackRadius: 3
+  dashSpeed: 5
+  waitTime: 2
+  attackDuration: 3
+  attackCoolDown: 3
 --- !u!195 &2096371322
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -19,7 +19,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties: _RippleCount
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -68,7 +68,7 @@ Material:
     - _EnableExternalAlpha: 0
     - _Origin: -0.4
     - _RippleCount: 0.2
-    - _RippleInfluence: 0.137
+    - _RippleInfluence: 0.71
     - _RippleSpeed: 1.33
     - _Spread: 0.4
     - _TopOrigin: 2.77
@@ -76,8 +76,8 @@ Material:
     m_Colors:
     - _BottomColor: {r: 0, g: 0.09411765, b: 0.27058825, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Color01: {r: 0.03529412, g: 0.044054814, b: 0.55294114, a: 0}
-    - _Color02: {r: 0, g: 0.094117604, b: 0.27058816, a: 0}
+    - _Color01: {r: 0.14675044, g: 0.17840256, b: 0.8805031, a: 0}
+    - _Color02: {r: 0, g: 0, b: 0, a: 0}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _MiddleColor: {r: 0.03529412, g: 0.043137256, b: 0.5529412, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
