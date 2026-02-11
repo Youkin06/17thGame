@@ -97,6 +97,15 @@ public class PlayerController : MonoBehaviour
     {
         maxSpeed = playerMaxSpeed;
     }
+
+    /// <summary>
+    /// ダメージ受付の窓口。弾・ダッシュ敵などから呼ばれ、HijackSystemController に委譲する。
+    /// </summary>
+    public void OnPlayerDamaged()
+    {
+        if (hijackSystemController != null)
+            hijackSystemController.OnPlayerDamaged();
+    }
     
     void FixedUpdate()
     {
