@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneNavigator : MonoBehaviour
 {
+    
     public void LoadScene(string sceneName)
     {
         Debug.Log("Loading Scene: " + sceneName);

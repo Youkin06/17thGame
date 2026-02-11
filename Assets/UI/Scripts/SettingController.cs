@@ -61,6 +61,10 @@ public class SettingController : MonoBehaviour
         //Sizeが変わるときだけ調整
         sizeSlider.onValueChanged.AddListener(JoyStickSizeChanged);
     }
+    void SettingContainerOpen()
+    {
+        settingContainer.SetActive(true);
+    }
 
     void JoyStickSizeChanged(float value)
     {
