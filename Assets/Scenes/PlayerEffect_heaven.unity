@@ -476,7 +476,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player_Move_Effect
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5931042721065428375, guid: 931bb2d03c9caa04ebc8a1b8b263a263, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
