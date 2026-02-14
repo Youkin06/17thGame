@@ -37,6 +37,11 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb;
     public PlayerUIController playerUIController; 
     [SerializeField] private HijackSystemController hijackSystemController;
+    [SerializeField] private Animator animator;  // ★ 追加
+    
+    // ★ 追加: Animatorパラメータ名キャッシュ
+    private static readonly int AnimIsMoving = Animator.StringToHash("isMoving");
+    private static readonly int AnimAttackTrigger = Animator.StringToHash("attackTrigger");
     
     private float totalDistanceMoved = 0f;
     private Vector2 lastPosition;
@@ -54,6 +59,12 @@ public class PlayerController : MonoBehaviour
         if (hijackSystemController == null)
         {
             hijackSystemController = GetComponent<HijackSystemController>();
+        }
+        
+        // ★ 追加: Animatorの自動取得
+        if (animator == null)
+        {
+            animator = GetComponent<Animator>();
         }
     }
     
@@ -97,6 +108,15 @@ public class PlayerController : MonoBehaviour
     {
         maxSpeed = playerMaxSpeed;
     }
+
+    /// <summary>
+    /// ダメージ受付の窓口。弾・ダッシュ敵などから呼ばれ、HijackSystemController に委譲する。
+    /// </summary>
+    public void OnPlayerDamaged()
+    {
+        if (hijackSystemController != null)
+            hijackSystemController.OnPlayerDamaged();
+    }
     
     void FixedUpdate()
     {
@@ -114,8 +134,6 @@ public class PlayerController : MonoBehaviour
         {
             playerUIController.OnPlayerMoved(distanceThisFrame);
         }
-        
-
         
         // 状態に応じた処理
         switch (currentState)
@@ -136,7 +154,7 @@ public class PlayerController : MonoBehaviour
                 HandleDashing();
                 break;
         }
-                // 状態遷移の処理
+        // 状態遷移の処理
         UpdateState(hasInput);
     }
     
@@ -160,11 +178,33 @@ public class PlayerController : MonoBehaviour
         }
         Debug.Log(logMessage);
         
-        // 将来的に追加できる処理例：
-        // - アニメーションの切り替え
-        // - SEの再生
-        // - イベントの発火
-        // OnStateChanged?.Invoke(previousState, currentState);
+        // ★ 追加: アニメーション更新
+        UpdateAnimation();
+    }
+    
+    /// <summary>
+    /// 現在のStateに応じてAnimatorパラメータを更新
+    /// </summary>
+    private void UpdateAnimation()
+    {
+        if (animator == null) return;
+
+        switch (currentState)
+        {
+            case PlayerMoveState.Idle:
+                animator.SetBool(AnimIsMoving, false);
+                break;
+
+            case PlayerMoveState.Accelerating:
+            case PlayerMoveState.MaxSpeed:
+                animator.SetBool(AnimIsMoving, true);
+                break;
+
+            case PlayerMoveState.Dashing:
+                // ★ 突進中もMoveアニメを維持（Attackは敵衝突時に発火）
+                animator.SetBool(AnimIsMoving, true);
+                break;
+        }
     }
     
     private void UpdateState(bool hasInput)
@@ -331,6 +371,8 @@ public class PlayerController : MonoBehaviour
             
             if (hijackSystemController != null)
             {
+                // ★ 追加: 憑依開始時にAttackアニメ発火
+                if (animator != null) animator.SetTrigger(AnimAttackTrigger);
                 hijackSystemController.TryHijackEnemy(collision, this);
             }
         }
@@ -394,7 +436,8 @@ public class PlayerController : MonoBehaviour
             
             if (hijackSystemController != null)
             {
-                // ここで乗っ取り処理（TryHijackEnemy_Trigger の実装が必要）
+                // ★ 追加: 憑依開始時にAttackアニメ発火
+                if (animator != null) animator.SetTrigger(AnimAttackTrigger);
                 hijackSystemController.TryHijackEnemy_Trigger(other, this);
             }
         }

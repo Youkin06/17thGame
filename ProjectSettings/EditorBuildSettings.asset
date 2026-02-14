@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/TitleScene_merge7.unity
     guid: abf5f0d0d9165084a9330edf303671f2
   - enabled: 1
+    path: Assets/Scenes/stage1enemy_ta-toru 1.unity
+    guid: cd06473bb4c96424e9dc6f162a3ea840
+  - enabled: 1
     path: Assets/Scenes/StageSelectScene_merge7.unity
     guid: 81df6467b22459c499d2539950e8df89
   - enabled: 1

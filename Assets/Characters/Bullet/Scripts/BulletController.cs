@@ -41,7 +41,9 @@ public class BulletController : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
-            // ダメージ処理は別 issue で実装予定のため、ここでは Destroy のみ
+            var playerController = other.GetComponent<PlayerController>();
+            if (playerController != null)
+                playerController.OnPlayerDamaged();
             Destroy(gameObject);
         }
     }
