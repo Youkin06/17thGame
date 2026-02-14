@@ -56,6 +56,18 @@ public class StageController : MonoBehaviour
     {
         Time.timeScale = 0;
     }
+
+    /// <summary>
+    /// プレイヤー死亡時（被弾など）に呼ばれる。ゲームオーバー表示と時間停止を行う。
+    /// </summary>
+    public void OnPlayerDead()
+    {
+        if (isOver) return;
+        isOver = true;
+        Invoke(nameof(TimeStop), 1f);
+        if (gameOverPopUp != null)
+            gameOverPopUp.SetActive(true);
+    }
     
     // //ゴール到達時の挙動
     // public void OnGoalReached()

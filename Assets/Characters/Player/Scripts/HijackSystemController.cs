@@ -8,7 +8,8 @@ public class HijackSystemController : MonoBehaviour
     [SerializeField] private PlayerController playerController;
     [SerializeField] private PlayerUIController playerUIController;
     [SerializeField] private Rigidbody2D rb;
-    
+    [SerializeField] private StageController stageController;
+
     // 乗っ取り関連
     public BaseEnemyController hijackedEnemy { get; private set; } = null; // 乗っ取った敵への参照（nullチェックで乗っ取り状態を判定）
     private float hijackTimer = 0f; // 乗っ取りタイマー
@@ -24,6 +25,24 @@ public class HijackSystemController : MonoBehaviour
         {
             rb = GetComponent<Rigidbody2D>();
         }
+        if (stageController == null)
+        {
+            stageController = FindObjectOfType<StageController>();
+        }
+    }
+
+    /// <summary>
+    /// プレイヤーがダメージを受けたときの実処理。乗っ取り中なら解放、そうでなければ死亡処理。
+    /// </summary>
+    public void OnPlayerDamaged()
+    {
+        if (IsHijacking())
+        {
+            ReleaseHijackedEnemy();
+            return;
+        }
+        if (stageController != null)
+            stageController.OnPlayerDead();
     }
     
     void FixedUpdate()
