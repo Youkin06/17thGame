@@ -566,19 +566,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: b881418953c1349f3a143811649d9c54, type: 2}
   serchRadius: 6
-  attackRadius: 3
   turnSpeed: 180
   angleOffset: 270
-  dashSpeed: 5
-  waitTime: 2
-  attackDuration: 3
-  attackCoolDown: 3
   wanderRadius: 4
   wandervelocity: 0.3
   wanderMinWait: 0.5
   wanderMaxWait: 1.5
   wanderPointTimeout: 4
   arriveThreshold: 0.25
+  attackRadius: 3
+  dashSpeed: 5
+  waitTime: 2
+  attackDuration: 3
+  attackCoolDown: 3
 --- !u!195 &110924137
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1068,19 +1068,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: b881418953c1349f3a143811649d9c54, type: 2}
   serchRadius: 6
-  attackRadius: 3
   turnSpeed: 180
   angleOffset: 270
-  dashSpeed: 5
-  waitTime: 2
-  attackDuration: 3
-  attackCoolDown: 3
   wanderRadius: 4
   wandervelocity: 0.3
   wanderMinWait: 0.5
   wanderMaxWait: 1.5
   wanderPointTimeout: 4
   arriveThreshold: 0.25
+  attackRadius: 3
+  dashSpeed: 5
+  waitTime: 2
+  attackDuration: 3
+  attackCoolDown: 3
 --- !u!195 &262636034
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3371,7 +3371,7 @@ MonoBehaviour:
   m_BuildHeightMesh: 0
   m_MinRegionArea: 0
   m_HideEditorLogs: 0
-  m_NavMeshData: {fileID: 23800000, guid: 1b02b1c4c24659348a4efa4430aa5a7d, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 783c71a1aa1994c4080bef85bba6b3a2, type: 2}
 --- !u!4 &830487503
 Transform:
   m_ObjectHideFlags: 0
@@ -3609,8 +3609,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 555340633}
   sceneHandler: {fileID: 403415265}
-  ResultSceneName: ResultScene_merge6
-  GameOverSceneName: GameOverScene_merge6
+  gameOverPopUp: {fileID: 0}
+  gameClearPopUp: {fileID: 0}
 --- !u!114 &910075837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3626,6 +3626,7 @@ MonoBehaviour:
   playerController: {fileID: 910075838}
   playerUIController: {fileID: 910075840}
   rb: {fileID: 910075842}
+  stageController: {fileID: 0}
 --- !u!114 &910075838
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4417,8 +4418,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 555340633}
   sceneHandler: {fileID: 403415265}
-  ResultSceneName: ResultScene_merge6
-  GameOverSceneName: GameOverScene_merge6
+  gameOverPopUp: {fileID: 0}
+  gameClearPopUp: {fileID: 0}
 --- !u!114 &1026336417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4434,6 +4435,7 @@ MonoBehaviour:
   playerController: {fileID: 1026336418}
   playerUIController: {fileID: 1026336420}
   rb: {fileID: 1026336422}
+  stageController: {fileID: 0}
 --- !u!114 &1026336418
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8260,19 +8262,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: b881418953c1349f3a143811649d9c54, type: 2}
   serchRadius: 6
-  attackRadius: 3
   turnSpeed: 180
   angleOffset: 270
-  dashSpeed: 5
-  waitTime: 2
-  attackDuration: 3
-  attackCoolDown: 3
   wanderRadius: 4
   wandervelocity: 0.3
   wanderMinWait: 0.5
   wanderMaxWait: 1.5
   wanderPointTimeout: 4
   arriveThreshold: 0.25
+  attackRadius: 3
+  dashSpeed: 5
+  waitTime: 2
+  attackDuration: 3
+  attackCoolDown: 3
 --- !u!195 &2096371322
 NavMeshAgent:
   m_ObjectHideFlags: 0
