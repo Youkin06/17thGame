@@ -10,7 +10,7 @@ public class HijackSystemController : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     
     // 乗っ取り関連
-    private BaseEnemyController hijackedEnemy = null; // 乗っ取った敵への参照（nullチェックで乗っ取り状態を判定）
+    public BaseEnemyController hijackedEnemy { get; private set; } = null; // 乗っ取った敵への参照（nullチェックで乗っ取り状態を判定）
     private float hijackTimer = 0f; // 乗っ取りタイマー
     
     void Start()
