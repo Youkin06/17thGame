@@ -1035,7 +1035,11 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   m_Text: Stage1 Start
+=======
+  m_Text: Stage2 Start
+>>>>>>> Stashed changes
 =======
   m_Text: Stage2 Start
 >>>>>>> Stashed changes
