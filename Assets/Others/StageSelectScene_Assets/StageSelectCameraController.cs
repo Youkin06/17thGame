@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class StageSelectCameraController : MonoBehaviour
 {
@@ -15,18 +16,16 @@ public class StageSelectCameraController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        MoveStagePos(currentStage);
+        MoveStagePos(currentStage);//現在いるステージのボタンの位置に移動
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    
-    }
-
+    //指定のインデックスのボタンまで移動するメソッド
     public void MoveStagePos(int stageNum)
     {
-        Vector3 stagePos = stageButtons[stageNum].transform.position;
-        targetObj.transform.position = new Vector3(stagePos.x,stagePos.y,stagePos.z-zPos_offset);
+        Vector3 stagePos = stageButtons[stageNum].transform.position;//選択しているステージのインデックスのボタンの位置を取得
+        Vector3 targetPos = new Vector3(stagePos.x,stagePos.y,stagePos.z - zPos_offset);
+        targetObj.transform.DOMove(targetPos,1f).SetEase(Ease.OutQuart);//ボタンの位置まで滑らかに移動
+
+        // targetObj.transform.position = new Vector3(stagePos.x,stagePos.y,stagePos.z-zPos_offset);
     }
 }
