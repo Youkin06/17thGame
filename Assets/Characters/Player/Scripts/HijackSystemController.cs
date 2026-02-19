@@ -10,6 +10,14 @@ public class HijackSystemController : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private StageController stageController;
 
+    [Header("無敵設定")]
+    [SerializeField] private float invincibleDuration = 1.0f; // 無敵時間の長さ
+    [SerializeField] private float blinkInterval = 0.1f;    // 点滅の間隔
+    [SerializeField] private SpriteRenderer playerSprite;  // 点滅させる対象
+    public bool isInvincible = false;
+    private Collider2D enemyCollider;
+    private Coroutine invincibleCoroutine;
+
     // 乗っ取り関連
     public BaseEnemyController hijackedEnemy { get; private set; } = null; // 乗っ取った敵への参照（nullチェックで乗っ取り状態を判定）
     private float hijackTimer = 0f; // 乗っ取りタイマー
@@ -196,7 +204,14 @@ public class HijackSystemController : MonoBehaviour
         {
             playerController.EndDashingState();
         }
-        
+
+        // 敵のコライダーを無効化する
+        // これにより、乗っ取り中に自分自身とぶつかってダメージを受けるのを防ぐ
+        enemyCollider = enemy.GetComponent<Collider2D>();
+        if (enemyCollider != null)
+        {
+            enemyCollider.enabled = false;
+        }
         Debug.Log($"敵を乗っ取りました: {enemy.enemyData?.enemyType}");
     }
     
@@ -207,6 +222,11 @@ public class HijackSystemController : MonoBehaviour
     {
         if (hijackedEnemy == null) return;
         
+        if (enemyCollider != null)
+        {
+            enemyCollider.enabled = true;
+        }
+
         // 1. 敵を解放
         hijackedEnemy.ReleaseEnemy();
         
@@ -223,10 +243,47 @@ public class HijackSystemController : MonoBehaviour
             playerUIController.ResetHijackTimer();
             playerUIController.isHijacking = false;
         }
-        
+        StartInvincible();
         Debug.Log("敵を解放しました");
     }
-    
+    //無敵時間開始の関数
+    public void StartInvincible()
+    {
+        // すでに動いている場合は一度止めてから再開始
+        if (invincibleCoroutine != null)
+        {
+            StopCoroutine(invincibleCoroutine);
+        }
+        invincibleCoroutine = StartCoroutine(InvincibleRoutine());
+    }
+
+    private IEnumerator InvincibleRoutine()
+    {
+        isInvincible = true;
+        float elapsed = 0f;
+
+        while (elapsed < invincibleDuration)
+        {
+            if (playerSprite != null)
+            {
+                // enabledを反転させて表示・非表示を切り替える
+                playerSprite.enabled = !playerSprite.enabled;
+            }
+
+            yield return new WaitForSeconds(blinkInterval);
+            elapsed += blinkInterval;
+        }
+
+        // 最後は必ず表示状態に戻す
+        if (playerSprite != null)
+        {
+            playerSprite.enabled = true;
+        }
+
+        isInvincible = false;
+        invincibleCoroutine = null;
+    }
+
     /// <summary>
     /// 乗っ取り中かどうかを取得
     /// </summary>
