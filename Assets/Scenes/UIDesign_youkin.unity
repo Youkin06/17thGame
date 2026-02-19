@@ -3022,7 +3022,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7dc70bbf47824d37a8beffa7a5ab9c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isHijacking: 0
+  isHijacking: 1
   slider: {fileID: 180422000}
   timeDecreaseRate: 0.1
   distanceDecreaseRate: 0.01
@@ -3730,7 +3730,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &298848203
 Transform:
   m_ObjectHideFlags: 0
@@ -14962,6 +14962,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9015799b096b9415d9eee1f8265ee906, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  circles: []
+  hijackSystemController: {fileID: 0}
+  currentHijackDuration: 0
 --- !u!1001 &1897149281
 PrefabInstance:
   m_ObjectHideFlags: 0
