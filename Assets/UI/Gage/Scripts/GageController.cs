@@ -96,7 +96,7 @@ public class GageController : MonoBehaviour
             currentHijackDuration = duration;
 
             // 敵が切り替わった時だけ名前ログ
-            LogHijackedEnemyNameIfChanged();
+            //LogHijackedEnemyNameIfChanged();
 
             // 必要時のみゲージ再生開始
             StartGaugeIfNeeded(duration);
