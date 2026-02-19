@@ -3022,7 +3022,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7dc70bbf47824d37a8beffa7a5ab9c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isHijacking: 1
+  isHijacking: 0
   slider: {fileID: 180422000}
   timeDecreaseRate: 0.1
   distanceDecreaseRate: 0.01
@@ -14965,6 +14965,8 @@ MonoBehaviour:
   circles: []
   hijackSystemController: {fileID: 0}
   currentHijackDuration: 0
+  fastFillTotalDuration: 0.4
+  fullShownPauseDuration: 0.1
 --- !u!1001 &1897149281
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -22,12 +22,11 @@ public class PlayerUIController : MonoBehaviour
         if (isHijacking)
         {
             slider.value -= Time.deltaTime * timeDecreaseRate;
-        }
-
-        if (slider.value <= 0)
-        {
-            //ゲームオーバー処理
-            Debug.Log("GameOver");
+            if (slider.value <= 0)
+            {
+                //ゲームオーバー処理
+                Debug.Log("GameOver");
+            }
         }
     }
 

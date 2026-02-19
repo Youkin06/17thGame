@@ -15,18 +15,15 @@ public class GageController : MonoBehaviour
 
     // 現在の乗っ取り時間（確認用）
     [SerializeField] private float currentHijackDuration;
+    [SerializeField] private float fastFillTotalDuration = 0.4f;
+    [SerializeField] private float fullShownPauseDuration = 0.1f;
 
-    // 敵名ログの重複出力防止用
-    private BaseEnemyController lastLoggedEnemy;
-
-    // 現在ゲージ再生中の敵を保持（敵が変わったら作り直す）
+    // 現在ゲージ再生中の敵
     private BaseEnemyController activeGaugeEnemy;
-
-    // 円の初期スケール（解除時に戻す用）
     private Vector3[] initialScales;
-
-    // 8個を順番に縮めるDOTweenシーケンス
     private Sequence gaugeSequence;
+    private bool isGaugeVisible;
+    private bool hasSetVisibility;
 
     /// <summary>
     /// 初期化処理。円参照のキャッシュと初期スケール保存、依存参照の自動取得を行う。
@@ -44,6 +41,9 @@ public class GageController : MonoBehaviour
         {
             hijackSystemController = FindObjectOfType<HijackSystemController>();
         }
+
+        SetGaugeVisible(false);
+        SetAllCirclesToInitialScale();
     }
 
     /// <summary>
@@ -58,14 +58,6 @@ public class GageController : MonoBehaviour
         {
             circles[i] = transform.GetChild(i) as RectTransform;
         }
-    }
-
-    /// <summary>
-    /// キャッシュ済みの円配列を取得する。(外部スクリプトからのアクセス用)
-    /// </summary>
-    public RectTransform[] GetCircles()
-    {
-        return circles;
     }
 
     /// <summary>
@@ -86,7 +78,7 @@ public class GageController : MonoBehaviour
     
 
     /// <summary>
-    /// 毎フレーム処理。乗っ取り状態を監視し、ゲージ開始・停止と表示用値の更新を行う。
+    /// 毎フレーム処理。乗っ取り状態を監視し、ゲージの表示切り替えと再生制御を行う。
     /// </summary>
     void FixedUpdate()
     {
@@ -94,21 +86,12 @@ public class GageController : MonoBehaviour
         if (TryGetHijackDuration(out float duration))
         {
             currentHijackDuration = duration;
-
-            // 敵が切り替わった時だけ名前ログ
-            //LogHijackedEnemyNameIfChanged();
-
-            // 必要時のみゲージ再生開始
-            StartGaugeIfNeeded(duration);
+            PlayFillThenShrinkIfNeeded(duration);
         }
         else
         {
-            // 非乗っ取り時は値クリア
             currentHijackDuration = 0f;
-            lastLoggedEnemy = null;
-
-            // 再生停止＆全円を元サイズへ
-            StopGaugeAndReset();
+            StopGaugeAndHide();
         }
     }
 
@@ -137,44 +120,31 @@ public class GageController : MonoBehaviour
     }
 
     /// <summary>
-    /// 乗っ取り対象が変化したタイミングで敵名と持続時間をログ出力する。（デバッグ用　コメントアウト）
+    /// 乗っ取り開始時に、Circle0から順に高速で拡大→一時停止→順次縮小を再生する。
     /// </summary>
-    /*
-    private void LogHijackedEnemyNameIfChanged()
-    {
-        BaseEnemyController currentEnemy = hijackSystemController.hijackedEnemy;
-        if (currentEnemy == null || currentEnemy == lastLoggedEnemy)
-        {
-            return;
-        }
-
-        Debug.Log($"Hijacked Enemy: {currentEnemy.gameObject.name}" + $" (Duration: {currentEnemy.enemyData.hijackDuration}s)");
-        lastLoggedEnemy = currentEnemy;
-    }
-    */
-
-    /// <summary>
-    /// 必要な場合のみゲージ縮小シーケンスを開始する。既に同一敵で再生中なら何もしない。
-    /// </summary>
-    private void StartGaugeIfNeeded(float hijackDuration)
+    private void PlayFillThenShrinkIfNeeded(float hijackDuration)
     {
         BaseEnemyController currentEnemy = hijackSystemController.hijackedEnemy;
         if (currentEnemy == null || circles == null || circles.Length == 0)
         {
             return;
         }
-
-        if (currentEnemy == activeGaugeEnemy && gaugeSequence != null && gaugeSequence.IsActive())
+        if (currentEnemy == activeGaugeEnemy)
         {
             return;
         }
 
-        StopGaugeAndReset();
-        activeGaugeEnemy = currentEnemy;
+        StopGaugeAnimation();
+        SetGaugeVisible(true);
+        SetAllCirclesToZeroScale();
 
-        float perCircleDuration = Mathf.Max(0.01f, hijackDuration) / circles.Length;
+        activeGaugeEnemy = currentEnemy;
+        float fillPerCircleDuration = Mathf.Max(0.01f, fastFillTotalDuration) / circles.Length;
+        float shrinkTotalDuration = Mathf.Max(0.01f, hijackDuration - fastFillTotalDuration - fullShownPauseDuration);
+        float shrinkPerCircleDuration = shrinkTotalDuration / circles.Length;
         gaugeSequence = DOTween.Sequence();
 
+        // 高速で順番に拡大
         for (int i = 0; i < circles.Length; i++)
         {
             if (circles[i] == null)
@@ -182,33 +152,111 @@ public class GageController : MonoBehaviour
                 continue;
             }
 
-            gaugeSequence.Append(circles[i].DOScale(Vector3.zero, perCircleDuration).SetEase(Ease.Linear));
+            gaugeSequence.Append(circles[i].DOScale(initialScales[i], fillPerCircleDuration).SetEase(Ease.Linear));
+        }
+
+        // 全表示状態で一時停止
+        gaugeSequence.AppendInterval(Mathf.Max(0f, fullShownPauseDuration));
+
+        // 1つずつ順番に縮小（前の仕様）
+        for (int i = 0; i < circles.Length; i++)
+        {
+            if (circles[i] == null)
+            {
+                continue;
+            }
+
+            gaugeSequence.Append(circles[i].DOScale(Vector3.zero, shrinkPerCircleDuration).SetEase(Ease.Linear));
         }
     }
 
     /// <summary>
-    /// ゲージ再生を停止し、全Circleを初期スケールへ戻す。
+    /// 非乗っ取り時にゲージを停止し、表示を消す。
     /// </summary>
-    private void StopGaugeAndReset()
+    private void StopGaugeAndHide()
     {
-        if (gaugeSequence != null)
+        StopGaugeAnimation();
+        SetGaugeVisible(false);
+        SetAllCirclesToInitialScale();
+        activeGaugeEnemy = null;
+    }
+
+    /// <summary>
+    /// 再生中のゲージTweenを停止する。
+    /// </summary>
+    private void StopGaugeAnimation()
+    {
+        if (gaugeSequence == null)
         {
-            gaugeSequence.Kill();
-            gaugeSequence = null;
+            return;
         }
 
-        if (circles != null && initialScales != null)
+        gaugeSequence.Kill();
+        gaugeSequence = null;
+    }
+
+    /// <summary>
+    /// 全てのCircleを初期スケールへ戻す。
+    /// </summary>
+    private void SetAllCirclesToInitialScale()
+    {
+        if (circles == null || initialScales == null)
         {
-            for (int i = 0; i < circles.Length; i++)
+            return;
+        }
+
+        for (int i = 0; i < circles.Length; i++)
+        {
+            if (circles[i] != null && i < initialScales.Length)
             {
-                if (circles[i] != null && i < initialScales.Length)
-                {
-                    circles[i].localScale = initialScales[i];
-                }
+                circles[i].localScale = initialScales[i];
+            }
+        }
+    }
+
+    /// <summary>
+    /// 全てのCircleをゼロスケールに設定する。
+    /// </summary>
+    private void SetAllCirclesToZeroScale()
+    {
+        if (circles == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < circles.Length; i++)
+        {
+            if (circles[i] != null)
+            {
+                circles[i].localScale = Vector3.zero;
+            }
+        }
+    }
+
+    /// <summary>
+    /// ゲージの表示/非表示を切り替える。
+    /// </summary>
+    private void SetGaugeVisible(bool visible)
+    {
+        if (circles == null)
+        {
+            return;
+        }
+        if (hasSetVisibility && isGaugeVisible == visible)
+        {
+            return;
+        }
+
+        for (int i = 0; i < circles.Length; i++)
+        {
+            if (circles[i] != null)
+            {
+                circles[i].gameObject.SetActive(visible);
             }
         }
 
-        activeGaugeEnemy = null;
+        isGaugeVisible = visible;
+        hasSetVisibility = true;
     }
 
     /// <summary>
@@ -216,9 +264,6 @@ public class GageController : MonoBehaviour
     /// </summary>
     void OnDestroy()
     {
-        if (gaugeSequence != null)
-        {
-            gaugeSequence.Kill();
-        }
+        StopGaugeAnimation();
     }
 }
