@@ -3289,7 +3289,7 @@ MonoBehaviour:
   m_BuildHeightMesh: 0
   m_MinRegionArea: 0
   m_HideEditorLogs: 0
-  m_NavMeshData: {fileID: 23800000, guid: 1b02b1c4c24659348a4efa4430aa5a7d, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 47a8f1497e50049ef9f8df542b56dac4, type: 2}
 --- !u!4 &830487503
 Transform:
   m_ObjectHideFlags: 0
@@ -3809,8 +3809,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 555340633}
   sceneHandler: {fileID: 403415265}
-  ResultSceneName: ResultScene_merge6
-  GameOverSceneName: GameOverScene_merge6
+  gameOverPopUp: {fileID: 0}
+  gameClearPopUp: {fileID: 0}
 --- !u!114 &1026336417
 MonoBehaviour:
   m_ObjectHideFlags: 0

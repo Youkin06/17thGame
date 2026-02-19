@@ -10,6 +10,9 @@ public class RushEnemyController : BaseEnemyController
     [SerializeField] float attackDuration = 3f;
     [SerializeField] float attackCoolDown = 3f;
 
+    private bool isInRushDamagePhase = false;
+    private bool dealtDamageThisRush = false;
+
     protected override void Start()
     {
         base.Start();
@@ -76,7 +79,10 @@ public class RushEnemyController : BaseEnemyController
         yield return new WaitForSeconds(waitTime);
 
         Debug.Log("突進!!");
+        isInRushDamagePhase = true;
+        dealtDamageThisRush = false;
         yield return StartCoroutine(DashStraightToTarget(direction, dashSpeed, attackDuration));
+        isInRushDamagePhase = false;
 
         Debug.Log("クールタイム");
         yield return new WaitForSeconds(attackCoolDown);
@@ -105,6 +111,16 @@ public class RushEnemyController : BaseEnemyController
     {
         if (agent != null)
             agent.speed = 0f;
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (!collision.gameObject.CompareTag("Player") || !isInRushDamagePhase || dealtDamageThisRush)
+            return;
+        var playerController = collision.gameObject.GetComponent<PlayerController>();
+        if (playerController == null) return;
+        dealtDamageThisRush = true;
+        playerController.OnPlayerDamaged();
     }
 
     void OnDrawGizmos()
