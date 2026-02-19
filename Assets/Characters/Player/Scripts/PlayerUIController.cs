@@ -36,11 +36,12 @@ public class PlayerUIController : MonoBehaviour
     /// </summary>
     /// <param name="distanceDelta">このフレームでの移動距離</param>
     public void OnPlayerMoved(float distanceDelta)
-    {
+    {   /*
         if (!isHijacking)
         {
             slider.value -= distanceDelta * distanceDecreaseRate;
         }
+        */
     }
     
     /// <summary>
