@@ -36,7 +36,7 @@ public class PlayerUIController : MonoBehaviour
     /// </summary>
     /// <param name="distanceDelta">このフレームでの移動距離</param>
     public void OnPlayerMoved(float distanceDelta)
-    {   /*(旧システム)　魂状態　減少
+    {   /*(旧システム)　魂状態　減少    
         if (!isHijacking)
         {
             slider.value -= distanceDelta * distanceDecreaseRate;
