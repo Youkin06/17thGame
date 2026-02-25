@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class SettingController : MonoBehaviour
 {
@@ -10,17 +10,21 @@ public class SettingController : MonoBehaviour
     [SerializeField] private GameObject settingContainer;
     [Tooltip("Slider, Buttonなどが入っている親オブジェクトを指定")]
     [SerializeField] private GameObject settingRoot;
+    
     private AudioSource bgmAudioSource;
     private Slider bgmSlider;
     private Slider seSlider;
     private Slider sizeSlider;
     private Button backButton;
+    private Button resetButton;
+    private GameObject resetContainer;
+    private Button yesButton;
+    private Button noButton;
     private CheckButton muteButton;
     private CheckButton displayButton;
     private CheckButton fixedButton;
     private CheckButton vibrationButton;
 
-    // Start is called before the first frame update
     void Start()
     {
         bgmAudioSource = GameObject.Find("BGMAudioSource").GetComponent<AudioSource>();
@@ -28,13 +32,20 @@ public class SettingController : MonoBehaviour
         seSlider = settingRoot.transform.Find("SESlider").GetComponent<Slider>();
         sizeSlider = settingRoot.transform.Find("SizeSlider").GetComponent<Slider>();
         backButton = settingRoot.transform.Find("BackButton").GetComponent<Button>();
+        resetButton = settingRoot.transform.Find("ResetButton").GetComponent<Button>();
+        resetContainer = settingRoot.transform.Find("ResetContainer").gameObject;
+        yesButton = resetContainer.transform.Find("YesButton").GetComponent<Button>();
+        noButton = resetContainer.transform.Find("NoButton").GetComponent<Button>();
         muteButton = settingRoot.transform.Find("MuteButton").GetComponent<CheckButton>();
         displayButton = settingRoot.transform.Find("DisplayButton").GetComponent<CheckButton>();
         fixedButton = settingRoot.transform.Find("FixedButton").GetComponent<CheckButton>();
         vibrationButton = settingRoot.transform.Find("VibrationButton").GetComponent<CheckButton>();
 
-        // 戻るボタンにクリックイベントを登録
+        // チェックがつかないボタンにクリックイベントを登録
         backButton.onClick.AddListener(PushBackButton);
+        resetButton.onClick.AddListener(PushResetButton);
+        yesButton.onClick.AddListener(PushYesButton);
+        noButton.onClick.AddListener(PushNoButton);
 
         //いったん起動
         settingContainer.SetActive(true);
@@ -47,11 +58,12 @@ public class SettingController : MonoBehaviour
 
         //非表示にしておく
         settingContainer.SetActive(false);
+        resetContainer.SetActive(false);
 
         //BGMの初期値
         bgmAudioSource.volume = bgmSlider.value;
         //音量が変わった時だけ変更
-        bgmSlider.onValueChanged.AddListener((vol) => 
+        bgmSlider.onValueChanged.AddListener((vol) =>
         {
             bgmAudioSource.volume = vol;
         });
@@ -61,6 +73,7 @@ public class SettingController : MonoBehaviour
         //Sizeが変わるときだけ調整
         sizeSlider.onValueChanged.AddListener(JoyStickSizeChanged);
     }
+
     void SettingContainerOpen()
     {
         settingContainer.SetActive(true);
@@ -91,13 +104,44 @@ public class SettingController : MonoBehaviour
         }
 
         joyStick.transform.localScale = Vector3.one * targetScale;
-
         Debug.Log($"JoyStickサイズ変更: {intValue} -> 倍率 {targetScale}");
     }
 
     void PushBackButton()
     {
         settingContainer.SetActive(false);
+    }
+
+    void PushResetButton()
+    {
+        resetContainer.SetActive(true);
+    }
+
+    void PushYesButton()
+    {
+        // スライダーの値をリセット
+        bgmSlider.value = 0.5f;
+        seSlider.value = 0.5f;
+        sizeSlider.value = 1;
+
+        // 見た目のリセット
+        muteButton.Setup(false, MuteChanged);
+        displayButton.Setup(true, DisplayChanged);
+        fixedButton.Setup(false, FixedChanged);
+        vibrationButton.Setup(false, VibrationChanged);
+
+        // 中身のリセットを直接呼び出す
+        MuteChanged(false);
+        DisplayChanged(true);
+        FixedChanged(false);
+        VibrationChanged(false);
+
+        resetContainer.SetActive(false);
+    }
+
+    void PushNoButton()
+    {
+        resetContainer.SetActive(false);
     }
 
     void MuteChanged(bool isOn)
