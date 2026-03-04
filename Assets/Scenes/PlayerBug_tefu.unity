@@ -2985,7 +2985,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 3.41
+  m_Radius: 0.5
 --- !u!50 &232257642
 Rigidbody2D:
   serializedVersion: 4
@@ -3002,7 +3002,7 @@ Rigidbody2D:
   m_LinearDrag: 0.5
   m_AngularDrag: 0.05
   m_GravityScale: 0
-  m_Material: {fileID: 6200000, guid: 2084c25e1a61ae54e9f83c23ccdd1b1b, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -3012,7 +3012,7 @@ Rigidbody2D:
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 0
 --- !u!212 &232257643
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3464,9 +3464,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 1df61ab0d8337d84092a44a11d3e8c73, type: 3}
+  m_audioClip: {fileID: 8300000, guid: f6c67ca9aec802f43882ca342ca6c6c3, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.095
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -3752,7 +3752,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.6
+  m_Radius: 0.1
 --- !u!50 &298848207
 Rigidbody2D:
   serializedVersion: 4
@@ -8622,12 +8622,12 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 15
+  m_Radius: 10
 --- !u!212 &1033171062
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8937,7 +8937,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.1
 --- !u!50 &1078933991
 Rigidbody2D:
   serializedVersion: 4
@@ -9173,7 +9173,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.1
 --- !u!50 &1097304332
 Rigidbody2D:
   serializedVersion: 4
@@ -11103,7 +11103,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000030517578, y: 0.000030517578}
+  m_AnchoredPosition: {x: -0.000030517578, y: 0.000015258789}
   m_SizeDelta: {x: 27.5, y: 10.601196}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1425762560
@@ -13232,7 +13232,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000030517578, y: 0.000030517578}
+  m_AnchoredPosition: {x: -0.000030517578, y: 0.000015258789}
   m_SizeDelta: {x: 27.5, y: 10.601196}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1707762883
@@ -13773,7 +13773,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.1
 --- !u!50 &1811885257
 Rigidbody2D:
   serializedVersion: 4
