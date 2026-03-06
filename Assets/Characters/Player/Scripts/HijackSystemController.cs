@@ -108,7 +108,7 @@ public class HijackSystemController : MonoBehaviour
         }
         
         // 新しい敵を乗っ取る
-        HijackEnemy(enemy);
+        HijackEnemy(enemy, previousEnemy);
     }
 
 
@@ -159,7 +159,7 @@ public class HijackSystemController : MonoBehaviour
     /// <summary>
     /// 敵を乗っ取る処理
     /// </summary>
-    private void HijackEnemy(BaseEnemyController enemy)
+    private void HijackEnemy(BaseEnemyController enemy, BaseEnemyController previousEnemy = null)
     {
         // 1. 敵の追跡動作を停止
         enemy.StopTracking();
@@ -168,6 +168,12 @@ public class HijackSystemController : MonoBehaviour
         Vector2 enemyPosition = enemy.transform.position;
         
         // 3. プレイヤーを敵の中心に移動
+        if (previousEnemy != null)
+        {
+            Vector2 escapeDir = ((Vector2)previousEnemy.transform.position - enemyPosition).normalized;
+            if (escapeDir == Vector2.zero) escapeDir = Vector2.right;
+            previousEnemy.transform.position = enemyPosition + escapeDir * 1.5f; // 1.5fは敵のCollider半径に合わせて調整
+        }
         rb.position = enemyPosition;
         
         // 4. 敵をPlayerの子オブジェクトにする
