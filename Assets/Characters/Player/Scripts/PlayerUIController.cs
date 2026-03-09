@@ -22,12 +22,11 @@ public class PlayerUIController : MonoBehaviour
         if (isHijacking)
         {
             slider.value -= Time.deltaTime * timeDecreaseRate;
-        }
-
-        if (slider.value <= 0)
-        {
-            //ゲームオーバー処理
-            Debug.Log("GameOver");
+            if (slider.value <= 0)
+            {
+                //ゲームオーバー処理
+                Debug.Log("GameOver");
+            }
         }
     }
 
@@ -36,11 +35,12 @@ public class PlayerUIController : MonoBehaviour
     /// </summary>
     /// <param name="distanceDelta">このフレームでの移動距離</param>
     public void OnPlayerMoved(float distanceDelta)
-    {
+    {   /*(旧システム)　魂状態　減少    
         if (!isHijacking)
         {
             slider.value -= distanceDelta * distanceDecreaseRate;
         }
+        */
     }
     
     /// <summary>

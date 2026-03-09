@@ -2847,6 +2847,11 @@ MonoBehaviour:
   playerController: {fileID: 448343487}
   playerUIController: {fileID: 448343489}
   rb: {fileID: 448343491}
+  stageController: {fileID: 0}
+  invincibleDuration: 1
+  blinkInterval: 0.1
+  playerSprite: {fileID: 0}
+  isInvincible: 0
 --- !u!114 &448343487
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2871,6 +2876,7 @@ MonoBehaviour:
   rb: {fileID: 448343491}
   playerUIController: {fileID: 448343489}
   hijackSystemController: {fileID: 448343486}
+  animator: {fileID: 0}
 --- !u!114 &448343488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5713,7 +5719,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000030517578, y: 0.000015258789}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 27.5, y: 10.601196}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &834489382
@@ -13209,7 +13215,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000030517578, y: 0.000015258789}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 27.5, y: 10.601196}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1935041368
