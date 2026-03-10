@@ -35,7 +35,6 @@ public class PlayerController : MonoBehaviour
     [Header("参照コンポーネント")]
     public DynamicJoystick dynamicJoystick;
     public Rigidbody2D rb;
-    public PlayerUIController playerUIController; 
     [SerializeField] private HijackSystemController hijackSystemController;
     [SerializeField] private Animator animator;
     

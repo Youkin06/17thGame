@@ -6,7 +6,7 @@ public class HijackSystemController : MonoBehaviour
 {
     [Header("参照コンポーネント")]
     [SerializeField] private PlayerController playerController;
-    [SerializeField] private PlayerUIController playerUIController;
+    // [SerializeField] private PlayerUIController playerUIController;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private StageController stageController;
 
@@ -192,12 +192,12 @@ public class HijackSystemController : MonoBehaviour
             playerController.SetMaxSpeed(enemy.enemyData.moveSpeed);
         }
         
-        // 7. UIを乗っ取りモードに
-        if (playerUIController != null)
-        {
-            playerUIController.isHijacking = true;
-            playerUIController.ResetHijackTimer();
-        }
+        // // 7. UIを乗っ取りモードに
+        // if (playerUIController != null)
+        // {
+        //     playerUIController.isHijacking = true;
+        //     playerUIController.ResetHijackTimer();
+        // }
         
         // 8. Dashing状態を終了（直接メソッドを呼ぶ）
         if (playerController != null)
@@ -237,12 +237,12 @@ public class HijackSystemController : MonoBehaviour
         hijackedEnemy = null;
         hijackTimer = 0f;
         
-        // 4. UIを通常モードに
-        if (playerUIController != null)
-        {
-            playerUIController.ResetHijackTimer();
-            playerUIController.isHijacking = false;
-        }
+        // // 4. UIを通常モードに
+        // if (playerUIController != null)
+        // {
+        //     playerUIController.ResetHijackTimer();
+        //     playerUIController.isHijacking = false;
+        // }
         StartInvincible();
         Debug.Log("敵を解放しました");
     }

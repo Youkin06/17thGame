@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class StageController : MonoBehaviour
 {
-    public Slider slider;
     public GameObject sceneHandler;
     public GameObject gameOverPopUp;
     public GameObject gameClearPopUp;
@@ -27,15 +26,7 @@ public class StageController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(slider.value <= 0 && isGoaled == false && isOver == false)
-        {
-            //1秒後にゲームを停止
-            Invoke(nameof(TimeStop),1f);
-            //ゲームオーバーポップを表示
-            gameOverPopUp.SetActive(true);
-            isGoaled = true;
-            //OnPlayerDead();
-        }
+        
     }
 
     public void OnTriggerEnter2D(Collider2D collision)
