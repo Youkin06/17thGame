@@ -130,10 +130,6 @@ public class PlayerController : MonoBehaviour
         lastPosition = currentPosition;
         
         // 移動があった場合、UIを更新
-        if (distanceThisFrame > 0.001f && playerUIController != null)
-        {
-            playerUIController.OnPlayerMoved(distanceThisFrame);
-        }
         
         // 状態に応じた処理
         switch (currentState)
