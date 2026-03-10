@@ -37,9 +37,9 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb;
     public PlayerUIController playerUIController; 
     [SerializeField] private HijackSystemController hijackSystemController;
-    [SerializeField] private Animator animator;  // ★ 追加
+    [SerializeField] private Animator animator;
     
-    // ★ 追加: Animatorパラメータ名キャッシュ
+
     private static readonly int AnimIsMoving = Animator.StringToHash("isMoving");
     private static readonly int AnimAttackTrigger = Animator.StringToHash("attackTrigger");
     
@@ -114,8 +114,15 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void OnPlayerDamaged()
     {
+        if (hijackSystemController.isInvincible)
+        {
+            return;
+        }
+        else{
         if (hijackSystemController != null)
             hijackSystemController.OnPlayerDamaged();
+            hijackSystemController.StartInvincible();
+        }
     }
     
     void FixedUpdate()
@@ -348,30 +355,48 @@ public class PlayerController : MonoBehaviour
     public void OnCollisionEnter2D(Collision2D collision)
     {
         // CompareTagにしました
-        if (collision.gameObject.CompareTag("Enemy") && currentState == PlayerMoveState.Dashing)
-        {            
-            BaseEnemyController enemy = collision.gameObject.GetComponent<BaseEnemyController>();
-            
-            if (enemy == null)
+        // 敵に当たった場合
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            if (collision.transform.IsChildOf(this.transform))
             {
-                Debug.Log("ダッシュ状態でEnemy(scriptなし)に衝突した");
-                rb.velocity = Vector2.zero;
-                
-                Vector2 input = new Vector2(dynamicJoystick.Horizontal, dynamicJoystick.Vertical);
-                bool hasInput = input.sqrMagnitude > 0.01f;
-                
-                if (hasInput) ChangeState(PlayerMoveState.Accelerating, "Enemy衝突後、入力あり");
-                else ChangeState(PlayerMoveState.Idle, "Enemy衝突により中断");
-                return;
+                return; 
             }
-            
-            if (hijackSystemController != null)
+            // ダッシュ中（乗っ取り成功）
+            if (currentState == PlayerMoveState.Dashing)
             {
-                // ★ 追加: 憑依開始時にAttackアニメ発火
-                if (animator != null) animator.SetTrigger(AnimAttackTrigger);
-                hijackSystemController.TryHijackEnemy(collision, this);
+                BaseEnemyController enemy = collision.gameObject.GetComponent<BaseEnemyController>();
+                
+                if (enemy == null)
+                {
+                    Debug.Log("ダッシュ状態でEnemy(scriptなし)に衝突した");
+                    rb.velocity = Vector2.zero;
+                    
+                    Vector2 input = new Vector2(dynamicJoystick.Horizontal, dynamicJoystick.Vertical);
+                    bool hasInput = input.sqrMagnitude > 0.01f;
+                    
+                    if (hasInput) ChangeState(PlayerMoveState.Accelerating, "Enemy衝突後、入力あり");
+                    else ChangeState(PlayerMoveState.Idle, "Enemy衝突により中断");
+                    return;
+                }
+                
+                if (hijackSystemController != null)
+                {
+                    // ★ 追加: 憑依開始時にAttackアニメ発火
+                    if (animator != null) animator.SetTrigger(AnimAttackTrigger);
+                    hijackSystemController.TryHijackEnemy(collision, this);
+                    return;
+                }
+            }
+
+            // ダッシュ中ではない
+            else
+            {
+                Debug.Log("敵本体に接触ダメージ");
+                OnPlayerDamaged();
             }
         }
+        
     }
 
     //##################################################
@@ -438,4 +463,5 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
 }
