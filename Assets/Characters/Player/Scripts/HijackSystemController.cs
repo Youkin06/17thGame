@@ -198,12 +198,11 @@ public class HijackSystemController : MonoBehaviour
             playerController.SetMaxSpeed(enemy.enemyData.moveSpeed);
         }
         
-        // // 7. UIを乗っ取りモードに
-        // if (playerUIController != null)
-        // {
-        //     playerUIController.isHijacking = true;
-        //     playerUIController.ResetHijackTimer();
-        // }
+        // 7. プレイヤーの乗っ取り状態を更新、UIを乗っ取りモードに
+        if (playerController != null)
+            playerController.SetHijacking(true);
+        if (playerUIController != null)
+            playerUIController.ResetHijackTimer();
         
         // 8. Dashing状態を終了（直接メソッドを呼ぶ）
         if (playerController != null)
@@ -243,13 +242,16 @@ public class HijackSystemController : MonoBehaviour
         hijackedEnemy = null;
         hijackTimer = 0f;
         
-        // // 4. UIを通常モードに
-        // if (playerUIController != null)
-        // {
-        //     playerUIController.ResetHijackTimer();
-        //     playerUIController.isHijacking = false;
-        // }
+// 4. プレイヤーの乗っ取り状態を解除、UIを通常モードに
+
+        if (playerController != null)
+            playerController.SetHijacking(false);
+        if (playerUIController != null)
+            playerUIController.ResetHijackTimer();
+        
         StartInvincible();
+
+    
         Debug.Log("敵を解放しました");
     }
     //無敵時間開始の関数

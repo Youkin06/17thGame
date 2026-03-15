@@ -115,6 +115,7 @@ public class RushEnemyController : BaseEnemyController
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        if (isHijacked) return; // 乗っ取り中はプレイヤーにダメージを与えない
         if (!collision.gameObject.CompareTag("Player") || !isInRushDamagePhase || dealtDamageThisRush)
             return;
         var playerController = collision.gameObject.GetComponent<PlayerController>();
