@@ -1,17 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerEffectController : MonoBehaviour
 {
     [Header("参照設定")]
-    private PlayerController playerController;
+    [SerializeField] private PlayerController playerController;
 
     [Header("エフェクト親オブジェクト")]
-    [Tooltip("突進中に再生したいパーティクルの親")]
+    [Tooltip("突進（Dashing）中に再生したいパーティクルの親")]
     [SerializeField] private GameObject playerDashEffectRoot;
     
-    [Tooltip("加速・最高速中に再生したいパーティクルの親")]
+    [Tooltip("加速・最高速（Accelerating / MaxSpeed）中に再生したいパーティクルの親")]
     [SerializeField] private GameObject playerEffectRoot;
 
     private ParticleSystem[] dashParticles;
@@ -37,12 +39,17 @@ public class PlayerEffectController : MonoBehaviour
             moveParticles = playerEffectRoot.GetComponentsInChildren<ParticleSystem>();
         }
 
-        // 初期状態はすべて停止
-        StopAllParticles();
-        
+        // 状態の初期化
         if (playerController != null)
         {
             lastState = playerController.currentState;
+            // 起動時の状態に合わせてエフェクトを適用（重要：これで出ない問題を防止）
+            UpdateEffects(lastState);
+        }
+        else
+        {
+            // コントローラーがない場合は念のためすべて停止
+            StopAllParticles();
         }
     }
 
@@ -50,7 +57,7 @@ public class PlayerEffectController : MonoBehaviour
     {
         if (playerController == null) return;
 
-        // 状態が変化したときだけエフェクトを更新
+        // 状態が変化した瞬間にだけエフェクトを更新する（1フレームのみ実行）
         if (playerController.currentState != lastState)
         {
             UpdateEffects(playerController.currentState);
@@ -65,6 +72,7 @@ public class PlayerEffectController : MonoBehaviour
         ToggleParticles(dashParticles, isDashing);
 
         // 2. 移動中（Accelerating または MaxSpeed）の判定
+        // Idle以外の移動状態で再生
         bool isMoving = (currentState == PlayerMoveState.Accelerating || currentState == PlayerMoveState.MaxSpeed);
         ToggleParticles(moveParticles, isMoving);
     }
@@ -77,11 +85,21 @@ public class PlayerEffectController : MonoBehaviour
         {
             if (shouldPlay)
             {
-                if (!p.isPlaying) p.Play();
+                // 子オブジェクトのパーティクルも含めて一斉に再生
+                if (!p.isPlaying) 
+                {
+                    p.Play(true);
+                }
             }
             else
             {
-                if (p.isPlaying) p.Stop();
+                // 子オブジェクトも含めて停止。
+                // StopEmittingAndClear：停止した瞬間に画面上の粒子も消去する
+                // StopEmitting：放出だけ止めて、画面上の粒子は寿命まで残す（自然な余韻）
+                if (p.isPlaying)
+                {
+                    p.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                }
             }
         }
     }
