@@ -54,19 +54,19 @@ Material:
     m_Ints: []
     m_Floats:
     - _EnableExternalAlpha: 0
-    - _Nebula_Intensity: 3.04
-    - _Nebula_Speed: 3
+    - _Nebula_Intensity: 2.64
+    - _Nebula_Speed: 5.32
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Star_BlinkSpeed: 5
-    - _Star_Intensity: 0.94
+    - _Star_BlinkSpeed: 16.31
+    - _Star_Intensity: 0.93
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Color_Bottom: {r: 0.03921569, g: 0.03921569, b: 0.18823525, a: 1}
-    - _Color_Nebula: {r: 0.06439547, g: 0.06439547, b: 0.8203115, a: 1}
+    - _Color_Bottom: {r: 0.05882353, g: 0.05882353, b: 0.23921569, a: 1}
+    - _Color_Nebula: {r: 0.8349056, g: 0.8349056, b: 1, a: 1}
     - _Color_NebulaTint: {r: 0.03310477, g: 0.05780543, b: 0.2462014, a: 1}
-    - _Color_Star: {r: 2, g: 2, b: 2, a: 0}
-    - _Color_Top: {r: 0.001517635, g: 0.001517635, b: 0.005181517, a: 1}
+    - _Color_Star: {r: 22.627419, g: 22.627419, b: 22.627419, a: 0}
+    - _Color_Top: {r: 0.0046724807, g: 0.0046724807, b: 0.047169805, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

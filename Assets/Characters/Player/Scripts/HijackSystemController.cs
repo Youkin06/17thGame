@@ -6,7 +6,7 @@ public class HijackSystemController : MonoBehaviour
 {
     [Header("参照コンポーネント")]
     [SerializeField] private PlayerController playerController;
-    [SerializeField] private PlayerUIController playerUIController;
+    // [SerializeField] private PlayerUIController playerUIController;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private StageController stageController;
 
@@ -17,6 +17,8 @@ public class HijackSystemController : MonoBehaviour
     public bool isInvincible = false;
     private Collider2D enemyCollider;
     private Coroutine invincibleCoroutine;
+
+    private PlayerUIController playerUIController;
 
     // 乗っ取り関連
     public BaseEnemyController hijackedEnemy { get; private set; } = null; // 乗っ取った敵への参照（nullチェックで乗っ取り状態を判定）
@@ -116,7 +118,7 @@ public class HijackSystemController : MonoBehaviour
         }
         
         // 新しい敵を乗っ取る
-        HijackEnemy(enemy);
+        HijackEnemy(enemy, previousEnemy);
     }
 
 
@@ -167,7 +169,7 @@ public class HijackSystemController : MonoBehaviour
     /// <summary>
     /// 敵を乗っ取る処理
     /// </summary>
-    private void HijackEnemy(BaseEnemyController enemy)
+    private void HijackEnemy(BaseEnemyController enemy, BaseEnemyController previousEnemy = null)
     {
         // 1. 敵の追跡動作を停止
         enemy.StopTracking();
@@ -176,6 +178,12 @@ public class HijackSystemController : MonoBehaviour
         Vector2 enemyPosition = enemy.transform.position;
         
         // 3. プレイヤーを敵の中心に移動
+        if (previousEnemy != null)
+        {
+            Vector2 escapeDir = ((Vector2)previousEnemy.transform.position - enemyPosition).normalized;
+            if (escapeDir == Vector2.zero) escapeDir = Vector2.right;
+            previousEnemy.transform.position = enemyPosition + escapeDir * 1.5f; // 1.5fは敵のCollider半径に合わせて調整
+        }
         rb.position = enemyPosition;
         
         // 4. 敵をPlayerの子オブジェクトにする
@@ -192,12 +200,11 @@ public class HijackSystemController : MonoBehaviour
             playerController.SetMaxSpeed(enemy.enemyData.moveSpeed);
         }
         
-        // 7. UIを乗っ取りモードに
+        // 7. プレイヤーの乗っ取り状態を更新、UIを乗っ取りモードに
+        if (playerController != null)
+            playerController.SetHijacking(true);
         if (playerUIController != null)
-        {
-            playerUIController.isHijacking = true;
             playerUIController.ResetHijackTimer();
-        }
         
         // 8. Dashing状態を終了（直接メソッドを呼ぶ）
         if (playerController != null)
@@ -237,13 +244,16 @@ public class HijackSystemController : MonoBehaviour
         hijackedEnemy = null;
         hijackTimer = 0f;
         
-        // 4. UIを通常モードに
+// 4. プレイヤーの乗っ取り状態を解除、UIを通常モードに
+
+        if (playerController != null)
+            playerController.SetHijacking(false);
         if (playerUIController != null)
-        {
             playerUIController.ResetHijackTimer();
-            playerUIController.isHijacking = false;
-        }
+        
         StartInvincible();
+
+    
         Debug.Log("敵を解放しました");
     }
     //無敵時間開始の関数

@@ -12,11 +12,13 @@ public class RushEnemyController : BaseEnemyController
 
     private bool isInRushDamagePhase = false;
     private bool dealtDamageThisRush = false;
+    private Animator animator;
 
     protected override void Start()
     {
         base.Start();
         isAttacking = false;
+        animator = GetComponent<Animator>();
     }
 
     protected override void UpdateEnemyBehavior(float distance, Vector2 playerPos)
@@ -69,6 +71,7 @@ public class RushEnemyController : BaseEnemyController
     {
         Debug.Log("攻撃ループ開始");
         isAttacking = true;
+        animator.SetBool("IsAttacking", true);  // Attack アニメーション開始
 
         Vector3 direction = (targetPos - transform.position).normalized;
 
@@ -104,6 +107,7 @@ public class RushEnemyController : BaseEnemyController
         }
 
         isAttacking = false;
+        animator.SetBool("IsAttacking", false);  // Idle アニメーションに戻る
         Debug.Log("攻撃ループ終了");
     }
 
@@ -115,6 +119,7 @@ public class RushEnemyController : BaseEnemyController
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        if (isHijacked) return; // 乗っ取り中はプレイヤーにダメージを与えない
         if (!collision.gameObject.CompareTag("Player") || !isInRushDamagePhase || dealtDamageThisRush)
             return;
         var playerController = collision.gameObject.GetComponent<PlayerController>();

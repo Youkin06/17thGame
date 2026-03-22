@@ -31,17 +31,18 @@ public class PlayerController : MonoBehaviour
     public PlayerMoveState currentState { get; private set; } = PlayerMoveState.Idle; 
     private float defaultDashDuration = 0.2f;
     private float dashDuration = 0f;
+    public bool isHijacking { get; private set; } = false;
     
     [Header("参照コンポーネント")]
     public DynamicJoystick dynamicJoystick;
     public Rigidbody2D rb;
-    public PlayerUIController playerUIController; 
     [SerializeField] private HijackSystemController hijackSystemController;
     [SerializeField] private Animator animator;
     
 
     private static readonly int AnimIsMoving = Animator.StringToHash("isMoving");
     private static readonly int AnimAttackTrigger = Animator.StringToHash("attackTrigger");
+    private static readonly int AnimIsHijacking = Animator.StringToHash("isHijacking");
     
     private float totalDistanceMoved = 0f;
     private Vector2 lastPosition;
@@ -74,6 +75,16 @@ public class PlayerController : MonoBehaviour
     public void EndDashingState()
     {
         dashDuration = 0f;
+    }
+    
+    /// <summary>
+    /// 乗っ取り状態を設定（HijackSystemControllerから呼ばれる）。Animatorにも即時反映する。
+    /// </summary>
+    public void SetHijacking(bool value)
+    {
+        isHijacking = value;
+        if (animator != null)
+            animator.SetBool(AnimIsHijacking, isHijacking);
     }
     
     /// <summary>
@@ -137,10 +148,6 @@ public class PlayerController : MonoBehaviour
         lastPosition = currentPosition;
         
         // 移動があった場合、UIを更新
-        if (distanceThisFrame > 0.001f && playerUIController != null)
-        {
-            playerUIController.OnPlayerMoved(distanceThisFrame);
-        }
         
         // 状態に応じた処理
         switch (currentState)
@@ -185,7 +192,6 @@ public class PlayerController : MonoBehaviour
         }
         Debug.Log(logMessage);
         
-        // ★ 追加: アニメーション更新
         UpdateAnimation();
     }
     
@@ -195,6 +201,9 @@ public class PlayerController : MonoBehaviour
     private void UpdateAnimation()
     {
         if (animator == null) return;
+        // 乗っ取り状態は currentState と独立して常に同期
+        animator.SetBool(AnimIsHijacking, isHijacking);
+        
 
         switch (currentState)
         {
