@@ -139,7 +139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ca24613f16b34db6972e35bb870c285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worldOffset: {x: 0.4, y: -0.4, z: 0}
+  worldOffset: {x: 0.1, y: -0.1, z: 0}
   copyLocalScale: 0
   includeInactiveBones: 1
   shadowColor: {r: 0, g: 0, b: 0, a: 0.45}

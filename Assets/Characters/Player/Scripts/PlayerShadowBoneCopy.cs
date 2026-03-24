@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 /// <summary>
 /// アタッチしたオブジェクトを Awake で Instantiate して影コピーを自動生成するコンポーネント。
@@ -202,6 +203,17 @@ public class PlayerShadowBoneCopy : MonoBehaviour
         foreach (Animator anim in shadowGO.GetComponentsInChildren<Animator>(true))
         {
             anim.enabled = false;
+        }
+
+        // NavMeshAgent を無効化（経路探索・移動不要）。
+        foreach (NavMeshAgent agent in shadowGO.GetComponentsInChildren<NavMeshAgent>(true))
+        {
+            agent.enabled = false;
+        }
+
+                foreach (EnemyController enemycontroller in shadowGO.GetComponentsInChildren<EnemyController>(true))
+        {
+            enemycontroller.enabled = false;
         }
 
         // Collider2D 全種を無効化（当たり判定不要）。
