@@ -42,6 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7368937446542998203}
   - component: {fileID: 377619252724268489}
+  - component: {fileID: -3395174421185511319}
   - component: {fileID: 5876878929410746263}
   - component: {fileID: 2756463456871635420}
   - component: {fileID: 8680014419575236198}
@@ -126,6 +127,38 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &-3395174421185511319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1339216280629442508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ca24613f16b34db6972e35bb870c285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldOffset: {x: 0.4, y: -0.4, z: 0}
+  copyLocalScale: 0
+  includeInactiveBones: 1
+  shadowColor: {r: 0, g: 0, b: 0, a: 0.45}
+  sortingOrderOffset: -10
+  overrideSortingLayer: 0
+  shadowSortingLayerName: Default
+  disableObjectNames:
+  - hitbox
+  - PlayerDashEffect
+  - PlayerMoveEffect
+  - StickEffect
+  - eye
+  - PlayerTailTargetObject
+  disableScriptTypeNames:
+  - PlayerController
+  - HijackSystemController
+  - CameraController
+  - BaseEnemyController
+  - DynamicJoystick
 --- !u!50 &5876878929410746263
 Rigidbody2D:
   serializedVersion: 4

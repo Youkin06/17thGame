@@ -1,109 +1,118 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// アタッチしたオブジェクトを Awake で Instantiate して影コピーを自動生成するコンポーネント。
+/// Player など任意のオブジェクトに1つ付けるだけで動作する汎用スクリプト。
+/// </summary>
 [DisallowMultipleComponent]
 public class PlayerShadowBoneCopy : MonoBehaviour
 {
     // =========================
-    // Root References
-    // =========================
-    // 本体プレイヤー側のルート。ここを基準にボーン姿勢を参照する。
-    [Header("Root References")]
-    [SerializeField] private Transform sourceRoot;
-    // 影側ルート。通常はこのコンポーネントが付いている playerShadow 自身。
-    [SerializeField] private Transform shadowRoot;
-
-    // =========================
     // Follow Settings
     // =========================
-    // 影のワールド固定オフセット（右下方向に置く想定）。
     [Header("Follow Settings")]
-    [SerializeField] private Vector3 worldOffset = new Vector3(0.4f, -0.4f, 0f);
+    // 影のワールド固定オフセット（右下方向が標準）。
+    [SerializeField]
+    private Vector3 worldOffset = new Vector3(0.4f, -0.4f, 0f);
+
     // true のとき localScale も本体からコピーする。
-    [SerializeField] private bool copyLocalScale;
-    // 非アクティブなボーンも対応表作成対象に含める。
-    [SerializeField] private bool includeInactiveBones = true;
-    // 何らかの理由で対応表が空のとき、実行中に再構築を試みる。
-    [SerializeField] private bool autoRebuildWhenEmpty = true;
+    [SerializeField]
+    private bool copyLocalScale;
+
+    // 非アクティブなボーンも対応表の対象に含める。
+    [SerializeField]
+    private bool includeInactiveBones = true;
 
     // =========================
-    // Shadow Setup (Optional)
+    // Shadow Visuals
     // =========================
-    // 影側の Animator を無効化して二重アニメーションを防ぐ。
-    [Header("Shadow Setup (Optional)")]
-    [SerializeField] private bool disableShadowAnimator = true;
-    // 影側の Rig / Constraint を無効化してIK二重計算を防ぐ。
-    [SerializeField] private bool disableShadowRigAndConstraints = true;
-    // Start時に影色・描画順設定を自動適用する。
-    [SerializeField] private bool applyShadowVisualsOnStart = true;
+    [Header("Shadow Visuals")]
     // 影に適用する基本色（黒半透明）。
-    [SerializeField] private Color shadowColor = new Color(0f, 0f, 0f, 0.45f);
+    [SerializeField]
+    private Color shadowColor = new Color(0f, 0f, 0f, 0.45f);
+
     // 本体より背面に置くための sortingOrder 差分。
-    [SerializeField] private int sortingOrderOffset = -10;
-    // true の場合、Sorting Layer 名も強制上書きする。
-    [SerializeField] private bool overrideSortingLayer;
+    [SerializeField]
+    private int sortingOrderOffset = -10;
+
+    // true の場合 Sorting Layer 名も強制上書きする。
+    [SerializeField]
+    private bool overrideSortingLayer;
+
     // overrideSortingLayer 有効時に使う Sorting Layer 名。
-    [SerializeField] private string sortingLayerName = "Default";
-    // 影側で無効化したいオブジェクト名リスト（判定・エフェクト等）。
-    [SerializeField] private string[] disableObjectNames =
+    [SerializeField]
+    private string shadowSortingLayerName = "Default";
+
+    // =========================
+    // Disable Options
+    // =========================
+    [Header("Disable Options")]
+    // 影側で名前指定で SetActive(false) するオブジェクト名リスト（判定・エフェクト系）。
+    [SerializeField]
+    private string[] disableObjectNames =
     {
         "hitbox",
         "PlayerDashEffect",
         "PlayerMoveEffect",
         "StickEffect",
         "eye",
-        "PlayerTailTargetObject"
+        "PlayerTailTargetObject",
     };
 
-    // 本体ボーンと影ボーンの対応ペア（インデックス一致で同期）。
+    // 影側で無効化するゲームロジック系スクリプトの型名リスト。
+    [SerializeField]
+    private string[] disableScriptTypeNames =
+    {
+        "PlayerController",
+        "HijackSystemController",
+        "CameraController",
+        "BaseEnemyController",
+        "DynamicJoystick",
+    };
+
+    // -----------------------------------------------
+    // 内部状態
+    // -----------------------------------------------
+
+    // 本体ボーンと影ボーンの同期ペア（インデックス一致で LateUpdate コピー）。
     private readonly List<Transform> sourceBones = new List<Transform>();
     private readonly List<Transform> shadowBones = new List<Transform>();
 
-    private void Reset()
+    // Instantiate で生成した影ルート。
+    private Transform shadowRoot;
+
+    // Instantiate 中の再帰呼び出しを防ぐフラグ。
+    // Instantiate(gameObject) するとコピー側の Awake も同フレームで呼ばれるため、
+    // static フラグで「影生成中かどうか」を共有し二重 Instantiate を遮断する。
+    private static bool _isCreatingShadow;
+
+    // -----------------------------------------------
+    // Unity ライフサイクル
+    // -----------------------------------------------
+
+    private void Awake()
     {
-        shadowRoot = transform;
-    }
-
-    private void Start()
-    {
-        if (shadowRoot == null)
-        {
-            shadowRoot = transform;
-        }
-
-        BuildBoneMapping();
-
-        if (disableShadowAnimator)
-        {
-            DisableAnimatorInShadow();
-        }
-
-        if (disableShadowRigAndConstraints)
-        {
-            DisableRigAndConstraintComponents();
-        }
-
-        if (applyShadowVisualsOnStart)
-        {
-            ApplyShadowVisuals();
-            DisableExcludedObjects();
-        }
-    }
-
-    private void LateUpdate()
-    {
-        if (sourceRoot == null || shadowRoot == null)
+        // 影コピー側の Awake 呼び出しは無視する（CreateShadow 内で後処理する）。
+        if (_isCreatingShadow)
         {
             return;
         }
 
-        if (autoRebuildWhenEmpty && sourceBones.Count == 0)
+        CreateShadow();
+    }
+
+    private void LateUpdate()
+    {
+        if (shadowRoot == null)
         {
-            BuildBoneMapping();
+            return;
         }
 
-        shadowRoot.SetPositionAndRotation(sourceRoot.position + worldOffset, sourceRoot.rotation);
+        // 影ルートを本体位置 + 固定オフセットに追従させる。
+        shadowRoot.SetPositionAndRotation(transform.position + worldOffset, transform.rotation);
 
+        // 各ボーンペアの localPosition / localRotation を複製する。
         int pairCount = Mathf.Min(sourceBones.Count, shadowBones.Count);
         for (int i = 0; i < pairCount; i++)
         {
@@ -123,35 +132,203 @@ public class PlayerShadowBoneCopy : MonoBehaviour
         }
     }
 
-    [ContextMenu("Build Bone Mapping")]
+    private void OnDestroy()
+    {
+        // 本体が破棄されたら影も合わせて削除する。
+        if (shadowRoot != null)
+        {
+            Destroy(shadowRoot.gameObject);
+        }
+    }
+
+    // -----------------------------------------------
+    // 影生成ロジック
+    // -----------------------------------------------
+
+    private void CreateShadow()
+    {
+        // フラグを立ててから Instantiate する。
+        // Instantiate 内でコピー側の Awake が即座に呼ばれるが、
+        // フラグが true なので再帰せず早期 return する。
+        _isCreatingShadow = true;
+        GameObject shadowGO;
+        try
+        {
+            shadowGO = Instantiate(
+                gameObject,
+                transform.position + worldOffset,
+                transform.rotation
+            );
+        }
+        finally
+        {
+            _isCreatingShadow = false;
+        }
+
+        shadowGO.name = gameObject.name + "_Shadow";
+        shadowRoot = shadowGO.transform;
+
+        // 影 GameObject 上のこのコンポーネントは不要なので削除する。
+        PlayerShadowBoneCopy shadowScript = shadowGO.GetComponent<PlayerShadowBoneCopy>();
+        if (shadowScript != null)
+        {
+            Destroy(shadowScript);
+        }
+
+        // Instantiate が階層内の Transform 参照を自動リマップするため、
+        // SpriteSkin の boneTransforms は既に影ボーンを指した状態になる。
+        // 手動リマップは不要。
+
+        // 不要コンポーネントを無効化する。
+        DisableUnnecessaryComponents(shadowGO);
+
+        // 指定オブジェクトを非アクティブにする。
+        DisableExcludedObjects(shadowGO);
+
+        // 影の見た目（色・描画順）を適用する。
+        ApplyShadowVisuals(shadowGO);
+
+        // ボーン対応表を構築する。
+        BuildBoneMapping();
+    }
+
+    /// <summary>
+    /// 影には不要なコンポーネントを無効化する。
+    /// SpriteSkin と SpriteRenderer は維持する。
+    /// </summary>
+    private void DisableUnnecessaryComponents(GameObject shadowGO)
+    {
+        // Animator を無効化（二重アニメーション防止）。
+        foreach (Animator anim in shadowGO.GetComponentsInChildren<Animator>(true))
+        {
+            anim.enabled = false;
+        }
+
+        // Collider2D 全種を無効化（当たり判定不要）。
+        foreach (Collider2D col in shadowGO.GetComponentsInChildren<Collider2D>(true))
+        {
+            col.enabled = false;
+        }
+
+        // Rigidbody2D を無効化（物理演算不要）。
+        foreach (Rigidbody2D rb in shadowGO.GetComponentsInChildren<Rigidbody2D>(true))
+        {
+            rb.simulated = false;
+        }
+
+        // ゲームロジック系スクリプトと Rig/IK 系を無効化する。
+        HashSet<string> blockList = new HashSet<string>(disableScriptTypeNames);
+        foreach (Behaviour behaviour in shadowGO.GetComponentsInChildren<Behaviour>(true))
+        {
+            if (behaviour == null)
+            {
+                continue;
+            }
+
+            string typeName = behaviour.GetType().Name;
+
+            // ゲームロジック系。
+            if (blockList.Contains(typeName))
+            {
+                behaviour.enabled = false;
+                continue;
+            }
+
+            // Rig / IK Constraint 系。
+            bool isRigType =
+                typeName == "Rig"
+                || typeName == "RigBuilder"
+                || typeName.EndsWith("Constraint")
+                || typeName.Contains("IKConstraint");
+
+            if (isRigType)
+            {
+                behaviour.enabled = false;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 名前リストに一致する子オブジェクトを非アクティブにする。
+    /// </summary>
+    private void DisableExcludedObjects(GameObject shadowGO)
+    {
+        if (disableObjectNames == null || disableObjectNames.Length == 0)
+        {
+            return;
+        }
+
+        HashSet<string> excludedNames = new HashSet<string>(disableObjectNames);
+        foreach (Transform child in shadowGO.GetComponentsInChildren<Transform>(true))
+        {
+            if (child == shadowRoot)
+            {
+                continue;
+            }
+
+            if (excludedNames.Contains(child.name))
+            {
+                child.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 影側 SpriteRenderer に影色・sortingOrder を適用する。
+    /// </summary>
+    private void ApplyShadowVisuals(GameObject shadowGO)
+    {
+        foreach (SpriteRenderer sr in shadowGO.GetComponentsInChildren<SpriteRenderer>(true))
+        {
+            sr.color = shadowColor;
+            sr.sortingOrder += sortingOrderOffset;
+            if (overrideSortingLayer && !string.IsNullOrEmpty(shadowSortingLayerName))
+            {
+                sr.sortingLayerName = shadowSortingLayerName;
+            }
+        }
+    }
+
+    // -----------------------------------------------
+    // ボーン対応表
+    // -----------------------------------------------
+
+    /// <summary>
+    /// 本体と影の相対パス一致でボーンペアを構築する。
+    /// LateUpdate はこのリストだけを参照して高速同期する。
+    /// </summary>
+    [ContextMenu("Rebuild Bone Mapping")]
     public void BuildBoneMapping()
     {
         sourceBones.Clear();
         shadowBones.Clear();
 
-        if (sourceRoot == null || shadowRoot == null)
+        if (shadowRoot == null)
         {
-            Debug.LogError($"{nameof(PlayerShadowBoneCopy)}: sourceRoot or shadowRoot is not assigned.", this);
+            Debug.LogError($"{nameof(PlayerShadowBoneCopy)}: shadowRoot が未設定です。", this);
             return;
         }
 
-        Dictionary<string, Transform> sourceMap = BuildRelativePathMap(sourceRoot, includeInactiveBones);
-        Transform[] shadowTransforms = shadowRoot.GetComponentsInChildren<Transform>(includeInactiveBones);
+        // 影側ボーンの相対パス辞書を作成する。
+        Dictionary<string, Transform> shadowMap = BuildRelativePathMap(
+            shadowRoot,
+            includeInactiveBones
+        );
 
+        // 本体配下のボーンを走査して一致するペアを登録する。
         int unmatchedCount = 0;
-        for (int i = 0; i < shadowTransforms.Length; i++)
+        foreach (Transform sourceChild in GetComponentsInChildren<Transform>(includeInactiveBones))
         {
-            Transform shadow = shadowTransforms[i];
-            if (shadow == shadowRoot)
+            if (sourceChild == transform)
             {
                 continue;
             }
 
-            string relativePath = GetRelativePath(shadowRoot, shadow);
-            if (sourceMap.TryGetValue(relativePath, out Transform source))
+            string relativePath = GetRelativePath(transform, sourceChild);
+            if (shadowMap.TryGetValue(relativePath, out Transform shadowChild))
             {
-                sourceBones.Add(source);
-                shadowBones.Add(shadow);
+                sourceBones.Add(sourceChild);
+                shadowBones.Add(shadowChild);
             }
             else
             {
@@ -161,125 +338,45 @@ public class PlayerShadowBoneCopy : MonoBehaviour
 
         if (sourceBones.Count == 0)
         {
-            Debug.LogError($"{nameof(PlayerShadowBoneCopy)}: no matched bone paths found.", this);
+            Debug.LogError(
+                $"{nameof(PlayerShadowBoneCopy)}: ボーン対応が1件も見つかりませんでした。",
+                this
+            );
             return;
         }
 
         if (unmatchedCount > 0)
         {
             Debug.LogWarning(
-                $"{nameof(PlayerShadowBoneCopy)}: matched={sourceBones.Count}, unmatchedShadowBones={unmatchedCount}.",
+                $"{nameof(PlayerShadowBoneCopy)}: matched={sourceBones.Count}, unmatched={unmatchedCount}",
                 this
             );
         }
+        Debug.Log($"[ShadowBoneMapping] source={sourceBones.Count} shadow={shadowBones.Count}", this);
+
     }
 
-    [ContextMenu("Apply Shadow Visuals")]
-    public void ApplyShadowVisuals()
-    {
-        if (shadowRoot == null)
-        {
-            return;
-        }
+    // -----------------------------------------------
+    // ユーティリティ
+    // -----------------------------------------------
 
-        SpriteRenderer[] renderers = shadowRoot.GetComponentsInChildren<SpriteRenderer>(true);
-        for (int i = 0; i < renderers.Length; i++)
-        {
-            SpriteRenderer renderer = renderers[i];
-            renderer.color = shadowColor;
-            renderer.sortingOrder += sortingOrderOffset;
-            if (overrideSortingLayer && !string.IsNullOrEmpty(sortingLayerName))
-            {
-                renderer.sortingLayerName = sortingLayerName;
-            }
-        }
-    }
-
-    [ContextMenu("Disable Excluded Shadow Objects")]
-    public void DisableExcludedObjects()
-    {
-        if (shadowRoot == null || disableObjectNames == null || disableObjectNames.Length == 0)
-        {
-            return;
-        }
-
-        HashSet<string> excludedNames = new HashSet<string>(disableObjectNames);
-        Transform[] allTransforms = shadowRoot.GetComponentsInChildren<Transform>(true);
-        for (int i = 0; i < allTransforms.Length; i++)
-        {
-            Transform item = allTransforms[i];
-            if (item == shadowRoot)
-            {
-                continue;
-            }
-
-            if (excludedNames.Contains(item.name))
-            {
-                item.gameObject.SetActive(false);
-            }
-        }
-    }
-
-    private void DisableAnimatorInShadow()
-    {
-        if (shadowRoot == null)
-        {
-            return;
-        }
-
-        Animator[] animators = shadowRoot.GetComponentsInChildren<Animator>(true);
-        for (int i = 0; i < animators.Length; i++)
-        {
-            animators[i].enabled = false;
-        }
-    }
-
-    private void DisableRigAndConstraintComponents()
-    {
-        if (shadowRoot == null)
-        {
-            return;
-        }
-
-        Behaviour[] behaviours = shadowRoot.GetComponentsInChildren<Behaviour>(true);
-        for (int i = 0; i < behaviours.Length; i++)
-        {
-            Behaviour behaviour = behaviours[i];
-            if (behaviour == null || behaviour == this)
-            {
-                continue;
-            }
-
-            string typeName = behaviour.GetType().Name;
-            bool isRigComponent =
-                typeName == "Rig" ||
-                typeName == "RigBuilder" ||
-                typeName.EndsWith("Constraint") ||
-                typeName.Contains("IKConstraint");
-
-            if (isRigComponent)
-            {
-                behaviour.enabled = false;
-            }
-        }
-    }
-
-    private static Dictionary<string, Transform> BuildRelativePathMap(Transform root, bool includeInactive)
+    private static Dictionary<string, Transform> BuildRelativePathMap(
+        Transform root,
+        bool includeInactive
+    )
     {
         Dictionary<string, Transform> map = new Dictionary<string, Transform>();
-        Transform[] transforms = root.GetComponentsInChildren<Transform>(includeInactive);
-        for (int i = 0; i < transforms.Length; i++)
+        foreach (Transform t in root.GetComponentsInChildren<Transform>(includeInactive))
         {
-            Transform item = transforms[i];
-            if (item == root)
+            if (t == root)
             {
                 continue;
             }
 
-            string relativePath = GetRelativePath(root, item);
-            if (!map.ContainsKey(relativePath))
+            string path = GetRelativePath(root, t);
+            if (!map.ContainsKey(path))
             {
-                map.Add(relativePath, item);
+                map.Add(path, t);
             }
         }
 
