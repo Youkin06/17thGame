@@ -143,7 +143,7 @@ MonoBehaviour:
   copyLocalScale: 0
   includeInactiveBones: 1
   shadowColor: {r: 0, g: 0, b: 0, a: 0.45}
-  sortingOrderOffset: -10
+  sortingOrderOffset: -1
   overrideSortingLayer: 0
   shadowSortingLayerName: Default
   disableObjectNames:
