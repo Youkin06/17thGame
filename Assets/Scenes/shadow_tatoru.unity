@@ -1976,6 +1976,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 812966848}
     m_Modifications:
+    - target: {fileID: -3395174421185511319, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
+      propertyPath: worldOffset.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3395174421185511319, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
+      propertyPath: worldOffset.y
+      value: -0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 1339216280629442508, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
       propertyPath: m_Name
       value: NormalEnemy1 (2)
@@ -2108,6 +2116,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 812966848}
     m_Modifications:
+    - target: {fileID: -3395174421185511319, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
+      propertyPath: worldOffset.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3395174421185511319, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
+      propertyPath: worldOffset.y
+      value: -0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 1339216280629442508, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
       propertyPath: m_Name
       value: NormalEnemy1 (4)
@@ -4241,6 +4257,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 812966848}
     m_Modifications:
+    - target: {fileID: -3395174421185511319, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
+      propertyPath: worldOffset.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3395174421185511319, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
+      propertyPath: worldOffset.y
+      value: -0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 1339216280629442508, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
       propertyPath: m_Name
       value: NormalEnemy1 (5)
@@ -4400,6 +4424,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 812966848}
     m_Modifications:
+    - target: {fileID: -3395174421185511319, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
+      propertyPath: worldOffset.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3395174421185511319, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
+      propertyPath: worldOffset.y
+      value: -0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 1339216280629442508, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
       propertyPath: m_Name
       value: NormalEnemy1 (6)
@@ -12669,7 +12701,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ca24613f16b34db6972e35bb870c285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worldOffset: {x: 0.1, y: -0.1, z: 0}
+  worldOffset: {x: 0.2, y: -0.2, z: 0}
   copyLocalScale: 0
   includeInactiveBones: 1
   shadowColor: {r: 0, g: 0, b: 0, a: 0.45}
@@ -19034,6 +19066,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 812966848}
     m_Modifications:
+    - target: {fileID: -3395174421185511319, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
+      propertyPath: worldOffset.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3395174421185511319, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
+      propertyPath: worldOffset.y
+      value: -0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 1339216280629442508, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
       propertyPath: m_Name
       value: NormalEnemy1 (1)
@@ -195247,6 +195287,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 812966848}
     m_Modifications:
+    - target: {fileID: -3395174421185511319, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
+      propertyPath: worldOffset.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3395174421185511319, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
+      propertyPath: worldOffset.y
+      value: -0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 1339216280629442508, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
       propertyPath: m_Name
       value: NormalEnemy1 (3)
@@ -196165,6 +196213,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 812966848}
     m_Modifications:
+    - target: {fileID: -3395174421185511319, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
+      propertyPath: worldOffset.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3395174421185511319, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
+      propertyPath: worldOffset.y
+      value: -0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 1339216280629442508, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
       propertyPath: m_Name
       value: NormalEnemy1 (7)
@@ -214452,6 +214508,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 812966848}
     m_Modifications:
+    - target: {fileID: -3395174421185511319, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
+      propertyPath: worldOffset.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3395174421185511319, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
+      propertyPath: worldOffset.y
+      value: -0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 1339216280629442508, guid: 7cf7e46367390d143bdbe394afdedddd, type: 3}
       propertyPath: m_Name
       value: NormalEnemy1
