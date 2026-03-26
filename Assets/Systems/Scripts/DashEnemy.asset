@@ -16,3 +16,4 @@ MonoBehaviour:
   moveSpeed: 10
   bodyColor: {r: 1, g: 0, b: 0, a: 0}
   hijackDuration: 10
+  hijackClip: {fileID: 7400000, guid: 66033ef19131b49d7ba70d61a15ef103, type: 2}
