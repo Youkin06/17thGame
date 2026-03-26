@@ -12442,6 +12442,8 @@ MonoBehaviour:
   rb: {fileID: 941392681}
   hijackSystemController: {fileID: 941392676}
   animator: {fileID: 941392674}
+  baseAnimatorController: {fileID: 0}
+  baseHijackClip: {fileID: 0}
 --- !u!114 &941392678
 MonoBehaviour:
   m_ObjectHideFlags: 0
