@@ -25,6 +25,8 @@ public abstract class BaseEnemyController : MonoBehaviour
 
     protected Coroutine wanderCo;
 
+    protected Animator animator;
+
     protected virtual void Start()
     {
         if (enemyData != null)
@@ -41,6 +43,7 @@ public abstract class BaseEnemyController : MonoBehaviour
             agent.updateUpAxis = false;
         }
         enemyRb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -197,6 +200,7 @@ public abstract class BaseEnemyController : MonoBehaviour
     public virtual void StopTracking()
     {
         isHijacked = true;
+        animator.SetBool("isHijacked", true);
         if (agent != null)
             agent.enabled = false;
         if (enemyRb != null)
@@ -212,6 +216,7 @@ public abstract class BaseEnemyController : MonoBehaviour
     public void ReleaseEnemy()
     {
         isHijacked = false;
+        animator.SetBool("isHijacked", false);
         transform.SetParent(null);
 
         if (agent != null)
