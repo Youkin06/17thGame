@@ -199,18 +199,18 @@ AnimatorStateMachine:
     m_Position: {x: 360, y: 90, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -532345956557524286}
-    m_Position: {x: 500, y: -90, z: 0}
+    m_Position: {x: 500, y: -160, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7743178264886704369}
-    m_Position: {x: 40, y: -100, z: 0}
+    m_Position: {x: 50, y: -170, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
-  - {fileID: 4636235663844103496}
   - {fileID: -2271491354978729358}
+  - {fileID: 4636235663844103496}
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: 280, y: -140, z: 0}
+  m_AnyStatePosition: {x: 280, y: -250, z: 0}
   m_EntryPosition: {x: 130, y: 140, z: 0}
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
@@ -319,6 +319,9 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: attackTrigger
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: isHijacking
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -532345956557524286}
