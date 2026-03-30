@@ -137,4 +137,23 @@ public class RushEnemyController : BaseEnemyController
         Gizmos.color = Color.red;
         Gizmos.DrawRay(transform.position, transform.up * 3f);
     }
+
+
+    public override void StopTracking()
+    {
+    base.StopTracking();
+    
+    // 突進に関するフラグをすべてリセットする
+    isInRushDamagePhase = false;
+    dealtDamageThisRush = false;
+
+    // アニメーションも攻撃状態を解除する
+    if (animator != null)
+    {
+        animator.SetBool("IsAttacking", false);
+    }
+
+    Debug.Log("RushEnemy: 乗っ取りにより攻撃フラグをリセットしました");
+}
+
 }
