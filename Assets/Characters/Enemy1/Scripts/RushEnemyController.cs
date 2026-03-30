@@ -12,13 +12,11 @@ public class RushEnemyController : BaseEnemyController
 
     private bool isInRushDamagePhase = false;
     private bool dealtDamageThisRush = false;
-    private Animator animator;
 
     protected override void Start()
     {
         base.Start();
         isAttacking = false;
-        animator = GetComponent<Animator>();
     }
 
     protected override void UpdateEnemyBehavior(float distance, Vector2 playerPos)

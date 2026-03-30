@@ -203,6 +203,7 @@ public class HijackSystemController : MonoBehaviour
         // 7. プレイヤーの乗っ取り状態を更新、UIを乗っ取りモードに
         if (playerController != null)
             playerController.SetHijacking(true);
+            playerController.ApplyHijackVisual(hijackedEnemy.enemyData);
         if (playerUIController != null)
             playerUIController.ResetHijackTimer();
         
@@ -248,6 +249,7 @@ public class HijackSystemController : MonoBehaviour
 
         if (playerController != null)
             playerController.SetHijacking(false);
+            playerController.ResetHijackVisual();
         if (playerUIController != null)
             playerUIController.ResetHijackTimer();
         
