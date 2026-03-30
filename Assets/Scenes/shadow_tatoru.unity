@@ -12672,11 +12672,7 @@ MonoBehaviour:
   worldOffset: {x: 0.1, y: -0.1, z: 0}
   copyLocalScale: 0
   includeInactiveBones: 1
-  shadowColor:
-    r: 0
-    g: 0
-    b: 0
-    a: 0.45
+  shadowColor: {r: 0, g: 0, b: 0, a: 0.45}
   sortingOrderOffset: -10
   overrideSortingLayer: 0
   shadowSortingLayerName: Default
@@ -12693,7 +12689,6 @@ MonoBehaviour:
   - CameraController
   - BaseEnemyController
   - DynamicJoystick
-  shadowRoot: {fileID: 0}
 --- !u!1001 &964088194
 PrefabInstance:
   m_ObjectHideFlags: 0

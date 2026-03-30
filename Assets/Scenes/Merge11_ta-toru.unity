@@ -12309,6 +12309,7 @@ GameObject:
   - component: {fileID: 941392673}
   - component: {fileID: 941392672}
   - component: {fileID: 941392684}
+  - component: {fileID: 941392685}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -12442,6 +12443,8 @@ MonoBehaviour:
   rb: {fileID: 941392681}
   hijackSystemController: {fileID: 941392676}
   animator: {fileID: 941392674}
+  baseAnimatorController: {fileID: 0}
+  baseHijackClip: {fileID: 7400000, guid: 1dcc70c70967443e490b725eec93858e, type: 2}
 --- !u!114 &941392678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12656,6 +12659,38 @@ MonoBehaviour:
   playerController: {fileID: 941392677}
   playerDashEffectRoot: {fileID: 1852525689}
   playerEffectRoot: {fileID: 848711062}
+--- !u!114 &941392685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 941392671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ca24613f16b34db6972e35bb870c285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldOffset: {x: 0.2, y: -0.2, z: 0}
+  copyLocalScale: 0
+  includeInactiveBones: 1
+  shadowColor: {r: 0, g: 0, b: 0, a: 0.45}
+  sortingOrderOffset: -10
+  overrideSortingLayer: 0
+  shadowSortingLayerName: Default
+  disableObjectNames:
+  - hitbox
+  - PlayerDashEffect
+  - PlayerMoveEffect
+  - StickEffect
+  - eye
+  - PlayerTailTargetObject
+  disableScriptTypeNames:
+  - PlayerController
+  - HijackSystemController
+  - CameraController
+  - BaseEnemyController
+  - DynamicJoystick
 --- !u!1001 &964088194
 PrefabInstance:
   m_ObjectHideFlags: 0
