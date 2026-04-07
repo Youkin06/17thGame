@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WaveFill
-  m_Shader: {fileID: 4800000, guid: 9d00bc476d8be4bbea4e8f77b3b44ce9, type: 3}
+  m_Name: ProcedualButton
+  m_Shader: {fileID: 4800000, guid: 183e0a6480af24aa49529e2ed59b9d66, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -41,36 +41,37 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Amplitude: 0.07
-    - _Amplitude2: 0.08
-    - _AmplitudePulseSpeed: 5
-    - _AmplitudePulseSpeed2: 5
+    - _BlobInnerFade: 0.5
+    - _BlobSharpness: 0.2
     - _ColorMask: 15
-    - _EdgeSoftness: 0.01
-    - _EdgeSoftness2: 0.01
     - _EnableExternalAlpha: 0
-    - _Frequency: 2
-    - _Frequency2: 3
-    - _LineThickness: 0.001
-    - _LineThickness2: 0.001
-    - _LineY: 0.9
-    - _LineY2: 0.85
-    - _OverlayStrength: 0.95
-    - _OverlayStrength2: 0.5
-    - _Speed: 0.4
-    - _Speed2: 0.5
+    - _LobeCount: 7
+    - _LobeInnerBias: 1
+    - _LobeJitter: 0.03
+    - _LobeOffset: 0.173
+    - _LobeOuterBias: 0.2
+    - _LobeRadialScale: 3
+    - _LobeRadius: 0.08
+    - _LobeRotationSpeed: 0.03
+    - _LobeTangentialScale: 1
+    - _OutlineWidth: 0.002
+    - _PulseAmount: 0.01
+    - _PulseSpeed: 1
+    - _Radius: 0.25
+    - _SmoothJoin: 0.1
+    - _Softness: 0.0001
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
-    - _UseUIAlphaClip: 0
+    - _WaveAmplitude: 0.0271
+    - _WaveFrequency: 7
+    - _WaveSpeed: 0.3
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _FillColor: {r: 0.5518868, g: 0.7806184, b: 1, a: 0.74509805}
-    - _FillColor2: {r: 0.5518868, g: 0.9768917, b: 1, a: 0.6392157}
+    - _FillColor: {r: 1, g: 1, b: 1, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _LineColor: {r: 1, g: 1, b: 1, a: 1}
-    - _LineColor2: {r: 1, g: 1, b: 1, a: 0.8}
+    - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

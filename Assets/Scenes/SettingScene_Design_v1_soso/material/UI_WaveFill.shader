@@ -4,25 +4,27 @@ Shader "UI/WaveFill"
     {
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
         _Color ("Tint", Color) = (1,1,1,1)
-        _FillColor ("Fill Color", Color) = (0.78, 0.91, 0.93, 1)
-        _OverlayStrength ("Overlay Strength", Range(0,1)) = 0.8
-        _LineColor ("Line Color", Color) = (1,1,1,1)
-        _LineY ("Line Y", Range(0,1)) = 0.8
-        _LineThickness ("Line Thickness", Range(0.001,0.1)) = 0.01
-        _Amplitude ("Amplitude", Range(0,0.2)) = 0.1
-        _Frequency ("Frequency", Float) = 10
-        _Speed ("Speed", Float) = 1
-        _EdgeSoftness ("Edge Softness", Range(0.001,0.05)) = 0.01
+        _FillColor ("[Wave 1] Fill Color", Color) = (0.78, 0.91, 0.93, 1)
+        _OverlayStrength ("[Wave 1] Overlay Strength", Range(0,1)) = 0.8
+        _LineColor ("[Wave 1] Line Color", Color) = (1,1,1,1)
+        _LineY ("[Wave 1] Base Height", Range(0,1)) = 0.8
+        _LineThickness ("[Wave 1] Line Thickness", Range(0.001,0.1)) = 0.01
+        _Amplitude ("[Wave 1] Wave Height", Range(0,0.2)) = 0.1
+        _Frequency ("[Wave 1] Frequency", Float) = 10
+        _Speed ("[Wave 1] Horizontal Flow Speed", Float) = 1
+        _AmplitudePulseSpeed ("[Wave 1] Wave Height Change Speed", Float) = 0.3
+        _EdgeSoftness ("[Wave 1] Edge Softness", Range(0.001,0.05)) = 0.01
 
-        _FillColor2 ("Fill Color 2", Color) = (0.65, 0.85, 0.90, 1)
-        _OverlayStrength2 ("Overlay Strength 2", Range(0,1)) = 0.5
-        _LineColor2 ("Line Color 2", Color) = (1,1,1,0.8)
-        _LineY2 ("Line Y 2", Range(0,1)) = 0.6
-        _LineThickness2 ("Line Thickness 2", Range(0.001,0.1)) = 0.01
-        _Amplitude2 ("Amplitude 2", Range(0,0.2)) = 0.05
-        _Frequency2 ("Frequency 2", Float) = 7
-        _Speed2 ("Speed 2", Float) = 0.8
-        _EdgeSoftness2 ("Edge Softness 2", Range(0.001,0.05)) = 0.01
+        _FillColor2 ("[Wave 2] Fill Color", Color) = (0.65, 0.85, 0.90, 1)
+        _OverlayStrength2 ("[Wave 2] Overlay Strength", Range(0,1)) = 0.5
+        _LineColor2 ("[Wave 2] Line Color", Color) = (1,1,1,0.8)
+        _LineY2 ("[Wave 2] Base Height", Range(0,1)) = 0.6
+        _LineThickness2 ("[Wave 2] Line Thickness", Range(0.001,0.1)) = 0.01
+        _Amplitude2 ("[Wave 2] Wave Height", Range(0,0.2)) = 0.05
+        _Frequency2 ("[Wave 2] Frequency", Float) = 7
+        _Speed2 ("[Wave 2] Horizontal Flow Speed", Float) = 0.8
+        _AmplitudePulseSpeed2 ("[Wave 2] Wave Height Change Speed", Float) = 0.25
+        _EdgeSoftness2 ("[Wave 2] Edge Softness", Range(0.001,0.05)) = 0.01
 
         _StencilComp ("Stencil Comparison", Float) = 8
         _Stencil ("Stencil ID", Float) = 0
@@ -103,6 +105,7 @@ Shader "UI/WaveFill"
             float _Amplitude;
             float _Frequency;
             float _Speed;
+            float _AmplitudePulseSpeed;
             float _EdgeSoftness;
 
             fixed4 _FillColor2;
@@ -113,6 +116,7 @@ Shader "UI/WaveFill"
             float _Amplitude2;
             float _Frequency2;
             float _Speed2;
+            float _AmplitudePulseSpeed2;
             float _EdgeSoftness2;
 
             v2f vert(appdata_t v)
@@ -137,7 +141,7 @@ Shader "UI/WaveFill"
                 float xWarp = x
                     + sin(x * TAU * 1.3 + t * 0.9) * 0.015
                     + sin(x * TAU * 2.1 - t * 0.6) * 0.008;
-                float ampMod = 0.85 + sin(t * 0.8 + x * TAU * 0.4) * 0.15;
+                float ampMod = 0.85 + sin(t * _AmplitudePulseSpeed + x * TAU * 0.4) * 0.15;
                 float wave = (
                     sin(xWarp * _Frequency * TAU + t * _Speed) * 0.7 +
                     sin(xWarp * (_Frequency * 0.55) * TAU - t * (_Speed * 0.6)) * 0.3
@@ -155,7 +159,7 @@ Shader "UI/WaveFill"
                 float xWarp2 = x
                     + sin(x * TAU * 1.7 - t * 0.7) * 0.012
                     + sin(x * TAU * 2.8 + t * 0.5) * 0.006;
-                float ampMod2 = 0.9 + sin(t * 0.65 + x * TAU * 0.3) * 0.1;
+                float ampMod2 = 0.9 + sin(t * _AmplitudePulseSpeed2 + x * TAU * 0.3) * 0.1;
                 float wave2 = (
                     sin(xWarp2 * _Frequency2 * TAU + t * _Speed2) * 0.72 +
                     sin(xWarp2 * (_Frequency2 * 0.6) * TAU - t * (_Speed2 * 0.5)) * 0.28
