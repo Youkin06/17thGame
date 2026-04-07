@@ -55,8 +55,8 @@ Material:
     - _LineY2: 0.85
     - _OverlayStrength: 0.95
     - _OverlayStrength2: 0.5
-    - _Speed: 0.6
-    - _Speed2: 0.7
+    - _Speed: 0.4
+    - _Speed2: 0.5
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
