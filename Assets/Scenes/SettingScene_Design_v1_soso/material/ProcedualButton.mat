@@ -45,19 +45,19 @@ Material:
     - _BlobSharpness: 0.2
     - _ColorMask: 15
     - _EnableExternalAlpha: 0
-    - _LobeCount: 7
+    - _LobeCount: 9
     - _LobeInnerBias: 1
     - _LobeJitter: 0.03
-    - _LobeOffset: 0.173
-    - _LobeOuterBias: 0.2
+    - _LobeOffset: 0.155
+    - _LobeOuterBias: 0
     - _LobeRadialScale: 3
-    - _LobeRadius: 0.08
+    - _LobeRadius: 0.0449
     - _LobeRotationSpeed: 0.03
     - _LobeTangentialScale: 1
-    - _OutlineWidth: 0.002
+    - _OutlineWidth: 0
     - _PulseAmount: 0.01
     - _PulseSpeed: 1
-    - _Radius: 0.25
+    - _Radius: 0.252
     - _SmoothJoin: 0.1
     - _Softness: 0.0001
     - _Stencil: 0

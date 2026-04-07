@@ -1,0 +1,57 @@
+﻿flowchart LR
+    GO_30176["Main Camera"]
+    style GO_30176 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    SC_30180[["UniversalAdditionalCameraData"]]
+    GO_30148["Player"]
+    style GO_30148 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    SC_30158[["JoystickMove"]]
+    GO_30164["eye"]
+    style GO_30164 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    GO_30200["Canvas"]
+    style GO_30200 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    SC_30204[["CanvasScaler"]]
+    SC_30202[["GraphicRaycaster"]]
+    GO_-4128["Dynamic Joystick"]
+    style GO_-4128 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    SC_-4132[["Image"]]
+    SC_30162[["DynamicJoystick"]]
+    GO_-4134["Background"]
+    style GO_-4134 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    SC_-4140[["Image"]]
+    GO_-4142["Handle"]
+    style GO_-4142 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    SC_-4148[["Image"]]
+    GO_30210["EventSystem"]
+    style GO_30210 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    SC_30214[["EventSystem"]]
+    SC_30212[["StandaloneInputModule"]]
+    GO_30186["NormalEnemy1"]
+    style GO_30186 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    SC_30198[["EnemyController"]]
+    GO_30170["Triangle"]
+    style GO_30170 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    GO_30218["NavMesh"]
+    style GO_30218 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    GO_30218_Missing_1("Missing Script"):::missing
+    GO_30218_Missing_2("Missing Script"):::missing
+    GO_30226["background(kari)"]
+    style GO_30226 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    GO_30226_Missing_3("Missing Script"):::missing
+    GO_30176 --> SC_30180
+    GO_30148 --> SC_30158
+    SC_30158 -.-> SC_30162
+    SC_30158 -.-> GO_30148
+    GO_30200 --> SC_30204
+    GO_30200 --> SC_30202
+    GO_-4128 --> SC_-4132
+    GO_-4128 --> SC_30162
+    SC_30162 -.-> GO_-4134
+    SC_30162 -.-> GO_-4142
+    GO_-4134 --> SC_-4140
+    GO_-4142 --> SC_-4148
+    GO_30210 --> SC_30214
+    GO_30210 --> SC_30212
+    GO_30186 --> SC_30198
+    GO_30218 -.-> GO_30218_Missing_1
+    GO_30218 -.-> GO_30218_Missing_2
+    GO_30226 -.-> GO_30226_Missing_3
