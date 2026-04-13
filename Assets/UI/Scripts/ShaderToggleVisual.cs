@@ -10,6 +10,8 @@ public class ShaderToggleVisual : MonoBehaviour
     private Material runtimeMaterial;
     private Coroutine animationRoutine;
 
+    public bool IsReady => style != null && runtimeMaterial != null;
+
     private void Awake()
     {
         targetGraphic = GetComponent<Graphic>();
@@ -25,7 +27,7 @@ public class ShaderToggleVisual : MonoBehaviour
         runtimeMaterial = new Material(targetGraphic.material);
         runtimeMaterial.name = $"{targetGraphic.material.name}_Runtime_{name}";
         targetGraphic.material = runtimeMaterial;
-
+        ApplyDefaultState();
     }
 
     private void OnDestroy()
@@ -75,6 +77,25 @@ public class ShaderToggleVisual : MonoBehaviour
             }
 
             SetShaderFloat(propertyId, setting.propertyName, value);
+        }
+
+        targetGraphic.SetMaterialDirty();
+    }
+
+    private void ApplyDefaultState()
+    {
+        if (!IsReady)
+        {
+            return;
+        }
+
+        foreach (var setting in style.floatProperties)
+        {
+            int propertyId = Shader.PropertyToID(setting.propertyName);
+            if (runtimeMaterial.HasProperty(propertyId))
+            {
+                runtimeMaterial.SetFloat(propertyId, setting.offValue);
+            }
         }
 
         targetGraphic.SetMaterialDirty();

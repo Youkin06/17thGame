@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 1325516326476952942}
   - component: {fileID: 737088817133464075}
   - component: {fileID: 146822782308270944}
+  - component: {fileID: 1148867652995173782}
   m_Layer: 5
   m_Name: SelectActiveColor
   m_TagString: Untagged
@@ -198,6 +199,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1148867652995173782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3659726311394631596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShowMaskGraphic: 1
 --- !u!1 &3989173734357039090
 GameObject:
   m_ObjectHideFlags: 0
@@ -232,8 +246,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00012207031, y: 0.00036621094}
-  m_SizeDelta: {x: 0.99609375, y: 0.6168823}
+  m_AnchoredPosition: {x: -15.935181, y: 0.00036621094}
+  m_SizeDelta: {x: 467.28973, y: 0.6168823}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2265728686613957831
 CanvasRenderer:

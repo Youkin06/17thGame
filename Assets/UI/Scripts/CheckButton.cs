@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ public class CheckButton : MonoBehaviour
     [SerializeField] private ShaderToggleVisual shaderToggleVisual;
     private Button button;
     private Action<bool> pushButtonWork;
+    private Coroutine syncVisualRoutine;
     private bool isOn;
 
     private void Awake()
@@ -40,6 +42,11 @@ public class CheckButton : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        ApplyVisualState(instant: true);
+    }
+
     /// <summary>
     /// ボタン押下時に実行する処理を登録する
     /// </summary>
@@ -60,7 +67,7 @@ public class CheckButton : MonoBehaviour
             check.SetActive(isOn);
         }
 
-        shaderToggleVisual?.ApplyState(isOn, instantVisual);
+        ApplyVisualState(instantVisual);
 
         if (notify)
         {
@@ -79,5 +86,38 @@ public class CheckButton : MonoBehaviour
     private void SwitchCheck()
     {
         SetState(!isOn, notify: true, instantVisual: false);
+    }
+
+    private void ApplyVisualState(bool instant)
+    {
+        if (shaderToggleVisual == null)
+        {
+            return;
+        }
+
+        if (shaderToggleVisual.IsReady)
+        {
+            shaderToggleVisual.ApplyState(isOn, instant);
+            return;
+        }
+
+        if (syncVisualRoutine != null)
+        {
+            StopCoroutine(syncVisualRoutine);
+        }
+
+        syncVisualRoutine = StartCoroutine(SyncVisualWhenReady());
+    }
+
+    private IEnumerator SyncVisualWhenReady()
+    {
+        yield return null;
+
+        if (shaderToggleVisual != null && shaderToggleVisual.IsReady)
+        {
+            shaderToggleVisual.ApplyState(isOn, instant: true);
+        }
+
+        syncVisualRoutine = null;
     }
 }
