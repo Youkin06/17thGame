@@ -83,6 +83,9 @@ public class PlayerShadowBoneCopy : MonoBehaviour
     // Instantiate で生成した影ルート。
     private Transform shadowRoot;
 
+    // disableObjectNames に含まれるノードは影生成時に意図的にオフにしているため active をミラーしない。
+    private HashSet<string> _skipActiveMirrorNames;
+
     // Instantiate 中の再帰呼び出しを防ぐフラグ。
     // Instantiate(gameObject) するとコピー側の Awake も同フレームで呼ばれるため、
     // static フラグで「影生成中かどうか」を共有し二重 Instantiate を遮断する。
@@ -130,6 +133,16 @@ public class PlayerShadowBoneCopy : MonoBehaviour
             {
                 shadow.localScale = source.localScale;
             }
+
+            // 本体の activeSelf を影に反映（Animator 無効の影でも乗っ取りなどの見た目切替に追従する）。
+            if (_skipActiveMirrorNames == null || !_skipActiveMirrorNames.Contains(source.name))
+            {
+                bool activeSelf = source.gameObject.activeSelf;
+                if (shadow.gameObject.activeSelf != activeSelf)
+                {
+                    shadow.gameObject.SetActive(activeSelf);
+                }
+            }
         }
     }
 
@@ -165,6 +178,11 @@ public class PlayerShadowBoneCopy : MonoBehaviour
         {
             _isCreatingShadow = false;
         }
+
+        _skipActiveMirrorNames =
+            disableObjectNames != null && disableObjectNames.Length > 0
+                ? new HashSet<string>(disableObjectNames)
+                : null;
 
         shadowGO.name = gameObject.name + "_Shadow";
         shadowRoot = shadowGO.transform;
