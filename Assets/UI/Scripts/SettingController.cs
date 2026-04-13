@@ -116,10 +116,10 @@ public class SettingController : MonoBehaviour
         fixedButton.Setup(FixedChanged);
         vibrationButton.Setup(VibrationChanged);
 
-        muteButton.SetState(false, notify: false, instantVisual: true);
-        displayButton.SetState(true, notify: false, instantVisual: true);
-        fixedButton.SetState(false, notify: false, instantVisual: true);
-        vibrationButton.SetState(false, notify: false, instantVisual: true);
+        muteButton.SetState(false, notify: true, instantVisual: true);
+        displayButton.SetState(true, notify: true, instantVisual: true);
+        fixedButton.SetState(false, notify: true, instantVisual: true);
+        vibrationButton.SetState(false, notify: true, instantVisual: true);
 
         //非表示にしておく
         settingContainer.SetActive(false);
@@ -169,7 +169,6 @@ public class SettingController : MonoBehaviour
         }
 
         joyStick.transform.localScale = Vector3.one * targetScale;
-        Debug.Log($"JoyStickサイズ変更: {intValue} -> 倍率 {targetScale}");
     }
 
     void PushBackButton()

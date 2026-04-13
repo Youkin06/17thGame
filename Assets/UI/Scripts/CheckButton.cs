@@ -7,7 +7,6 @@ public class CheckButton : MonoBehaviour
 {
     [SerializeField] private GameObject check;
     [SerializeField] private ShaderToggleVisual shaderToggleVisual;
-
     private Button button;
     private Action<bool> pushButtonWork;
     private bool isOn;

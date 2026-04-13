@@ -12,11 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61bdc2a287d394628b9649039a8dbffa, type: 3}
   m_Name: ShaderToggleStyle
   m_EditorClassIdentifier: 
-  duration: 0.15
+  duration: 0.07
   floatProperties:
   - propertyName: _LobeOffset
     offValue: 0
     onValue: 0.15
   - propertyName: _PulseAmount
-    offValue: 0.1
+    offValue: 0.04
     onValue: 0.01
+  - propertyName: _Radius
+    offValue: 0.1
+    onValue: 0.25
+  - propertyName: _LobeRadius
+    offValue: 0
+    onValue: 0.045
