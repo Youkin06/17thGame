@@ -19,5 +19,6 @@ public class EnemyData : ScriptableObject
 
     [Header("乗っ取り時の設定")]
     public Color bodyColor;       
-    public float hijackDuration;  
+    public float hijackDuration;
+    public AnimationClip hijackClip; // 乗っ取り時のPlayerの見た目
 }
