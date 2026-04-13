@@ -111,10 +111,15 @@ public class SettingController : MonoBehaviour
         settingContainer.SetActive(true);
 
         // オンオフボタンにそれぞれのメソッドを紐付ける
-        muteButton.Setup(false, MuteChanged);
-        displayButton.Setup(true, DisplayChanged);
-        fixedButton.Setup(false, FixedChanged);
-        vibrationButton.Setup(false, VibrationChanged);
+        muteButton.Setup(MuteChanged);
+        displayButton.Setup(DisplayChanged);
+        fixedButton.Setup(FixedChanged);
+        vibrationButton.Setup(VibrationChanged);
+
+        muteButton.SetState(false, notify: false, instantVisual: true);
+        displayButton.SetState(true, notify: false, instantVisual: true);
+        fixedButton.SetState(false, notify: false, instantVisual: true);
+        vibrationButton.SetState(false, notify: false, instantVisual: true);
 
         //非表示にしておく
         settingContainer.SetActive(false);
@@ -184,17 +189,11 @@ public class SettingController : MonoBehaviour
         seSlider.value = 0.5f;
         sizeSlider.value = 1;
 
-        // 見た目のリセット
-        muteButton.Setup(false, MuteChanged);
-        displayButton.Setup(true, DisplayChanged);
-        fixedButton.Setup(false, FixedChanged);
-        vibrationButton.Setup(false, VibrationChanged);
-
-        // 中身のリセットを直接呼び出す
-        MuteChanged(false);
-        DisplayChanged(true);
-        FixedChanged(false);
-        VibrationChanged(false);
+        // 状態と見た目をリセット
+        muteButton.SetState(false, notify: true, instantVisual: true);
+        displayButton.SetState(true, notify: true, instantVisual: true);
+        fixedButton.SetState(false, notify: true, instantVisual: true);
+        vibrationButton.SetState(false, notify: true, instantVisual: true);
 
         resetContainer.SetActive(false);
     }

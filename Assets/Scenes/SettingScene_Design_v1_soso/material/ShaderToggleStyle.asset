@@ -13,4 +13,10 @@ MonoBehaviour:
   m_Name: ShaderToggleStyle
   m_EditorClassIdentifier: 
   duration: 0.15
-  floatProperties: []
+  floatProperties:
+  - propertyName: _LobeOffset
+    offValue: 0
+    onValue: 0.15
+  - propertyName: _PulseAmount
+    offValue: 0.1
+    onValue: 0.01
