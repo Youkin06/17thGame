@@ -18,16 +18,24 @@ public class SettingController : MonoBehaviour
             return null;
         }
 
+        // まず自身に付いているか確認
         T component = target.GetComponent<T>();
+
+        // なければ子からも探す
         if (component == null)
         {
-            Debug.LogError($"{objectName} は見つかりましたが、{typeof(T).Name} が付いていません。");
+            component = target.GetComponentInChildren<T>(true);
+        }
+
+        if (component == null)
+        {
+            Debug.LogError($"{objectName} は見つかりましたが、自身および子階層に {typeof(T).Name} が付いていません。");
             return null;
         }
 
         return component;
     }
-    [SerializeField] private GameObject joyStick;
+    [SerializeField] private GameObject joyStick; 
     [SerializeField] private GameObject settingContainer;
     [Tooltip("Slider, Buttonなどが入っている親オブジェクトを指定")]
     [SerializeField] private GameObject settingRoot;
