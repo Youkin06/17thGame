@@ -946,15 +946,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4732508700629785300, guid: 488b8d40ea20c4d26916f7e0053c7f3d, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.813
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4732508700629785300, guid: 488b8d40ea20c4d26916f7e0053c7f3d, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4732508700629785300, guid: 488b8d40ea20c4d26916f7e0053c7f3d, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.813
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5076619674087748207, guid: 488b8d40ea20c4d26916f7e0053c7f3d, type: 3}
       propertyPath: m_AnchorMax.x
@@ -963,6 +963,10 @@ PrefabInstance:
     - target: {fileID: 5076619674087748207, guid: 488b8d40ea20c4d26916f7e0053c7f3d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5661682186010966842, guid: 488b8d40ea20c4d26916f7e0053c7f3d, type: 3}
+      propertyPath: m_Name
+      value: MAINSlider
       objectReference: {fileID: 0}
     - target: {fileID: 6926784148044755792, guid: 488b8d40ea20c4d26916f7e0053c7f3d, type: 3}
       propertyPath: m_text
@@ -1757,15 +1761,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4732508700629785300, guid: 488b8d40ea20c4d26916f7e0053c7f3d, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.813
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4732508700629785300, guid: 488b8d40ea20c4d26916f7e0053c7f3d, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4732508700629785300, guid: 488b8d40ea20c4d26916f7e0053c7f3d, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.813
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5076619674087748207, guid: 488b8d40ea20c4d26916f7e0053c7f3d, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1774,6 +1778,10 @@ PrefabInstance:
     - target: {fileID: 5076619674087748207, guid: 488b8d40ea20c4d26916f7e0053c7f3d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5661682186010966842, guid: 488b8d40ea20c4d26916f7e0053c7f3d, type: 3}
+      propertyPath: m_Name
+      value: SESlider
       objectReference: {fileID: 0}
     - target: {fileID: 6926784148044755792, guid: 488b8d40ea20c4d26916f7e0053c7f3d, type: 3}
       propertyPath: m_text
@@ -214320,15 +214328,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4732508700629785300, guid: 488b8d40ea20c4d26916f7e0053c7f3d, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.813
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4732508700629785300, guid: 488b8d40ea20c4d26916f7e0053c7f3d, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4732508700629785300, guid: 488b8d40ea20c4d26916f7e0053c7f3d, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.813
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5076619674087748207, guid: 488b8d40ea20c4d26916f7e0053c7f3d, type: 3}
       propertyPath: m_AnchorMax.x
@@ -214337,6 +214345,10 @@ PrefabInstance:
     - target: {fileID: 5076619674087748207, guid: 488b8d40ea20c4d26916f7e0053c7f3d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5661682186010966842, guid: 488b8d40ea20c4d26916f7e0053c7f3d, type: 3}
+      propertyPath: m_Name
+      value: BGMSlider
       objectReference: {fileID: 0}
     - target: {fileID: 7894492196305669359, guid: 488b8d40ea20c4d26916f7e0053c7f3d, type: 3}
       propertyPath: m_Name

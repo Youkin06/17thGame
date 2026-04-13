@@ -35,12 +35,27 @@ public class SettingController : MonoBehaviour
 
         return component;
     }
+
+    private T TryFindComponentInChildrenByName<T>(Transform root, string objectName) where T : Component
+    {
+        Transform target = root.GetComponentsInChildren<Transform>(true)
+            .FirstOrDefault(t => t.name == objectName);
+
+        if (target == null)
+        {
+            return null;
+        }
+
+        T component = target.GetComponent<T>();
+        return component != null ? component : target.GetComponentInChildren<T>(true);
+    }
     [SerializeField] private GameObject joyStick; 
     [SerializeField] private GameObject settingContainer;
     [Tooltip("Slider, Buttonなどが入っている親オブジェクトを指定")]
     [SerializeField] private GameObject settingRoot;
 
     private AudioSource bgmAudioSource;
+    private Slider mainSlider;
     private Slider bgmSlider;
     private Slider seSlider;
     private Slider sizeSlider;
@@ -53,6 +68,7 @@ public class SettingController : MonoBehaviour
     private CheckButton displayButton;
     private CheckButton fixedButton;
     private CheckButton vibrationButton;
+    private bool isMuted;
 
     void Start()
     {
@@ -62,6 +78,9 @@ public class SettingController : MonoBehaviour
             Debug.LogError("settingRoot が Inspector で未設定です。");
             return;
         }
+        mainSlider = TryFindComponentInChildrenByName<Slider>(settingRoot.transform, "MAINSlider")
+            ?? TryFindComponentInChildrenByName<Slider>(settingRoot.transform, "MainSlider")
+            ?? TryFindComponentInChildrenByName<Slider>(settingRoot.transform, "MasterSlider");
         bgmSlider = FindComponentInChildrenByName<Slider>(settingRoot.transform, "BGMSlider");
         seSlider = FindComponentInChildrenByName<Slider>(settingRoot.transform, "SESlider");
         sizeSlider = FindComponentInChildrenByName<Slider>(settingRoot.transform, "SizeSlider");
@@ -126,12 +145,14 @@ public class SettingController : MonoBehaviour
         resetContainer.SetActive(false);
 
         //BGMの初期値
-        bgmAudioSource.volume = bgmSlider.value;
+        ApplyMasterVolume();
+        ApplyBgmVolume();
         //音量が変わった時だけ変更
-        bgmSlider.onValueChanged.AddListener((vol) =>
+        if (mainSlider != null)
         {
-            bgmAudioSource.volume = vol;
-        });
+            mainSlider.onValueChanged.AddListener(_ => ApplyMasterVolume());
+        }
+        bgmSlider.onValueChanged.AddListener(_ => ApplyBgmVolume());
 
         //Sizeの初期値
         JoyStickSizeChanged(sizeSlider.value);
@@ -186,6 +207,10 @@ public class SettingController : MonoBehaviour
         // スライダーの値をリセット
         bgmSlider.value = 0.5f;
         seSlider.value = 0.5f;
+        if (mainSlider != null)
+        {
+            mainSlider.value = 1f;
+        }
         sizeSlider.value = 1;
 
         // 状態と見た目をリセット
@@ -204,14 +229,19 @@ public class SettingController : MonoBehaviour
 
     void MuteChanged(bool isOn)
     {
-        if (isOn)
-        {
-            AudioListener.volume = 0;
-        }
-        else
-        {
-            AudioListener.volume = 1;
-        }
+        isMuted = isOn;
+        ApplyMasterVolume();
+    }
+
+    void ApplyMasterVolume()
+    {
+        float masterVolume = mainSlider == null ? 1f : mainSlider.value;
+        AudioListener.volume = isMuted ? 0f : masterVolume;
+    }
+
+    void ApplyBgmVolume()
+    {
+        bgmAudioSource.volume = bgmSlider.value;
     }
 
     void DisplayChanged(bool isOn)
