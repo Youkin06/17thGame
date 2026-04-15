@@ -14,7 +14,7 @@ public class StageSelecUIController : MonoBehaviour
     int selectStageNum;
     public int currentStageNum;
     public string[] sceneName;
-    public GameObject selectRect;
+    public GameObject selectMark_rect;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,7 +34,7 @@ public class StageSelecUIController : MonoBehaviour
         //決定ボタンにメソッド割り当て
         decideButton.onClick.AddListener(DecideStage);
         
-        selectRect.transform.position = stageButtons[selectStageNum].transform.position;//選択UIの初期位置移動
+        selectMark_rect.transform.position = stageButtons[selectStageNum].transform.position;//選択UIの初期位置移動
     }
 
     // Update is called once per frame
@@ -47,7 +47,7 @@ public class StageSelecUIController : MonoBehaviour
     {
         selectStageNum = stageNum;
         cameraController.MoveStagePos(stageNum);//カメラの移動
-        selectRect.transform.position = stageButtons[stageNum].transform.position;//選択UIの移動
+        selectMark_rect.transform.position = stageButtons[stageNum].transform.position;//選択UIの移動
         Debug.Log($"ステージ:{stageNum}を選択");
     }
 
