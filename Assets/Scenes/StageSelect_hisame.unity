@@ -159,15 +159,14 @@ MonoBehaviour:
   - {fileID: 1368470585}
   decideButton: {fileID: 1900215389}
   cameraController: {fileID: 1130666801}
-  selectStageNum: 0
   currentStageNum: 3
   sceneName:
-  - 0
   - 1
   - 2
   - 3
   - 4
-  selectRect: {fileID: 1087002341}
+  - 5
+  selectMark_rect: {fileID: 1087002341}
 --- !u!4 &50024203
 Transform:
   m_ObjectHideFlags: 0
@@ -1119,11 +1118,10 @@ MonoBehaviour:
   - {fileID: 919818760}
   - {fileID: 741386101}
   - {fileID: 1368470585}
-  currentStage: 0
-  selectStage: 3
+  currentStage: 3
+  selectStage: 0
   mainCamera: {fileID: 1130666798}
   targetObj: {fileID: 1130666796}
-  zPos_offset: 2
 --- !u!1 &1368470583
 GameObject:
   m_ObjectHideFlags: 0
