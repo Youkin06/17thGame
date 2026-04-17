@@ -31,6 +31,8 @@ public class StageButtonData
 
 public class StageSelecUIController : MonoBehaviour
 {
+    [SerializeField] private GameObject moonObj;
+    [SerializeField] private float sideLength = 6.365f;//ステージ選択UIの左右の端のx座標の絶対値
     [SerializeField] private List<StageButtonData> stageButtons;
 
     [SerializeField] private Sprite latestStageSprite;
@@ -38,8 +40,18 @@ public class StageSelecUIController : MonoBehaviour
     [SerializeField] private Sprite lockedStageSprite;
     [SerializeField] private float lineMoveDuration = 0.2f;
 
-    [SerializeField] private Button decideButton;
-    [SerializeField] private Vector3 decideButtonXOffset = new Vector3(-2f, 0f, 0f);
+    [SerializeField] private Sprite decideButtonImageRight;
+    [SerializeField] private Sprite decideButtonImageUp;
+    [SerializeField] private Sprite decideButtonImageDown;
+    [SerializeField] private Sprite decideButtonImageLeft;
+    [SerializeField]private Button decideButton;
+    [SerializeField] private float decideButtonOffsetX;
+    [SerializeField] private float decideButtonOffsetY;
+    [SerializeField] private Button decideButtonPrefRight;
+    [SerializeField] private Button decideButtonPrefUp;
+    [SerializeField] private Button decideButtonPrefDown;
+    [SerializeField] private Button decideButtonPrefLeft;
+
     [SerializeField] private StageSelectCameraController cameraController;
 
     [SerializeField] private int latestStageNum;
@@ -97,7 +109,8 @@ public class StageSelecUIController : MonoBehaviour
         selectStageNum = stageNum;
         cameraController.MoveStagePos(stageNum);//カメラの移動
         selectMark_rect.transform.position = stageButtons[stageNum].buttonObj.transform.position;//選択UIの移動
-        decideButton.transform.position = stageButtons[stageNum].buttonObj.transform.position + decideButtonXOffset;//決定ボタンの移動 
+        UpdateDecideButtonImage(stageButtons[stageNum].buttonObj.transform.position, decideButton);//決定ボタンの画像更新
+        MoveDecideButton(stageButtons[stageNum].buttonObj.transform.position);//決定ボタンの移動
         Debug.Log($"ステージ:{stageNum}を選択");
     }
 
@@ -241,6 +254,84 @@ public class StageSelecUIController : MonoBehaviour
             }
         }
         return;
+    }
+
+    //決定ボタン更新メソッド
+    public void UpdateDecideButtonImage(Vector3 targetPosition, Button decideButton)
+    {
+        Vector3 moonPos = moonObj.transform.position;
+        Vector3 instantiatePos = decideButton.transform.position;
+        Quaternion instantiateRot = decideButton.transform.rotation;
+        Transform instantiateParent = decideButton.transform.parent;
+        if(targetPosition.x >= moonPos.x + sideLength)
+        {
+            Destroy(decideButton.gameObject);
+            this.decideButton = Instantiate(decideButtonPrefRight, instantiatePos, instantiateRot, instantiateParent);
+            this.decideButton.onClick.AddListener(DecideStage);
+        }
+        else if(targetPosition.x <= moonPos.x - sideLength)
+        {
+            Destroy(decideButton.gameObject);
+            this.decideButton=Instantiate(decideButtonPrefLeft, instantiatePos, instantiateRot, instantiateParent);
+            this.decideButton.onClick.AddListener(DecideStage);
+        }
+        else
+        {
+            if(targetPosition.y >= moonPos.y + sideLength)
+            {
+                Destroy(decideButton.gameObject);
+                this.decideButton=Instantiate(decideButtonPrefUp, instantiatePos, instantiateRot, instantiateParent);
+                this.decideButton.onClick.AddListener(DecideStage);
+            }
+            else if(targetPosition.y <= moonPos.y - sideLength)
+            {
+                Destroy(decideButton.gameObject);
+                this.decideButton=Instantiate(decideButtonPrefDown, instantiatePos, instantiateRot, instantiateParent);
+                this.decideButton.onClick.AddListener(DecideStage);
+            }
+            else
+            {
+                Debug.Log("Else");//デバッグ用
+                return;
+            }
+        }
+    }
+
+    //決定ボタン移動メソッド
+    public void MoveDecideButton(Vector3 targetPosition)
+    {
+        Vector3 offsetVec = new Vector3();
+        Vector3 moonPos = moonObj.transform.position;
+        Debug.Log($"TargetPosition:{targetPosition}"); 
+        if(targetPosition.x >= moonPos.x + sideLength)
+        {
+            offsetVec = new Vector3(decideButtonOffsetX, 0, 0);//月の位置とステージボタンの位置の差分を計算
+            Debug.Log("Right");
+        }
+        else if(targetPosition.x <= moonPos.x - sideLength)
+        {
+            offsetVec = new Vector3(-decideButtonOffsetX, 0, 0);//月の位置とステージボタンの位置の差分を計算
+            Debug.Log("Left");
+        }
+        else
+        {
+            if(targetPosition.y >= moonPos.y + sideLength)
+            {
+                offsetVec = new Vector3(0, decideButtonOffsetY, 0);//月の位置とステージボタンの位置の差分を計算
+                Debug.Log("Up");
+            }
+            else if(targetPosition.y <= moonPos.y - sideLength)
+            {
+                offsetVec = new Vector3(0, -decideButtonOffsetY, 0);//月の位置とステージボタンの位置の差分を計算
+                Debug.Log("Down");
+            }
+            else
+            {
+                Debug.Log("Else");//デバッグ用
+                return;
+            }
+        }
+        decideButton.transform.position = targetPosition + offsetVec;//ステージボタンの位置に差分を加えた位置に決定ボタンを移動
     }
 
     //リストからステージ番号に対するデータ自体を検索して返すメソッド
