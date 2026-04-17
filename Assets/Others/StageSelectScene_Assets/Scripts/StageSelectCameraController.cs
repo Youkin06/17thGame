@@ -11,20 +11,19 @@ public class StageSelectCameraController : MonoBehaviour
     [SerializeField] private int currentStage;
     [SerializeField] private int selectStage;
     [SerializeField] private GameObject targetObj;
-    [SerializeField] private int zPos_offset = 2;
+    [SerializeField] private Vector3 cameraOffset = new Vector3(0, 0, -3f);
 
     // Start is called before the first frame update
     void Start()
     {
-        SetStageButtonsPos();
-        MoveStagePos(currentStage);//現在いるステージのボタンの位置に移動
+        // MoveStagePos(currentStage);//現在いるステージのボタンの位置に移動
     }
 
     //指定のインデックスのボタンまで移動するメソッド
     public void MoveStagePos(int stageNum)
     {
         Vector3 stagePos = stageButtonsPos[stageNum];//選択しているステージのインデックスのボタンの位置を取得
-        Vector3 targetPos = new Vector3(stagePos.x,stagePos.y,stagePos.z - zPos_offset);
+        Vector3 targetPos = new Vector3(stagePos.x,stagePos.y,stagePos.z) + cameraOffset;
         targetObj.transform.DOMove(targetPos,1f).SetEase(Ease.OutQuart);//ボタンの位置まで滑らかに移動
 
         // targetObj.transform.position = new Vector3(stagePos.x,stagePos.y,stagePos.z-zPos_offset);
