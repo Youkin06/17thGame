@@ -153,30 +153,45 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageButtons:
   - stageNum: 0
-    sceneName: 0
+    sceneName: Stage_A
     buttonObj: {fileID: 1609187555}
-    isActive: 0
     betweenLine: {fileID: 0}
+    scoreText: {fileID: 811340721}
+    isUnlocked: 0
+    isClear: 1
+    score: 0
   - stageNum: 1
-    sceneName: 1
+    sceneName: Stage_B
     buttonObj: {fileID: 4065063728484604354}
-    isActive: 0
     betweenLine: {fileID: 3110565135532858717}
+    scoreText: {fileID: 861201153}
+    isUnlocked: 0
+    isClear: 1
+    score: 0
   - stageNum: 2
-    sceneName: 2
+    sceneName: Stage_C
     buttonObj: {fileID: 938651520}
-    isActive: 0
     betweenLine: {fileID: 1260223067}
+    scoreText: {fileID: 1957253773}
+    isUnlocked: 0
+    isClear: 1
+    score: 0
   - stageNum: 3
-    sceneName: 3
+    sceneName: Stage_D
     buttonObj: {fileID: 1991049313}
-    isActive: 0
     betweenLine: {fileID: 1442543053}
+    scoreText: {fileID: 1891329847}
+    isUnlocked: 0
+    isClear: 0
+    score: 0
   - stageNum: 4
-    sceneName: 4
+    sceneName: Stage_E
     buttonObj: {fileID: 2068428583}
-    isActive: 0
     betweenLine: {fileID: 350665752}
+    scoreText: {fileID: 1240026184}
+    isUnlocked: 0
+    isClear: 0
+    score: 0
   latestStageSprite: {fileID: 21300000, guid: 707fda8e7f8454fd7ba6d8c8112c9e66, type: 3}
   clearStageSprite: {fileID: 21300000, guid: d16476369ed4e401fa606fd571cc8c24, type: 3}
   lockedStageSprite: {fileID: 21300000, guid: eed199923d6944a7a8b66946c1a6962b, type: 3}
@@ -184,7 +199,7 @@ MonoBehaviour:
   decideButton: {fileID: 1900215389}
   decideButtonXOffset: {x: -2, y: 0, z: 0}
   cameraController: {fileID: 1130666801}
-  currentStageNum: 3
+  latestStageNum: 3
   selectMark_rect: {fileID: 1087002341}
 --- !u!4 &50024203
 Transform:
@@ -196,6 +211,73 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 142.03714, y: -1.8544921, z: -1.4731051}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &221561955
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 221561957}
+  - component: {fileID: 221561956}
+  m_Layer: 0
+  m_Name: GameProgressManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &221561956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221561955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f94f60279ff35455ba5d72e4c8afe833, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ProgressData:
+    latestUnlockedStage: 3
+    stages:
+    - stageId: 0
+      isUnlocked: 1
+      isCleared: 1
+      score: 12
+    - stageId: 1
+      isUnlocked: 1
+      isCleared: 1
+      score: 14
+    - stageId: 2
+      isUnlocked: 1
+      isCleared: 1
+      score: 16
+    - stageId: 3
+      isUnlocked: 0
+      isCleared: 0
+      score: 0
+    - stageId: 4
+      isUnlocked: 0
+      isCleared: 0
+      score: 0
+--- !u!4 &221561957
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221561955}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.965082, y: 0.23459671, z: -1.1207243}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -416,6 +498,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &811340721 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9165281028241202807, guid: ea7f46fa88c76406eb8fd0468a7df293, type: 3}
+  m_PrefabInstance: {fileID: 1609187553}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &861201153 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9165281028241202807, guid: ea7f46fa88c76406eb8fd0468a7df293, type: 3}
+  m_PrefabInstance: {fileID: 2901101647922854302}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &938651518
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -507,6 +611,10 @@ PrefabInstance:
     - target: {fileID: 6208429894534665647, guid: ea7f46fa88c76406eb8fd0468a7df293, type: 3}
       propertyPath: m_Name
       value: Stage2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8416877464229974927, guid: ea7f46fa88c76406eb8fd0468a7df293, type: 3}
+      propertyPath: m_text
+      value: Stage_C
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -986,6 +1094,17 @@ MonoBehaviour:
   selectStage: 3
   targetObj: {fileID: 1130666796}
   cameraOffset: {x: -1, y: 0, z: -3}
+--- !u!114 &1240026184 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9165281028241202807, guid: ea7f46fa88c76406eb8fd0468a7df293, type: 3}
+  m_PrefabInstance: {fileID: 2068428581}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1260223065
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1380,6 +1499,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Stage0
       objectReference: {fileID: 0}
+    - target: {fileID: 8416877464229974927, guid: ea7f46fa88c76406eb8fd0468a7df293, type: 3}
+      propertyPath: m_text
+      value: Stage_A
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1603,6 +1726,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1891329847 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9165281028241202807, guid: ea7f46fa88c76406eb8fd0468a7df293, type: 3}
+  m_PrefabInstance: {fileID: 1991049311}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1900215387
 GameObject:
   m_ObjectHideFlags: 0
@@ -1724,6 +1858,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1900215387}
   m_CullTransparentMesh: 1
+--- !u!114 &1957253773 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9165281028241202807, guid: ea7f46fa88c76406eb8fd0468a7df293, type: 3}
+  m_PrefabInstance: {fileID: 938651518}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1991049311
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1815,6 +1960,10 @@ PrefabInstance:
     - target: {fileID: 6208429894534665647, guid: ea7f46fa88c76406eb8fd0468a7df293, type: 3}
       propertyPath: m_Name
       value: Stage3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8416877464229974927, guid: ea7f46fa88c76406eb8fd0468a7df293, type: 3}
+      propertyPath: m_text
+      value: Stage_D
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2040,6 +2189,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Stage4
       objectReference: {fileID: 0}
+    - target: {fileID: 8416877464229974927, guid: ea7f46fa88c76406eb8fd0468a7df293, type: 3}
+      propertyPath: m_text
+      value: Stage_E
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2255,6 +2408,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Stage1
       objectReference: {fileID: 0}
+    - target: {fileID: 8416877464229974927, guid: ea7f46fa88c76406eb8fd0468a7df293, type: 3}
+      propertyPath: m_text
+      value: Stage_B
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2298,3 +2455,4 @@ SceneRoots:
   - {fileID: 2029257894}
   - {fileID: 50024203}
   - {fileID: 261645964}
+  - {fileID: 221561957}

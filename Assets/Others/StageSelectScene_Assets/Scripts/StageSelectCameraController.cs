@@ -11,6 +11,7 @@ public class StageSelectCameraController : MonoBehaviour
     [SerializeField] private int currentStage;
     [SerializeField] private int selectStage;
     [SerializeField] private GameObject targetObj;
+
     [SerializeField] private Vector3 cameraOffset = new Vector3(0, 0, -3f);
 
     // Start is called before the first frame update
