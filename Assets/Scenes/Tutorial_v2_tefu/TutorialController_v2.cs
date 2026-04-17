@@ -26,7 +26,6 @@ public class TutorialController_v2 : MonoBehaviour
     public TextMeshProUGUI practice;
 
     [Header("参照コンポーネント")]
-    public Slider slider;
     private PlayerController playerController;
     private PlayerMoveState previousState;
     public GameObject navMesh;
@@ -148,12 +147,6 @@ public class TutorialController_v2 : MonoBehaviour
 
     void Update()
     {
-        if (slider != null && slider.value <= 0 && !isGameEnded)
-        {
-            isGameEnded = true;
-            OnPlayerDead();
-        }
-
         if (playerController != null)
         {
             if (previousState != PlayerMoveState.Dashing && playerController.currentState == PlayerMoveState.Dashing)
