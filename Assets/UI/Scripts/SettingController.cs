@@ -17,7 +17,7 @@ public class SettingController : MonoBehaviour
     private Slider sizeSlider;
     private Button backButton;
     private Button resetButton;
-    private GameObject resetContainer;
+    // private GameObject resetContainer;
     private Button yesButton;
     private Button noButton;
     private CheckButton muteButton;
@@ -33,9 +33,9 @@ public class SettingController : MonoBehaviour
         sizeSlider = settingRoot.transform.Find("SizeSlider").GetComponent<Slider>();
         backButton = settingRoot.transform.Find("BackButton").GetComponent<Button>();
         resetButton = settingRoot.transform.Find("ResetButton").GetComponent<Button>();
-        resetContainer = settingRoot.transform.Find("ResetContainer").gameObject;
-        yesButton = resetContainer.transform.Find("YesButton").GetComponent<Button>();
-        noButton = resetContainer.transform.Find("NoButton").GetComponent<Button>();
+        // resetContainer = settingRoot.transform.Find("ResetContainer").gameObject;
+        // yesButton = resetContainer.transform.Find("YesButton").GetComponent<Button>();
+        // noButton = resetContainer.transform.Find("NoButton").GetComponent<Button>();
         muteButton = settingRoot.transform.Find("MuteButton").GetComponent<CheckButton>();
         displayButton = settingRoot.transform.Find("DisplayButton").GetComponent<CheckButton>();
         fixedButton = settingRoot.transform.Find("FixedButton").GetComponent<CheckButton>();
@@ -44,8 +44,8 @@ public class SettingController : MonoBehaviour
         // チェックがつかないボタンにクリックイベントを登録
         backButton.onClick.AddListener(PushBackButton);
         resetButton.onClick.AddListener(PushResetButton);
-        yesButton.onClick.AddListener(PushYesButton);
-        noButton.onClick.AddListener(PushNoButton);
+        // yesButton.onClick.AddListener(PushYesButton);
+        // noButton.onClick.AddListener(PushNoButton);
 
         //いったん起動
         settingContainer.SetActive(true);
@@ -58,7 +58,7 @@ public class SettingController : MonoBehaviour
 
         //非表示にしておく
         settingContainer.SetActive(false);
-        resetContainer.SetActive(false);
+        // resetContainer.SetActive(false);
 
         //BGMの初期値
         bgmAudioSource.volume = bgmSlider.value;
@@ -114,7 +114,7 @@ public class SettingController : MonoBehaviour
 
     void PushResetButton()
     {
-        resetContainer.SetActive(true);
+        // resetContainer.SetActive(true);
     }
 
     void PushYesButton()
@@ -136,12 +136,12 @@ public class SettingController : MonoBehaviour
         FixedChanged(false);
         VibrationChanged(false);
 
-        resetContainer.SetActive(false);
+        // resetContainer.SetActive(false);
     }
 
     void PushNoButton()
     {
-        resetContainer.SetActive(false);
+        // resetContainer.SetActive(false);
     }
 
     void MuteChanged(bool isOn)
