@@ -280,11 +280,20 @@ public class TutorialController_v2 : MonoBehaviour
         float displayDuration = 3.0f;
 
         if (enemy1TargetImageCanvasGroup != null)
+        {
+            enemy1TargetImageCanvasGroup.alpha = 1f;
             TargetImageBlinkAsync(enemy1TargetImageCanvasGroup, displayDuration + fadeDuration * 2, cancellationToken).Forget();
+        }
         if (enemy2TargetImageCanvasGroup != null)
+        {
+            enemy2TargetImageCanvasGroup.alpha = 1f;
             TargetImageBlinkAsync(enemy2TargetImageCanvasGroup, displayDuration + fadeDuration * 2, cancellationToken).Forget();
+        }
         if (enemy3TargetImageCanvasGroup != null)
+        {
+            enemy3TargetImageCanvasGroup.alpha = 1f;
             TargetImageBlinkAsync(enemy3TargetImageCanvasGroup, displayDuration + fadeDuration * 2, cancellationToken).Forget();
+        }
 
         float elapsedTime = 0f;
         while (elapsedTime < fadeDuration)
