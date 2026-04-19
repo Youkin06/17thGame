@@ -54,6 +54,9 @@ public class TutorialController_v2 : MonoBehaviour
     private CanvasGroup enemy2TargetImageCanvasGroup;
     private CanvasGroup enemy3TargetImageCanvasGroup;
 
+    private float hijackTutorialStartY = 30f;
+    private float practiceTutorialStartY = 90f;
+
     void Start()
     {
         Time.timeScale = 1;
@@ -103,7 +106,7 @@ public class TutorialController_v2 : MonoBehaviour
             targetImageCanvasGroup = targetImage.GetComponent<CanvasGroup>();
             if (targetImageCanvasGroup == null)
                 targetImageCanvasGroup = targetImage.gameObject.AddComponent<CanvasGroup>();
-            targetImageCanvasGroup.alpha = 1f;
+            targetImageCanvasGroup.alpha = 0f;
         }
 
         if (enemy1 != null)
@@ -114,7 +117,7 @@ public class TutorialController_v2 : MonoBehaviour
                 enemy1TargetImageCanvasGroup = img.GetComponent<CanvasGroup>();
                 if (enemy1TargetImageCanvasGroup == null)
                     enemy1TargetImageCanvasGroup = img.gameObject.AddComponent<CanvasGroup>();
-                enemy1TargetImageCanvasGroup.alpha = 1f;
+                enemy1TargetImageCanvasGroup.alpha = 0f;
             }
         }
 
@@ -126,7 +129,7 @@ public class TutorialController_v2 : MonoBehaviour
                 enemy2TargetImageCanvasGroup = img.GetComponent<CanvasGroup>();
                 if (enemy2TargetImageCanvasGroup == null)
                     enemy2TargetImageCanvasGroup = img.gameObject.AddComponent<CanvasGroup>();
-                enemy2TargetImageCanvasGroup.alpha = 1f;
+                enemy2TargetImageCanvasGroup.alpha = 0f;
             }
         }
 
@@ -138,7 +141,7 @@ public class TutorialController_v2 : MonoBehaviour
                 enemy3TargetImageCanvasGroup = img.GetComponent<CanvasGroup>();
                 if (enemy3TargetImageCanvasGroup == null)
                     enemy3TargetImageCanvasGroup = img.gameObject.AddComponent<CanvasGroup>();
-                enemy3TargetImageCanvasGroup.alpha = 1f;
+                enemy3TargetImageCanvasGroup.alpha = 0f;
             }
         }
 
@@ -164,13 +167,13 @@ public class TutorialController_v2 : MonoBehaviour
             previousState = playerController.currentState;
         }
 
-        if (!hasShownHijack && player != null && player.transform.position.y >= 48f)
+        if (!hasShownHijack && player != null && player.transform.position.y >= hijackTutorialStartY)
         {
             hasShownHijack = true;
             HijackTutorialAsync(this.GetCancellationTokenOnDestroy()).Forget();
         }
 
-        if (!hasShownPractice && player != null && player.transform.position.y >= 74f)
+        if (!hasShownPractice && player != null && player.transform.position.y >= practiceTutorialStartY)
         {
             hasShownPractice = true;
             if (enemy1 != null) enemy1.GetComponent<NavMeshAgent>().enabled = true;
@@ -237,6 +240,8 @@ public class TutorialController_v2 : MonoBehaviour
         float fadeDuration = 0.3f;
         float displayDuration = 3.0f;
 
+        targetImageCanvasGroup.alpha = 1f;
+
         if (targetImageCanvasGroup != null)
             TargetImageBlinkAsync(targetImageCanvasGroup, displayDuration + fadeDuration * 2, cancellationToken).Forget();
 
@@ -259,7 +264,7 @@ public class TutorialController_v2 : MonoBehaviour
             await UniTask.Yield(cancellationToken);
         }
         hijackCanvasGroup.alpha = 0f;
-        if (targetImageCanvasGroup != null) targetImageCanvasGroup.alpha = 0f;
+        targetImageCanvasGroup.alpha = 0f;
 
         Time.timeScale = originalTimeScale;
     }
@@ -337,7 +342,7 @@ public class TutorialController_v2 : MonoBehaviour
             elapsedTime += blinkSpeed * 2;
         }
 
-        canvasGroup.alpha = originalAlpha;
+        canvasGroup.alpha = 0f;
     }
 
     private async UniTask HandControllerLoopAsync(CancellationToken cancellationToken)
