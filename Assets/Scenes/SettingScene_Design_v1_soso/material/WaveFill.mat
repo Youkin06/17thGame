@@ -19,7 +19,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties: _ShapeFlipSpeed2
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -57,14 +57,22 @@ Material:
     - _LineY2: 0.85
     - _OverlayStrength: 0.95
     - _OverlayStrength2: 0.5
+    - _ShapeFlipAmount: 0.5
+    - _ShapeFlipAmount2: 0.6
+    - _ShapeFlipSpeed: 1.5
+    - _ShapeFlipSpeed2: 1.5
     - _Speed: 0.4
-    - _Speed2: 0.5
+    - _Speed2: 1
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
     - _UseUIAlphaClip: 0
+    - _VerticalBobAmount: 0.03
+    - _VerticalBobAmount2: 0.03
+    - _VerticalBobSpeed: 1
+    - _VerticalBobSpeed2: 0.8
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _FillColor: {r: 0.5518868, g: 0.7806184, b: 1, a: 0.74509805}

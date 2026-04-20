@@ -12,7 +12,11 @@ Shader "UI/WaveFill"
         _Amplitude ("[Wave 1] Wave Height", Range(0,0.2)) = 0.1
         _Frequency ("[Wave 1] Frequency", Float) = 10
         _Speed ("[Wave 1] Horizontal Flow Speed", Float) = 1
-        _AmplitudePulseSpeed ("[Wave 1] Wave Height Change Speed", Float) = 0.3
+        _AmplitudePulseSpeed ("[Wave 1] Wave Height Pulse Speed", Float) = 0.3
+        _ShapeFlipAmount ("[Wave 1] Crest Trough Flip Amount", Range(0,1)) = 0
+        _ShapeFlipSpeed ("[Wave 1] Crest Trough Flip Speed", Float) = 1
+        _VerticalBobAmount ("[Wave 1] Vertical Bob Amount", Range(0,0.2)) = 0
+        _VerticalBobSpeed ("[Wave 1] Vertical Bob Speed", Float) = 0
         _EdgeSoftness ("[Wave 1] Edge Softness", Range(0.001,0.05)) = 0.01
 
         _FillColor2 ("[Wave 2] Fill Color", Color) = (0.65, 0.85, 0.90, 1)
@@ -23,7 +27,11 @@ Shader "UI/WaveFill"
         _Amplitude2 ("[Wave 2] Wave Height", Range(0,0.2)) = 0.05
         _Frequency2 ("[Wave 2] Frequency", Float) = 7
         _Speed2 ("[Wave 2] Horizontal Flow Speed", Float) = 0.8
-        _AmplitudePulseSpeed2 ("[Wave 2] Wave Height Change Speed", Float) = 0.25
+        _AmplitudePulseSpeed2 ("[Wave 2] Wave Height Pulse Speed", Float) = 0.25
+        _ShapeFlipAmount2 ("[Wave 2] Crest Trough Flip Amount", Range(0,1)) = 0
+        _ShapeFlipSpeed2 ("[Wave 2] Crest Trough Flip Speed", Float) = 1
+        _VerticalBobAmount2 ("[Wave 2] Vertical Bob Amount", Range(0,0.2)) = 0
+        _VerticalBobSpeed2 ("[Wave 2] Vertical Bob Speed", Float) = 0
         _EdgeSoftness2 ("[Wave 2] Edge Softness", Range(0.001,0.05)) = 0.01
 
         _StencilComp ("Stencil Comparison", Float) = 8
@@ -106,6 +114,10 @@ Shader "UI/WaveFill"
             float _Frequency;
             float _Speed;
             float _AmplitudePulseSpeed;
+            float _ShapeFlipAmount;
+            float _ShapeFlipSpeed;
+            float _VerticalBobAmount;
+            float _VerticalBobSpeed;
             float _EdgeSoftness;
 
             fixed4 _FillColor2;
@@ -117,6 +129,10 @@ Shader "UI/WaveFill"
             float _Frequency2;
             float _Speed2;
             float _AmplitudePulseSpeed2;
+            float _ShapeFlipAmount2;
+            float _ShapeFlipSpeed2;
+            float _VerticalBobAmount2;
+            float _VerticalBobSpeed2;
             float _EdgeSoftness2;
 
             v2f vert(appdata_t v)
@@ -142,11 +158,17 @@ Shader "UI/WaveFill"
                     + sin(x * TAU * 1.3 + t * 0.9) * 0.015
                     + sin(x * TAU * 2.1 - t * 0.6) * 0.008;
                 float ampMod = 0.85 + sin(t * _AmplitudePulseSpeed + x * TAU * 0.4) * 0.15;
-                float wave = (
+                float travelingWave = (
                     sin(xWarp * _Frequency * TAU + t * _Speed) * 0.7 +
                     sin(xWarp * (_Frequency * 0.55) * TAU - t * (_Speed * 0.6)) * 0.3
-                ) * (_Amplitude * ampMod);
-                float lineY = _LineY + wave;
+                );
+                float standingWave = (
+                    sin(xWarp * _Frequency * TAU) * 0.7 +
+                    sin(xWarp * (_Frequency * 0.55) * TAU) * 0.3
+                ) * cos(t * _ShapeFlipSpeed);
+                float wave = lerp(travelingWave, standingWave, _ShapeFlipAmount) * (_Amplitude * ampMod);
+                float verticalBob = sin(t * _VerticalBobSpeed) * _VerticalBobAmount;
+                float lineY = _LineY + verticalBob + wave;
 
                 float fillMask = 1.0 - smoothstep(lineY - _EdgeSoftness, lineY + _EdgeSoftness, y);
                 float dist = abs(y - lineY);
@@ -160,11 +182,17 @@ Shader "UI/WaveFill"
                     + sin(x * TAU * 1.7 - t * 0.7) * 0.012
                     + sin(x * TAU * 2.8 + t * 0.5) * 0.006;
                 float ampMod2 = 0.9 + sin(t * _AmplitudePulseSpeed2 + x * TAU * 0.3) * 0.1;
-                float wave2 = (
+                float travelingWave2 = (
                     sin(xWarp2 * _Frequency2 * TAU + t * _Speed2) * 0.72 +
                     sin(xWarp2 * (_Frequency2 * 0.6) * TAU - t * (_Speed2 * 0.5)) * 0.28
-                ) * (_Amplitude2 * ampMod2);
-                float lineY2 = _LineY2 + wave2;
+                );
+                float standingWave2 = (
+                    sin(xWarp2 * _Frequency2 * TAU) * 0.72 +
+                    sin(xWarp2 * (_Frequency2 * 0.6) * TAU) * 0.28
+                ) * cos(t * _ShapeFlipSpeed2);
+                float wave2 = lerp(travelingWave2, standingWave2, _ShapeFlipAmount2) * (_Amplitude2 * ampMod2);
+                float verticalBob2 = sin(t * _VerticalBobSpeed2) * _VerticalBobAmount2;
+                float lineY2 = _LineY2 + verticalBob2 + wave2;
 
                 float fillMask2 = 1.0 - smoothstep(lineY2 - _EdgeSoftness2, lineY2 + _EdgeSoftness2, y);
                 float dist2 = abs(y - lineY2);
