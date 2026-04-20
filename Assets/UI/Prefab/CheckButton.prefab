@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 3820298281509048836}
   - component: {fileID: 1063666354351119635}
   - component: {fileID: 3785178073921183987}
+  - component: {fileID: 1617769289050871998}
+  - component: {fileID: 2438521228058695256}
   m_Layer: 5
   m_Name: CheckButton
   m_TagString: Untagged
@@ -165,3 +167,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   style: {fileID: 11400000, guid: fe363e5db73f644f7919fa118ce0e332, type: 2}
+--- !u!114 &1617769289050871998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5978494956048353376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7d7e3efb80dd334eaa43794a9537aca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 7891968822304839724}
+  pressedScale: 0.9
+  releaseScale: 1.2
+  pressDuration: 0.08
+  releaseDuration: 0.05
+  pressEase: 6
+  releaseEase: 27
+--- !u!114 &2438521228058695256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5978494956048353376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7d7e3efb80dd334eaa43794a9537aca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 7891968822304839724}
+  pressedScale: 0.9
+  releaseScale: 1.2
+  pressDuration: 0.08
+  releaseDuration: 0.05
+  pressEase: 6
+  releaseEase: 27

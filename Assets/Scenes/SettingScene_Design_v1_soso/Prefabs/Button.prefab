@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -143.80783, y: 84}
+  m_AnchoredPosition: {x: -143.80783, y: 1}
   m_SizeDelta: {x: 133.1783, y: 52.995}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8915514837499557354
@@ -168,7 +168,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 12}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &8862955214883844749
@@ -249,7 +249,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7891968822304839724, guid: ecd62347879682a4ea3894a30016ddfd, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 38.100037
+      value: -44.899902
       objectReference: {fileID: 0}
     - target: {fileID: 7891968822304839724, guid: ecd62347879682a4ea3894a30016ddfd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -266,10 +266,37 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5978494956048353376, guid: ecd62347879682a4ea3894a30016ddfd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3592045915839178331}
   m_SourcePrefab: {fileID: 100100000, guid: ecd62347879682a4ea3894a30016ddfd, type: 3}
 --- !u!224 &1691784576196209313 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7891968822304839724, guid: ecd62347879682a4ea3894a30016ddfd, type: 3}
   m_PrefabInstance: {fileID: 8862955214883844749}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2884673981798087405 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5978494956048353376, guid: ecd62347879682a4ea3894a30016ddfd, type: 3}
+  m_PrefabInstance: {fileID: 8862955214883844749}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3592045915839178331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2884673981798087405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7d7e3efb80dd334eaa43794a9537aca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 1691784576196209313}
+  pressedScale: 0.9
+  releaseScale: 1.2
+  pressDuration: 0.08
+  releaseDuration: 0.05
+  pressEase: 6
+  releaseEase: 27
