@@ -198,10 +198,6 @@ MonoBehaviour:
   clearStageSprite: {fileID: 21300000, guid: d16476369ed4e401fa606fd571cc8c24, type: 3}
   lockedStageSprite: {fileID: 21300000, guid: eed199923d6944a7a8b66946c1a6962b, type: 3}
   lineMoveDuration: 1
-  decideButtonImageRight: {fileID: 21300000, guid: 3acc35607beac4ee592f30157fe946fc, type: 3}
-  decideButtonImageUp: {fileID: 21300000, guid: 6b3a8fd3ba9354b57b57737487adce57, type: 3}
-  decideButtonImageDown: {fileID: 21300000, guid: 207f47856bcde4c12861a0d7e1bda4c3, type: 3}
-  decideButtonImageLeft: {fileID: 21300000, guid: ad0d71093594e41ec97cd0747ffeeb0e, type: 3}
   decideButton: {fileID: 1900215389}
   decideButtonOffsetX: 2
   decideButtonOffsetY: 0.5
@@ -210,7 +206,6 @@ MonoBehaviour:
   decideButtonPrefDown: {fileID: 5794140695329761021, guid: 94042516be84a4bce867e636f87603e4, type: 3}
   decideButtonPrefLeft: {fileID: 4779205094434231345, guid: ff8e9daf3753248b5a5c51ad95f25bce, type: 3}
   cameraController: {fileID: 1130666801}
-  latestStageNum: 3
   selectMark_rect: {fileID: 1087002341}
 --- !u!4 &50024203
 Transform:
@@ -256,29 +251,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f94f60279ff35455ba5d72e4c8afe833, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ProgressData:
-    latestUnlockedStage: 2
-    stages:
-    - stageId: 0
-      isUnlocked: 1
-      isCleared: 1
-      score: 12
-    - stageId: 1
-      isUnlocked: 1
-      isCleared: 0
-      score: 14
-    - stageId: 2
-      isUnlocked: 0
-      isCleared: 0
-      score: 16
-    - stageId: 3
-      isUnlocked: 0
-      isCleared: 0
-      score: 0
-    - stageId: 4
-      isUnlocked: 1
-      isCleared: 0
-      score: 0
   testProgressData: {fileID: 11400000, guid: 92504be8ebc1145fb81fb12307e8794c, type: 2}
 --- !u!4 &221561957
 Transform:
@@ -968,8 +940,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiController: {fileID: 50024202}
-  currentStage: 0
-  selectStage: 3
   targetObj: {fileID: 1130666796}
   cameraOffset: {x: -1, y: 0, z: -3}
 --- !u!114 &1240026184 stripped

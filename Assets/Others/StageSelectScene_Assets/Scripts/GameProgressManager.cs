@@ -10,7 +10,7 @@ using UnityEngine;
     /// 初期化・リセットはInitializeStageData()を呼ぶ
     /// TestProgressDataはテスト用のデータクラスで、インスペクター上で進捗データをセットするためのもの。実装後は不要になる想定。
     /// 進捗の保存と読み込みの処理はSave()とLoad()に記述する。PlayerPrefsなどで保存することを想定している
-    /// ステージクリア時はStageCleared()を呼び、ステージ開放時はStageUnlocked()を呼ぶ。最新ステージの更新はUpdateLatestUnlockedStage()を呼ぶ。
+    /// ステージクリア時はOnStageCleared()を呼び、ステージ開放時はOnStageUnlocked()を呼ぶ。最新ステージの更新はUpdateLatestUnlockedStage()を呼ぶ。
     /// 必ずStageUnlocked()を呼んでからUpdateLatestUnlockedStage()を呼ぶこと。ステージのスコアを更新する場合はUpdateStageScore()を呼ぶ。
     /// </summary>
 
