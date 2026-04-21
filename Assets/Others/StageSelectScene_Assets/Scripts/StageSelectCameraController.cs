@@ -6,12 +6,12 @@ using DG.Tweening;
 
 public class StageSelectCameraController : MonoBehaviour
 {
+    [Header("ステージ選択画面UI制御コントローラ")]
     [SerializeField] private StageSelecUIController uiController;
     private Vector3[] stageButtonsPos;
-    [SerializeField] private int currentStage;
-    [SerializeField] private int selectStage;
+    [Header("動かすカメラオブジェクト")]
     [SerializeField] private GameObject targetObj;
-
+    [Header("カメラの配置オフセット")]
     [SerializeField] private Vector3 cameraOffset = new Vector3(0, 0, -3f);
 
     // Start is called before the first frame update

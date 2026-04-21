@@ -165,7 +165,7 @@ MonoBehaviour:
   - stageNum: 1
     sceneName: Stage_B
     buttonObj: {fileID: 4065063728484604354}
-    betweenLine: {fileID: 3110565135532858717}
+    betweenLine: {fileID: 1260223067}
     scoreText: {fileID: 861201153}
     isUnlocked: 0
     isClear: 1
@@ -173,7 +173,7 @@ MonoBehaviour:
   - stageNum: 2
     sceneName: Stage_C
     buttonObj: {fileID: 938651520}
-    betweenLine: {fileID: 1260223067}
+    betweenLine: {fileID: 3110565135532858717}
     scoreText: {fileID: 1957253773}
     isUnlocked: 0
     isClear: 1
@@ -257,7 +257,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ProgressData:
-    latestUnlockedStage: 3
+    latestUnlockedStage: 2
     stages:
     - stageId: 0
       isUnlocked: 1
@@ -265,20 +265,21 @@ MonoBehaviour:
       score: 12
     - stageId: 1
       isUnlocked: 1
-      isCleared: 1
+      isCleared: 0
       score: 14
     - stageId: 2
-      isUnlocked: 1
-      isCleared: 1
+      isUnlocked: 0
+      isCleared: 0
       score: 16
     - stageId: 3
       isUnlocked: 0
       isCleared: 0
       score: 0
     - stageId: 4
-      isUnlocked: 0
+      isUnlocked: 1
       isCleared: 0
       score: 0
+  testProgressData: {fileID: 11400000, guid: 92504be8ebc1145fb81fb12307e8794c, type: 2}
 --- !u!4 &221561957
 Transform:
   m_ObjectHideFlags: 0
@@ -992,7 +993,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1932829402504756441, guid: 43c4089188c9e43939e3f3a4e8093435, type: 3}
       propertyPath: m_Name
-      value: stageBetweenLine2
+      value: stageBetweenLine1
       objectReference: {fileID: 0}
     - target: {fileID: 7283110054253509868, guid: 43c4089188c9e43939e3f3a4e8093435, type: 3}
       propertyPath: m_Pivot.x
@@ -1852,8 +1853,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2424618582874308617}
   - {fileID: 1260223066}
+  - {fileID: 2424618582874308617}
   - {fileID: 1442543052}
   - {fileID: 350665751}
   - {fileID: 1609187554}
@@ -1996,7 +1997,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1932829402504756441, guid: 43c4089188c9e43939e3f3a4e8093435, type: 3}
       propertyPath: m_Name
-      value: stageBetweenLine1
+      value: stageBetweenLine2
       objectReference: {fileID: 0}
     - target: {fileID: 1932829402504756441, guid: 43c4089188c9e43939e3f3a4e8093435, type: 3}
       propertyPath: m_IsActive

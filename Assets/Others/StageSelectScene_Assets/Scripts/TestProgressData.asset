@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daf80978531054ed199fe70b3d2a669b, type: 3}
+  m_Name: TestProgressData
+  m_EditorClassIdentifier: 
+  totalStages: 5
+  latestUnlockedStage: 3
+  stageDatas:
+  - id: 0
+    name: StageA
+  - id: 1
+    name: StageB
+  - id: 2
+    name: StageC
+  - id: 3
+    name: StageD
+  - id: 4
+    name: StageE
+  stageStatuses:
+  - unlocked: 1
+    cleared: 1
+    score: 1000
+  - unlocked: 1
+    cleared: 1
+    score: 2000
+  - unlocked: 1
+    cleared: 1
+    score: 0
+  - unlocked: 0
+    cleared: 0
+    score: 0
+  - unlocked: 0
+    cleared: 0
+    score: 0

@@ -9,11 +9,17 @@ using System;
 using TMPro;
 using UnityEditor.SceneManagement;
 
-/*外部スクリプトからほしいデータ*/
-//最新ステージID(latestStageNumに入れたい)
-//遷移するステージ名(stageNumとsceneNamgeに対応するもの)
-//アクティブ化されているかどうか(StageButtonDataのisUnlockedを永続化したい、isUnlockedはステージ選択画面でのみ更新)
-//クリア済みステージのスコア
+/*使い方*/
+    /// <summary>
+    /// ステージ選択UIを管理するクラス。ステージのボタンの状態の更新や、ステージ選択の処理を行う。
+    /// ステージの状態の更新は、GameProgressManagerからステージの状態を取得して行う。
+    /// 新しいステージを追加する場合は、stageButtonsリストに各種UIオブジェクトとデータを追加し、ステージの状態を管理するGameProgressManagerのデータも更新する必要がある。
+    /// </summary>
+    
+/*今後実装してほしいこと*/
+    /// さらに必要なステージクリア演出とステージ解放演出を追加する(【TODO】と書いてある部分に記述する)
+    /// UIオブジェクトをステージ数に応じて自動で配置されるようにすると楽かも
+
 
 //ボタンに持たせるデータのクラス
 [System.Serializable]
@@ -31,31 +37,43 @@ public class StageButtonData
 
 public class StageSelecUIController : MonoBehaviour
 {
+    [Header("月オブジェクト")]
     [SerializeField] private GameObject moonObj;
+
+    [Header("決定ボタン回転用のパラメータ(月の半径/√2/2-1程度)")]
     [SerializeField] private float sideLength = 6.365f;//ステージ選択UIの左右の端のx座標の絶対値
+
+    [Header("ステージボタンのデータリスト(ボタン、ステージ番号、シーン名、スコアテキストオブジェクトなどをセット)")]
     [SerializeField] private List<StageButtonData> stageButtons;
 
+    [Header("ステージの状態に応じたボタンの画像")]
     [SerializeField] private Sprite latestStageSprite;
     [SerializeField] private Sprite clearStageSprite;
     [SerializeField] private Sprite lockedStageSprite;
+
+    [Header("ステージ間の道のアニメーションのパラメータ")]
     [SerializeField] private float lineMoveDuration = 0.2f;
 
-    [SerializeField] private Sprite decideButtonImageRight;
-    [SerializeField] private Sprite decideButtonImageUp;
-    [SerializeField] private Sprite decideButtonImageDown;
-    [SerializeField] private Sprite decideButtonImageLeft;
+    [Header("決定ボタンのボタンオブジェクト(初期)")]
     [SerializeField]private Button decideButton;
+
+    [Header("決定ボタンのステージボタンに対するオフセット値")]
     [SerializeField] private float decideButtonOffsetX;
     [SerializeField] private float decideButtonOffsetY;
+
+    [Header("決定ボタンの上下左右のボタンPrefabs")]
     [SerializeField] private Button decideButtonPrefRight;
     [SerializeField] private Button decideButtonPrefUp;
     [SerializeField] private Button decideButtonPrefDown;
     [SerializeField] private Button decideButtonPrefLeft;
 
+    [Header("カメラについている移動用コントローラ")]
     [SerializeField] private StageSelectCameraController cameraController;
 
-    [SerializeField] private int latestStageNum;
+    [Header("選択中のステージを示すUIオブジェクト")]
     [SerializeField] private GameObject selectMark_rect;
+    private int latestStageNum;
+    
     private int selectStageNum;
 
     // Start is called before the first frame update
@@ -89,9 +107,10 @@ public class StageSelecUIController : MonoBehaviour
     }
 
     //進捗データ読み込みメソッド
-    private void LoadProgressToStageButtons(GameProgressData progressData)
+    private void LoadProgressToStageButtons(GameProgressState progressState)
     {
-        latestStageNum = progressData.latestUnlockedStage;//最新ステージIDをDBから取得して変数に入れる
+        latestStageNum = progressState.latestUnlockedStage;//最新ステージIDをDBから取得して変数に入れる
+        Debug.Log($"最新ステージID:{latestStageNum}");//【デバッグ用】
         foreach (var buttonData in stageButtons)
         {
             var progress = GameProgressManager.Instance.GetStageProgress(buttonData.stageNum);
@@ -127,7 +146,7 @@ public class StageSelecUIController : MonoBehaviour
     {
         foreach (StageButtonData buttonData in stageButtons)
         {
-            ApplyTentativeStageState(buttonData);
+            ApplyTentativeStageState(buttonData);//一時的な状態を適用
         }
         //【TODO】クリア時に必要な演出があればここで記述
         PlayFillBetweenLine(latestStageNum, 1f, () =>//道のアニメーション再生
@@ -177,7 +196,7 @@ public class StageSelecUIController : MonoBehaviour
             SetBetweenLineActive(buttonData.stageNum, true);
             UpdateScoreText(buttonData.stageNum, true, buttonData.score);//仮のスコア値
         }
-        else if (buttonData.isUnlocked)
+        else if (buttonData.stageNum == latestStageNum && buttonData.isUnlocked)
         {
             ChangeLockedStageButton(buttonData.stageNum, true);
             ChangeButtonImage(buttonData.stageNum, latestStageSprite);
