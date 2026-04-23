@@ -136,6 +136,7 @@ public class StageSelecUIController : MonoBehaviour
     //決定ボタンを押したときの処理
     public void DecideStage()
     {
+        SceneManager.LoadScene(SearchSceneName(selectStageNum));
         Debug.Log($"シーン:{SearchSceneName(selectStageNum)}に移動");
         //【TODO】ステージの名前が決定したらシーン遷移の処理を追加
         // SceneManager.LoadScene(SearchSceneName(selectStageNum));
