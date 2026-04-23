@@ -5,36 +5,6 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/TitleScene_merge7.unity
-    guid: abf5f0d0d9165084a9330edf303671f2
-  - enabled: 0
-    path: Assets/Scenes/stage1enemy_ta-toru 1.unity
-    guid: cd06473bb4c96424e9dc6f162a3ea840
-  - enabled: 0
-    path: Assets/Scenes/StageSelectScene_merge7.unity
-    guid: 81df6467b22459c499d2539950e8df89
-  - enabled: 0
-    path: Assets/Scenes/TestStage.unity
-    guid: 7ddac48c73945e6458ce5725f1d17219
-  - enabled: 0
-    path: Assets/Scenes/Archives/GameScene_heaven.unity
-    guid: f11d151249d63f0438f0387dfb519bbf
-  - enabled: 0
-    path: Assets/Scenes/Merge6Scene.unity
-    guid: 51bd34c4b00847b4a9f1158697dc21c7
-  - enabled: 0
-    path: Assets/Scenes/Archives/GameOverScene_merge6.unity
-    guid: 95b2600f9d52b4b6fb34f568a99418a1
-  - enabled: 0
-    path: Assets/Scenes/Archives/ResultScene_merge6.unity
-    guid: d6037dc1e33a6cd449885fe013534f3f
-  - enabled: 0
-    path: Assets/Scenes/Merge7_nikoru.unity
-    guid: 57a24adf737766e4c98f0f20ed578fe6
-  - enabled: 0
-    path: Assets/Scenes/damage_and_Muteki_v1_nikoru.unity
-    guid: c8cfed70ac354b0498e5a7c8ca0df3e7
   - enabled: 1
     path: Assets/Scenes/Merge11_ta-toru.unity
     guid: 8095c461f087f45169d130febf3ac017
