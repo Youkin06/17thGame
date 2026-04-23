@@ -1,42 +1,123 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
-using Unity.VisualScripting;
 
+[RequireComponent(typeof(Button))]
 public class CheckButton : MonoBehaviour
 {
+    [SerializeField] private GameObject check;
+    [SerializeField] private ShaderToggleVisual shaderToggleVisual;
     private Button button;
-    private GameObject check;
-
     private Action<bool> pushButtonWork;
+    private Coroutine syncVisualRoutine;
+    private bool isOn;
 
-    // Start is called before the first frame update
-    void Awake()
+    private void Awake()
     {
         button = GetComponent<Button>();
-        if(check == null)
+
+        if (check == null)
         {
-            var checkMark = transform.Find("Check");
-            check = checkMark.gameObject;
+            Transform checkMark = transform.Find("Check");
+            if (checkMark != null)
+            {
+                check = checkMark.gameObject;
+            }
         }
 
-        button.onClick.AddListener(SwichCheck);
+        if (shaderToggleVisual == null)
+        {
+            shaderToggleVisual = GetComponent<ShaderToggleVisual>();
+        }
+
+        button.onClick.AddListener(SwitchCheck);
     }
 
-    //初期化関数（初期値とボタンを押したときの処理設定）
-    public void Setup(bool initialBool, Action<bool> action)
+    private void OnDestroy()
     {
-        check.SetActive(initialBool);
+        if (button != null)
+        {
+            button.onClick.RemoveListener(SwitchCheck);
+        }
+    }
+
+    private void OnEnable()
+    {
+        ApplyVisualState(instant: true);
+    }
+
+    /// <summary>
+    /// ボタン押下時に実行する処理を登録する
+    /// </summary>
+    public void Setup(Action<bool> action)
+    {
         pushButtonWork = action;
     }
 
-    void SwichCheck()
+    /// <summary>
+    /// 状態を設定し、チェック表示とシェーダー見た目を同期する
+    /// </summary>
+    public void SetState(bool value, bool notify = false, bool instantVisual = false)
     {
-        bool onCheck = check.activeSelf;
-        check.SetActive(!onCheck);
-        //保存しておいた処理を呼び出し
-        pushButtonWork?.Invoke(!onCheck);
+        isOn = value;
+
+        if (check != null)
+        {
+            check.SetActive(isOn);
+        }
+
+        ApplyVisualState(instantVisual);
+
+        if (notify)
+        {
+            pushButtonWork?.Invoke(isOn);
+        }
+    }
+
+    /// <summary>
+    /// 現在の状態を返す
+    /// </summary>
+    public bool GetState()
+    {
+        return isOn;
+    }
+
+    private void SwitchCheck()
+    {
+        SetState(!isOn, notify: true, instantVisual: false);
+    }
+
+    private void ApplyVisualState(bool instant)
+    {
+        if (shaderToggleVisual == null)
+        {
+            return;
+        }
+
+        if (shaderToggleVisual.IsReady)
+        {
+            shaderToggleVisual.ApplyState(isOn, instant);
+            return;
+        }
+
+        if (syncVisualRoutine != null)
+        {
+            StopCoroutine(syncVisualRoutine);
+        }
+
+        syncVisualRoutine = StartCoroutine(SyncVisualWhenReady());
+    }
+
+    private IEnumerator SyncVisualWhenReady()
+    {
+        yield return null;
+
+        if (shaderToggleVisual != null && shaderToggleVisual.IsReady)
+        {
+            shaderToggleVisual.ApplyState(isOn, instant: true);
+        }
+
+        syncVisualRoutine = null;
     }
 }
