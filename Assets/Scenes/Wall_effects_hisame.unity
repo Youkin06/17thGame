@@ -2030,6 +2030,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetCrystalTile: {fileID: 11400000, guid: f1827147ebbb8e848b0e6216c9737a93, type: 2}
   breakRadius: 1
+  wallBrokenEffectPrefab: {fileID: 7650448707574840428, guid: 112aefaf4e09947ff818317ad1e79fa0, type: 3}
 --- !u!19719996 &274826002
 TilemapCollider2D:
   m_ObjectHideFlags: 0
