@@ -17,7 +17,7 @@ public class WallThoughEffectController : MonoBehaviour
     void Start()
     {   
         particles = GetComponentsInChildren<ParticleSystem>();
-        PlayEffect();
+        // PlayEffect();
     }
 
     private void PlayEffect()
