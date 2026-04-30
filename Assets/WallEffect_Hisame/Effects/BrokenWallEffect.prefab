@@ -1139,7 +1139,7 @@ ParticleSystem:
         m_RotationOrder: 4
     separateAxes: 0
   RotationModule:
-    enabled: 0
+    enabled: 1
     x:
       serializedVersion: 2
       minMaxState: 0
@@ -1369,8 +1369,8 @@ ParticleSystem:
         m_NumAlphaKeys: 2
   UVModule:
     serializedVersion: 2
-    enabled: 0
-    mode: 0
+    enabled: 1
+    mode: 1
     timeMode: 0
     fps: 30
     frameOverTime:
@@ -1428,8 +1428,8 @@ ParticleSystem:
         m_RotationOrder: 4
     startFrame:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 0
+      minMaxState: 3
+      scalar: 0.6666667
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -1488,7 +1488,9 @@ ParticleSystem:
     uvChannelMask: -1
     rowMode: 1
     sprites:
-    - sprite: {fileID: 0}
+    - sprite: {fileID: 872804138, guid: c75c461863bda484bb73b05b871999bc, type: 3}
+    - sprite: {fileID: 1194054278, guid: c75c461863bda484bb73b05b871999bc, type: 3}
+    - sprite: {fileID: 1943066665, guid: c75c461863bda484bb73b05b871999bc, type: 3}
     flipU: 0
     flipV: 0
   VelocityModule:
