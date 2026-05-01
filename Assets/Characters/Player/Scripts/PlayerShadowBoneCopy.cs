@@ -59,6 +59,7 @@ public class PlayerShadowBoneCopy : MonoBehaviour
         "StickEffect",
         "eye",
         "PlayerTailTargetObject",
+        "TargetCanvas"
     };
 
     // 影側で無効化するゲームロジック系スクリプトの型名リスト。

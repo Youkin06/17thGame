@@ -3,15 +3,59 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Linq;
 
 public class SettingController : MonoBehaviour
 {
-    [SerializeField] private GameObject joyStick;
+    private T FindComponentInChildrenByName<T>(Transform root, string objectName) where T : Component
+    {
+        Transform target = root.GetComponentsInChildren<Transform>(true)
+            .FirstOrDefault(t => t.name == objectName);
+
+        if (target == null)
+        {
+            Debug.LogError($"{objectName} が見つかりません。探索開始地点: {root.name}");
+            return null;
+        }
+
+        // まず自身に付いているか確認
+        T component = target.GetComponent<T>();
+
+        // なければ子からも探す
+        if (component == null)
+        {
+            component = target.GetComponentInChildren<T>(true);
+        }
+
+        if (component == null)
+        {
+            Debug.LogError($"{objectName} は見つかりましたが、自身および子階層に {typeof(T).Name} が付いていません。");
+            return null;
+        }
+
+        return component;
+    }
+
+    private T TryFindComponentInChildrenByName<T>(Transform root, string objectName) where T : Component
+    {
+        Transform target = root.GetComponentsInChildren<Transform>(true)
+            .FirstOrDefault(t => t.name == objectName);
+
+        if (target == null)
+        {
+            return null;
+        }
+
+        T component = target.GetComponent<T>();
+        return component != null ? component : target.GetComponentInChildren<T>(true);
+    }
+    [SerializeField] private GameObject joyStick; 
     [SerializeField] private GameObject settingContainer;
     [Tooltip("Slider, Buttonなどが入っている親オブジェクトを指定")]
     [SerializeField] private GameObject settingRoot;
-    
+
     private AudioSource bgmAudioSource;
+    private Slider mainSlider;
     private Slider bgmSlider;
     private Slider seSlider;
     private Slider sizeSlider;
@@ -24,22 +68,57 @@ public class SettingController : MonoBehaviour
     private CheckButton displayButton;
     private CheckButton fixedButton;
     private CheckButton vibrationButton;
+    private bool isMuted;
 
     void Start()
     {
         bgmAudioSource = GameObject.Find("BGMAudioSource").GetComponent<AudioSource>();
-        bgmSlider = settingRoot.transform.Find("BGMSlider").GetComponent<Slider>();
-        seSlider = settingRoot.transform.Find("SESlider").GetComponent<Slider>();
-        sizeSlider = settingRoot.transform.Find("SizeSlider").GetComponent<Slider>();
-        backButton = settingRoot.transform.Find("BackButton").GetComponent<Button>();
-        resetButton = settingRoot.transform.Find("ResetButton").GetComponent<Button>();
-        resetContainer = settingRoot.transform.Find("ResetContainer").gameObject;
-        yesButton = resetContainer.transform.Find("YesButton").GetComponent<Button>();
-        noButton = resetContainer.transform.Find("NoButton").GetComponent<Button>();
-        muteButton = settingRoot.transform.Find("MuteButton").GetComponent<CheckButton>();
-        displayButton = settingRoot.transform.Find("DisplayButton").GetComponent<CheckButton>();
-        fixedButton = settingRoot.transform.Find("FixedButton").GetComponent<CheckButton>();
-        vibrationButton = settingRoot.transform.Find("VibrationButton").GetComponent<CheckButton>();
+        if (settingRoot == null)
+        {
+            Debug.LogError("settingRoot が Inspector で未設定です。");
+            return;
+        }
+        mainSlider = TryFindComponentInChildrenByName<Slider>(settingRoot.transform, "MAINSlider")
+            ?? TryFindComponentInChildrenByName<Slider>(settingRoot.transform, "MainSlider")
+            ?? TryFindComponentInChildrenByName<Slider>(settingRoot.transform, "MasterSlider");
+        bgmSlider = FindComponentInChildrenByName<Slider>(settingRoot.transform, "BGMSlider");
+        seSlider = FindComponentInChildrenByName<Slider>(settingRoot.transform, "SESlider");
+        sizeSlider = FindComponentInChildrenByName<Slider>(settingRoot.transform, "SizeSlider");
+        backButton = FindComponentInChildrenByName<Button>(settingRoot.transform, "BackButton");
+        resetButton = FindComponentInChildrenByName<Button>(settingRoot.transform, "ResetButton");
+
+        Transform resetContainerTransform = settingRoot.transform.GetComponentsInChildren<Transform>(true)
+            .FirstOrDefault(t => t.name == "ResetContainer");
+        if (resetContainerTransform == null)
+        {
+            Debug.LogError($"ResetContainer が見つかりません。探索開始地点: {settingRoot.name}");
+            return;
+        }
+        resetContainer = resetContainerTransform.gameObject;
+
+        yesButton = FindComponentInChildrenByName<Button>(resetContainer.transform, "YesButton");
+        noButton = FindComponentInChildrenByName<Button>(resetContainer.transform, "NoButton");
+        muteButton = FindComponentInChildrenByName<CheckButton>(settingRoot.transform, "MuteButton");
+        displayButton = FindComponentInChildrenByName<CheckButton>(settingRoot.transform, "DisplayButton");
+        fixedButton = FindComponentInChildrenByName<CheckButton>(settingRoot.transform, "FixedButton");
+        vibrationButton = FindComponentInChildrenByName<CheckButton>(settingRoot.transform, "VibrationButton");
+
+        if (bgmSlider == null ||
+            seSlider == null ||
+            sizeSlider == null ||
+            backButton == null ||
+            resetButton == null ||
+            resetContainer == null ||
+            yesButton == null ||
+            noButton == null ||
+            muteButton == null ||
+            displayButton == null ||
+            fixedButton == null ||
+            vibrationButton == null)
+        {
+            Debug.LogError("SettingController の初期化に失敗しました。必要な UI が見つかっていません。");
+            return;
+        }
 
         // チェックがつかないボタンにクリックイベントを登録
         backButton.onClick.AddListener(PushBackButton);
@@ -51,22 +130,29 @@ public class SettingController : MonoBehaviour
         settingContainer.SetActive(true);
 
         // オンオフボタンにそれぞれのメソッドを紐付ける
-        muteButton.Setup(false, MuteChanged);
-        displayButton.Setup(true, DisplayChanged);
-        fixedButton.Setup(false, FixedChanged);
-        vibrationButton.Setup(false, VibrationChanged);
+        muteButton.Setup(MuteChanged);
+        displayButton.Setup(DisplayChanged);
+        fixedButton.Setup(FixedChanged);
+        vibrationButton.Setup(VibrationChanged);
+
+        muteButton.SetState(false, notify: true, instantVisual: true);
+        displayButton.SetState(true, notify: true, instantVisual: true);
+        fixedButton.SetState(false, notify: true, instantVisual: true);
+        vibrationButton.SetState(false, notify: true, instantVisual: true);
 
         //非表示にしておく
         settingContainer.SetActive(false);
         resetContainer.SetActive(false);
 
         //BGMの初期値
-        bgmAudioSource.volume = bgmSlider.value;
+        ApplyMasterVolume();
+        ApplyBgmVolume();
         //音量が変わった時だけ変更
-        bgmSlider.onValueChanged.AddListener((vol) =>
+        if (mainSlider != null)
         {
-            bgmAudioSource.volume = vol;
-        });
+            mainSlider.onValueChanged.AddListener(_ => ApplyMasterVolume());
+        }
+        bgmSlider.onValueChanged.AddListener(_ => ApplyBgmVolume());
 
         //Sizeの初期値
         JoyStickSizeChanged(sizeSlider.value);
@@ -104,7 +190,6 @@ public class SettingController : MonoBehaviour
         }
 
         joyStick.transform.localScale = Vector3.one * targetScale;
-        Debug.Log($"JoyStickサイズ変更: {intValue} -> 倍率 {targetScale}");
     }
 
     void PushBackButton()
@@ -122,19 +207,17 @@ public class SettingController : MonoBehaviour
         // スライダーの値をリセット
         bgmSlider.value = 0.5f;
         seSlider.value = 0.5f;
+        if (mainSlider != null)
+        {
+            mainSlider.value = 1f;
+        }
         sizeSlider.value = 1;
 
-        // 見た目のリセット
-        muteButton.Setup(false, MuteChanged);
-        displayButton.Setup(true, DisplayChanged);
-        fixedButton.Setup(false, FixedChanged);
-        vibrationButton.Setup(false, VibrationChanged);
-
-        // 中身のリセットを直接呼び出す
-        MuteChanged(false);
-        DisplayChanged(true);
-        FixedChanged(false);
-        VibrationChanged(false);
+        // 状態と見た目をリセット
+        muteButton.SetState(false, notify: true, instantVisual: true);
+        displayButton.SetState(true, notify: true, instantVisual: true);
+        fixedButton.SetState(false, notify: true, instantVisual: true);
+        vibrationButton.SetState(false, notify: true, instantVisual: true);
 
         resetContainer.SetActive(false);
     }
@@ -146,25 +229,30 @@ public class SettingController : MonoBehaviour
 
     void MuteChanged(bool isOn)
     {
-        if (isOn)
-        {
-            AudioListener.volume = 0;
-        }
-        else
-        {
-            AudioListener.volume = 1;
-        }
+        isMuted = isOn;
+        ApplyMasterVolume();
+    }
+
+    void ApplyMasterVolume()
+    {
+        float masterVolume = mainSlider == null ? 1f : mainSlider.value;
+        AudioListener.volume = isMuted ? 0f : masterVolume;
+    }
+
+    void ApplyBgmVolume()
+    {
+        bgmAudioSource.volume = bgmSlider.value;
     }
 
     void DisplayChanged(bool isOn)
     {
         if (isOn)
         {
-            
+
         }
         else
         {
-            
+
         }
     }
 
@@ -172,11 +260,11 @@ public class SettingController : MonoBehaviour
     {
         if (isOn)
         {
-            
+
         }
         else
         {
-            
+
         }
     }
 
@@ -184,11 +272,11 @@ public class SettingController : MonoBehaviour
     {
         if (isOn)
         {
-            
+
         }
         else
         {
-            
+
         }
     }
 }

@@ -36,14 +36,32 @@ public class GageController : MonoBehaviour
         // 初期スケールを記録
         CacheInitialScales();
 
-        // Inspector未設定ならシーンから自動探索
+        ResolveHijackSystemController();
+
+        SetGaugeVisible(false);
+        SetAllCirclesToInitialScale();
+    }
+
+    /// <summary>
+    /// Inspector未設定ならPlayerタグを優先し、それでも見つからなければシーン全体から取得する。
+    /// </summary>
+    private void ResolveHijackSystemController()
+    {
+        if (hijackSystemController != null)
+        {
+            return;
+        }
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            hijackSystemController = player.GetComponent<HijackSystemController>();
+        }
+
         if (hijackSystemController == null)
         {
             hijackSystemController = FindObjectOfType<HijackSystemController>();
         }
-
-        SetGaugeVisible(false);
-        SetAllCirclesToInitialScale();
     }
 
     /// <summary>
@@ -106,7 +124,11 @@ public class GageController : MonoBehaviour
 
         if (hijackSystemController == null)
         {
-            return false;
+            ResolveHijackSystemController();
+            if (hijackSystemController == null)
+            {
+                return false;
+            }
         }
 
         BaseEnemyController hijackedEnemy = hijackSystemController.hijackedEnemy;
