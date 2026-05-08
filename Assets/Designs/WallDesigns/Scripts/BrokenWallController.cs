@@ -8,6 +8,7 @@ public class BrokenWallController : MonoBehaviour
 
     [Header("設定")]
     [SerializeField] private TileBase targetCrystalTile; // 壊したいタイルのアセット
+    [SerializeField] private GameObject breakParticle; //破壊時に再生するエフェクトプレハブ
     [SerializeField] private int breakRadius = 1;       // プレイヤーの周囲何マス分をチェックするか
 
     void Awake()
@@ -42,6 +43,7 @@ public class BrokenWallController : MonoBehaviour
                     if (hitTile != null && hitTile == targetCrystalTile)
                     {
                         _tilemap.SetTile(targetPos, null);
+                        Instantiate(breakParticle,targetPos,Quaternion.identity);
                         Debug.Log($"タイル破壊成功: {targetPos}");
                     }
                 }

@@ -12,7 +12,7 @@ public class WallBrokenEffectController : MonoBehaviour
     void Start()
     {
         _particleSystem = GetComponent<ParticleSystem>();    
-        StartCoroutine(BrokenEffect());  
+        PlayEffect();
     }
 
     private void PlayEffect()
