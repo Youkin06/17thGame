@@ -18,11 +18,35 @@ public class WallThoughEffectController : MonoBehaviour
     {   
         particles = GetComponentsInChildren<ParticleSystem>();
         PlayEffect();
+        DeactivateEffect();
     }
 
-    private void PlayEffect()
+    public void PlayEffect()
     {
         foreach(var p in particles) p.Play();
+    }
+
+    public void StopEffect()
+    {
+        foreach(var p in particles) p.Stop();
+    }
+
+    public void ActivateEffect()
+    {
+        foreach(Transform child in transform)
+        {
+            child.gameObject.SetActive(true);
+        }
+        PlayEffect();
+        Debug.Log("Activate Effect");
+    }
+
+    public void DeactivateEffect()
+    {
+        foreach(Transform child in transform)
+        {
+            child.gameObject.SetActive(false);
+        }
     }
 
     public void DestroyObject()

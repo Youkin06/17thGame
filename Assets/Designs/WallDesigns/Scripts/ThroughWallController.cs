@@ -8,7 +8,6 @@ public class ThroughWallController : MonoBehaviour
 {
     [SerializeField] private TileBase throughTile; // 通り抜けられるタイルのアセット
     [SerializeField] private GameObject throughEffect; //通り抜ける時に再生するエフェクトプレハブ
-    private GameObject existthroughEffect; //生成済みのエフェクトオブジェクト
     private WallThoughEffectController wallThoughEffectController; //エフェクト制御用スクリプト
 
     private Tilemap _tilemap;
@@ -94,46 +93,12 @@ public class ThroughWallController : MonoBehaviour
                 spawnPos.z = -1.0f;
 
                 //エフェクトの生成 & 再生開始(生成時に自動再生)
-                existthroughEffect = Instantiate(throughEffect, spawnPos, Quaternion.identity);
-                wallThoughEffectController = existthroughEffect.GetComponent<WallThoughEffectController>();
+                wallThoughEffectController = other.GetComponentInChildren<WallThoughEffectController>();
+                wallThoughEffectController.ActivateEffect();
                 Debug.Log($"タイル通り抜け成功: {hitPoint}");
                 
             }
 
-        }
-    }
-
-    void OnTriggerStay2D(Collider2D other)
-    {
-        //エフェクト再生処理を入れる
-        // 1. 相手がPlayerControllerを持っているか確認
-        PlayerController player = other.gameObject.GetComponent<PlayerController>();
-
-        // 2. プレイヤーの状態チェック（魂状態）
-        if (player != null && !hijackSystem.IsHijacking())
-        {
-            // 3. 相手のコライダーの「現在位置」から、自分のコライダー上で一番近い点を計算
-            // triggerCollider は自身に付いている isTrigger = true の TilemapCollider2D
-            Vector3 hitPoint = triggerCollider.ClosestPoint(other.transform.position);
-            Vector3 direction = (hitPoint - other.transform.position).normalized;
-            Vector3 checkPos = hitPoint + (direction * 0.1f);
-
-            // 4. その座標をタイルマップの「セル座標(Vector3Int)」に変換
-            Vector3Int cellPosition = _tilemap.WorldToCell(checkPos);
-
-            // 5. セル座標を使ってタイルを取得
-            TileBase hitTile = _tilemap.GetTile(cellPosition);
-
-            // 6. 指定したthroughTileであればエフェクトを移動
-            if (hitTile != null && hitTile == throughTile && existthroughEffect)
-            {
-                //移動位置の調整
-                Vector3 movePos = hitPoint;
-                movePos.z = -1.0f;
-                
-                //対象位置にエフェクトを移動
-                existthroughEffect.transform.position = movePos;
-            }
         }
     }
 
@@ -159,12 +124,11 @@ public class ThroughWallController : MonoBehaviour
             TileBase hitTile = _tilemap.GetTile(cellPosition);
 
             // 6. 指定したthroughTileであればエフェクトを移動
-            if (hitTile != null && hitTile == throughTile && existthroughEffect)
+            if (hitTile != null && hitTile == throughTile && wallThoughEffectController != null)
             {
-                //エフェクトの削除
-                wallThoughEffectController.DestroyObject();
-                wallThoughEffectController =null;
-                existthroughEffect = null;
+                //エフェクトの停止
+                wallThoughEffectController.DeactivateEffect();
+                Debug.Log("Stop Effect");
             }
         }
     }

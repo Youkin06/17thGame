@@ -74,7 +74,7 @@ Transform:
   m_GameObject: {fileID: 5095280678028819394}
   serializedVersion: 2
   m_LocalRotation: {x: 0.70710677, y: 0, z: 0, w: 0.70710677}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -2.4, z: 0}
   m_LocalScale: {x: 0.23, y: 0.23, z: 0.23}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -95,7 +95,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 0
   useUnscaledTime: 0
@@ -163,7 +163,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2
+      scalar: 0.5
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -216,7 +216,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 6
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -334,8 +334,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1
-      minScalar: 0.8
+      scalar: 1.4
+      minScalar: 1.2
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -711,7 +711,7 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 0
+    type: 4
     angle: 25
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
@@ -719,7 +719,7 @@ ParticleSystem:
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
-    m_Scale: {x: 1, y: 1, z: 1}
+    m_Scale: {x: 0.42, y: 1, z: 0.27}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
@@ -1027,7 +1027,7 @@ ParticleSystem:
     curve:
       serializedVersion: 2
       minMaxState: 1
-      scalar: 1
+      scalar: 0.5
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -1042,8 +1042,8 @@ ParticleSystem:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 0.087063074
-          value: 0.47143218
+          time: 0.14973855
+          value: 0.37046477
           inSlope: 1.1657894
           outSlope: 1.1657894
           tangentMode: 0
@@ -1051,43 +1051,7 @@ ParticleSystem:
           inWeight: 0.33333334
           outWeight: 0.54648286
         - serializedVersion: 3
-          time: 0.15719186
-          value: 0
-          inSlope: 0.96632445
-          outSlope: 0.96632445
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 0.2520112
-          value: 0.34734955
-          inSlope: 0.15915222
-          outSlope: 0.15915222
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 1
-        - serializedVersion: 3
-          time: 0.35896325
-          value: 0.006072998
-          inSlope: 0.11041251
-          outSlope: 0.11041251
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 1
-          outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 0.44243807
-          value: 0.35224843
-          inSlope: -0.045887537
-          outSlope: -0.045887537
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 1
-        - serializedVersion: 3
-          time: 0.5509333
+          time: 0.3901667
           value: 0
           inSlope: 0.9390713
           outSlope: 0.9390713
@@ -1096,8 +1060,8 @@ ParticleSystem:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 0.6532313
-          value: 0.36625344
+          time: 0.59601086
+          value: 0.46720558
           inSlope: -0.31348723
           outSlope: -0.31348723
           tangentMode: 0
@@ -4961,7 +4925,7 @@ GameObject:
   - component: {fileID: 3551199345377879183}
   - component: {fileID: 5413279542702503715}
   m_Layer: 0
-  m_Name: ThroughWallEffectBubble
+  m_Name: ThroughWallEffect_bubble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4990,7 +4954,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8847583609232344558}
   serializedVersion: 8
-  lengthInSec: 0.5
+  lengthInSec: 1
   simulationSpeed: 0.5
   stopAction: 0
   cullingMode: 0
@@ -5005,7 +4969,7 @@ ParticleSystem:
   startDelay:
     serializedVersion: 2
     minMaxState: 0
-    scalar: 0.2
+    scalar: 0
     minScalar: 0
     maxCurve:
       serializedVersion: 2
@@ -5065,7 +5029,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3
+      scalar: 2
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -5118,7 +5082,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0.8
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -5236,8 +5200,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1.2
-      minScalar: 0.8
+      scalar: 1.4
+      minScalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -5819,7 +5783,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 10
+      scalar: 5
       minScalar: 10
       maxCurve:
         serializedVersion: 2

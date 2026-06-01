@@ -43,8 +43,10 @@ public class BrokenWallController : MonoBehaviour
                     if (hitTile != null && hitTile == targetCrystalTile)
                     {
                         _tilemap.SetTile(targetPos, null);
-                        Instantiate(breakParticle,targetPos,Quaternion.identity);
-                        Debug.Log($"タイル破壊成功: {targetPos}");
+                        Vector3 spawnPos = _tilemap.GetCellCenterWorld(targetPos);
+                        Instantiate(breakParticle, spawnPos, Quaternion.identity);
+
+                        Debug.Log($"タイル破壊成功: {spawnPos}");
                     }
                 }
             }
