@@ -17,18 +17,16 @@ public class WallThoughEffectController : MonoBehaviour
     void Start()
     {   
         particles = GetComponentsInChildren<ParticleSystem>();
-        // PlayEffect();
+        PlayEffect();
     }
 
     private void PlayEffect()
     {
-        StartCoroutine(ThroughEffect());
+        foreach(var p in particles) p.Play();
     }
 
-    private IEnumerator ThroughEffect()
+    public void DestroyObject()
     {
-        foreach(var p in particles) p.Play();
-        yield return new WaitForSeconds(effectDuration);
         Destroy(this.gameObject);
     }
 }
