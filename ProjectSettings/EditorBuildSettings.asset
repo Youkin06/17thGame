@@ -6,6 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
+    path: Assets/Scenes/StageSelect_Scene.unity
+    guid: b2233446ba5055a489045c75d7ea4b31
+  - enabled: 1
+    path: Assets/Scenes/Tutorial_Scene.unity
+    guid: 6c3ea2b086cf7b54bac449820cbdca85
+  - enabled: 1
+    path: Assets/Scenes/Stage1_Scene.unity
+    guid: e9aa1fe2705c9f4459f33f9d81240a83
+  - enabled: 1
+    path: Assets/Scenes/Merge11_ta-toru.unity
+    guid: 8095c461f087f45169d130febf3ac017
   m_configObjects: {}
