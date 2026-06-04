@@ -94,7 +94,7 @@ public class ThroughWallController : MonoBehaviour
 
                 //エフェクトの生成 & 再生開始(生成時に自動再生)
                 wallThoughEffectController = other.GetComponentInChildren<WallThoughEffectController>();
-                wallThoughEffectController.ActivateEffect();
+                wallThoughEffectController.EnterEffect();
                 Debug.Log($"タイル通り抜け成功: {hitPoint}");
                 
             }
@@ -127,7 +127,7 @@ public class ThroughWallController : MonoBehaviour
             if (hitTile != null && hitTile == throughTile && wallThoughEffectController != null)
             {
                 //エフェクトの停止
-                wallThoughEffectController.DeactivateEffect();
+                wallThoughEffectController.ExitEffect();
                 Debug.Log("Stop Effect");
             }
         }

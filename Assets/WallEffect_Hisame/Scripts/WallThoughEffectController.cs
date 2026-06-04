@@ -11,41 +11,56 @@ public class WallThoughEffectController : MonoBehaviour
     */
 
     [SerializeField] float effectDuration = 1f; // エフェクトの再生時間
-    private ParticleSystem[] particles;
+    private ParticleSystem particle_kirakira; // キラキラエフェクト
+    private ParticleSystem particle_bubble; // 泡エフェクト
     
     // Start is called before the first frame update
     void Start()
     {   
-        particles = GetComponentsInChildren<ParticleSystem>();
-        PlayEffect();
-        DeactivateEffect();
+        particle_kirakira = transform.Find("ThroughWallEffect_kirakira").GetComponent<ParticleSystem>();
+        particle_bubble = transform.Find("ThroughWallEffect_bubble").GetComponent<ParticleSystem>();
     }
 
-    public void PlayEffect()
+    /* 壁に入った時に呼ぶメソッド */
+    public void EnterEffect()
+    {
+        ActivateEffect(new GameObject[]{particle_kirakira.gameObject, particle_bubble.gameObject});
+        PlayEffect(new ParticleSystem[]{particle_kirakira, particle_bubble});
+    }
+
+    /* 壁から出た時に呼ぶメソッド */
+    public void ExitEffect()
+    {
+        StopEffect(new ParticleSystem[]{particle_kirakira});
+        DeactivateEffect(new GameObject[]{particle_bubble.gameObject});
+    }
+
+    /* エフェクト再生メソッド */
+    void PlayEffect(ParticleSystem[] particles)
     {
         foreach(var p in particles) p.Play();
     }
-
-    public void StopEffect()
+    /* エフェクト停止メソッド */
+    void StopEffect(ParticleSystem[] particles)
     {
         foreach(var p in particles) p.Stop();
     }
-
-    public void ActivateEffect()
+    /* エフェクト有効化メソッド */
+    void ActivateEffect(GameObject[] effects)
     {
-        foreach(Transform child in transform)
+        foreach(GameObject effect in effects)
         {
-            child.gameObject.SetActive(true);
+            effect.SetActive(true);
         }
-        PlayEffect();
         Debug.Log("Activate Effect");
     }
 
-    public void DeactivateEffect()
+    /* エフェクト無効化メソッド */
+    void DeactivateEffect(GameObject[] effects)
     {
-        foreach(Transform child in transform)
+        foreach(GameObject effect in effects)
         {
-            child.gameObject.SetActive(false);
+            effect.SetActive(false);
         }
     }
 
