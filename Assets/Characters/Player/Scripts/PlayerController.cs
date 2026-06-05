@@ -505,7 +505,7 @@ public class PlayerController : MonoBehaviour
     private T GetOrCreateHijackCollider<T>() where T : Collider2D
     {
         T collider = this.GetComponent<T>();
-        if (collider == null)
+        if (collider == null || collider == playerCollider)
         {
             collider = this.gameObject.AddComponent<T>();
         }
