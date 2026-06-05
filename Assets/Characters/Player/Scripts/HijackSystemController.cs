@@ -171,13 +171,19 @@ public class HijackSystemController : MonoBehaviour
     /// </summary>
     private void HijackEnemy(BaseEnemyController enemy, BaseEnemyController previousEnemy = null)
     {
-        // 1. 敵の追跡動作を停止
+        // 1.Playerの乗っ取り中用のコライダーの形状を敵のコライダーからコピー
+        enemyCollider = enemy.GetComponent<Collider2D>();
+        if(playerController!= null){
+            playerController.ApplyHijackCollider(enemyCollider);
+        }
+
+        // 2. 敵の追跡動作を停止
         enemy.StopTracking();
         
-        // 2. 敵の位置を取得
+        // 3. 敵の位置を取得
         Vector2 enemyPosition = enemy.transform.position;
         
-        // 3. プレイヤーを敵の中心に移動
+        // 4. プレイヤーを敵の中心に移動
         if (previousEnemy != null)
         {
             Vector2 escapeDir = ((Vector2)previousEnemy.transform.position - enemyPosition).normalized;
@@ -186,40 +192,36 @@ public class HijackSystemController : MonoBehaviour
         }
         rb.position = enemyPosition;
         
-        // 4. 敵をPlayerの子オブジェクトにする
+        // 5. 敵をPlayerの子オブジェクトにする
         enemy.transform.SetParent(playerController.transform);
         enemy.transform.localPosition = Vector3.zero; // 相対位置を0に設定
         
-        // 5. 参照を保持
+        // 6. 参照を保持
         hijackedEnemy = enemy;
         hijackTimer = 0f;
         
-        // 6. 最大速度を敵の速度に変更（イベント時に一度だけ設定）
+        // 7. 最大速度を敵の速度に変更（イベント時に一度だけ設定）
         if (enemy.enemyData != null)
         {
             playerController.SetMaxSpeed(enemy.enemyData.moveSpeed);
         }
         
-        // 7. プレイヤーの乗っ取り状態を更新、UIを乗っ取りモードに
+        // 8. プレイヤーの乗っ取り状態を更新、UIを乗っ取りモードに
         if (playerController != null)
             playerController.SetHijacking(true);
             playerController.ApplyHijackVisual(hijackedEnemy.enemyData);
         if (playerUIController != null)
             playerUIController.ResetHijackTimer();
         
-        // 8. Dashing状態を終了（直接メソッドを呼ぶ）
+        // 9. Dashing状態を終了（直接メソッドを呼ぶ）
         if (playerController != null)
         {
             playerController.EndDashingState();
         }
 
-        // 敵のコライダーを無効化する
-        // これにより、乗っ取り中に自分自身とぶつかってダメージを受けるのを防ぐ
-        enemyCollider = enemy.GetComponent<Collider2D>();
-        if (enemyCollider != null)
-        {
-            enemyCollider.enabled = false;
-        }
+        // 10. 乗っ取り用のコライダーを有効化
+        playerController.SetHijackColliderEnabled(true);
+
         Debug.Log($"敵を乗っ取りました: {enemy.enemyData?.enemyType}");
     }
     
@@ -229,23 +231,24 @@ public class HijackSystemController : MonoBehaviour
     public void ReleaseHijackedEnemy()
     {
         if (hijackedEnemy == null) return;
-        
-        if (enemyCollider != null)
-        {
-            enemyCollider.enabled = true;
-        }
 
         // 1. 敵を解放
         hijackedEnemy.ReleaseEnemy();
+
+        // 2. プレイヤーの乗っ取り用コライダーを無効化
+        if(playerController != null)
+        {
+            playerController.SetHijackColliderEnabled(false);
+        }
         
-        // 2. 最大速度をプレイヤーのデフォルト速度に戻す
+        // 3. 最大速度をプレイヤーのデフォルト速度に戻す
         playerController.ResetMaxSpeed();
         
-        // 3. 参照をクリア
+        // 4. 参照をクリア
         hijackedEnemy = null;
         hijackTimer = 0f;
         
-// 4. プレイヤーの乗っ取り状態を解除、UIを通常モードに
+        // 5. プレイヤーの乗っ取り状態を解除、UIを通常モードに
 
         if (playerController != null)
             playerController.SetHijacking(false);

@@ -48,6 +48,7 @@ public class PlayerController : MonoBehaviour
 
     private float totalDistanceMoved = 0f;
     private Vector2 lastPosition;
+    private Collider2D hijackCollider;// 乗っ取り時に使用するコライダー
 
     void Start()
     {
@@ -442,6 +443,124 @@ public class PlayerController : MonoBehaviour
             return;
 
         animator.runtimeAnimatorController = baseAnimatorController;
+    }
+
+    // 乗っ取り対象のコライダーを適用するメソッド
+    public void ApplyHijackCollider(Collider2D source)
+    {
+        if (source == null)
+        {
+            Debug.LogWarning("乗っ取り用PolygonColliderの適用に失敗しました");
+            return;
+        }
+
+        Vector3 sourceScale = source.transform.lossyScale;
+        Vector3 playerScale = this.transform.lossyScale;
+
+        float scaleX = sourceScale.x / playerScale.x;
+        float scaleY = sourceScale.y / playerScale.y;
+
+        if (source is PolygonCollider2D polygonSource)
+        {
+            PolygonCollider2D target = GetOrCreateHijackCollider<PolygonCollider2D>();
+            CopyPolygonCollider(polygonSource, target, scaleX, scaleY);
+            hijackCollider = target;
+        }
+        else if (source is BoxCollider2D boxSource)
+        {
+            BoxCollider2D target = GetOrCreateHijackCollider<BoxCollider2D>();
+            CopyBoxCollider(boxSource, target, scaleX, scaleY);
+            hijackCollider = target;
+        }
+        else if (source is CircleCollider2D circleSource)
+        {
+            CircleCollider2D target = GetOrCreateHijackCollider<CircleCollider2D>();
+            CopyCircleCollider(circleSource, target, scaleX, scaleY);
+            hijackCollider = target;
+        }
+        else
+        {
+            Debug.LogWarning("乗っ取り用コライダーの型が不明です: " + source.GetType());
+        }
+    }
+
+    // 乗っ取り用のPolygonColliderの有効無効を切り替えるメソッド
+    public void SetHijackColliderEnabled(bool enabled)
+    {
+        // 乗っ取り用コライダーの切り替え
+        if (hijackCollider != null)
+        {
+            hijackCollider.enabled = enabled;
+        }
+        // プレイヤーの基本コライダーの切り替え
+        if (playerCollider != null)
+        {
+            playerCollider.enabled = !enabled;
+        }
+        // 乗っ取り解除時は参照をクリア
+        if (!enabled) hijackCollider = null; // 乗っ取り解除時は参照をクリア
+    }
+
+    // 対象の型のコライダーを取得、もしくはなければ追加するメソッド
+    private T GetOrCreateHijackCollider<T>() where T : Collider2D
+    {
+        T collider = this.GetComponent<T>();
+        if (collider == null)
+        {
+            collider = this.gameObject.AddComponent<T>();
+        }
+        return collider;
+    }
+
+    // 敵のポリゴンコライダーをコピーするメソッド
+    private void CopyPolygonCollider(PolygonCollider2D source, PolygonCollider2D target, float scaleX, float scaleY)
+    {
+        target.enabled = false;
+        target.pathCount = source.pathCount;
+
+        for (int i = 0; i < source.pathCount; i++)
+        {
+            Vector2[] sourcePoints = source.GetPath(i);
+            Vector2[] targetPoints = new Vector2[sourcePoints.Length];
+
+            for (int j = 0; j < sourcePoints.Length; j++)
+            {
+                targetPoints[j] = new Vector2(
+                    sourcePoints[j].x * scaleX,
+                    sourcePoints[j].y * scaleY
+                );
+            }
+
+            target.SetPath(i, targetPoints);
+        }
+
+        target.offset = source.offset;
+        target.isTrigger = source.isTrigger;
+    }
+
+    // 敵のボックスコライダーをコピーするメソッド
+    private void CopyBoxCollider(BoxCollider2D source, BoxCollider2D target, float scaleX, float scaleY)
+    {
+        target.enabled = false;
+        target.size = new Vector2(
+            source.size.x * scaleX,
+            source.size.y * scaleY
+        );
+        target.offset = new Vector2(
+            source.offset.x * scaleX,
+            source.offset.y * scaleY
+        );
+        target.isTrigger = source.isTrigger;
+    }
+
+    // 敵のサークルコライダーをコピーするメソッド
+    private void CopyCircleCollider(CircleCollider2D source, CircleCollider2D target, float scaleX, float scaleY)
+    {
+        target.enabled = false;
+        float scale = Mathf.Min(scaleX, scaleY);
+        target.radius = source.radius * scale;
+        target.offset = source.offset;
+        target.isTrigger = source.isTrigger;
     }
 
 
