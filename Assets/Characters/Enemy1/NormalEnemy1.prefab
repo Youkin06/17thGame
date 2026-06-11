@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 8656078837001779043}
   - component: {fileID: 7878448151113965468}
   - component: {fileID: 1549196715996179227}
+  - component: {fileID: 6858082878183222295}
   m_Layer: 0
   m_Name: NormalEnemy1
   m_TagString: Enemy
@@ -167,7 +168,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1339216280629442508}
   m_Enabled: 1
   m_AgentTypeID: -1372625422
-  m_Radius: 0.5
+  m_Radius: 3.3
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -286,9 +287,36 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.08757592, y: 0.48508173}
+  m_Offset: {x: 0.09, y: 0.54}
   serializedVersion: 2
-  m_Radius: 3.275037
+  m_Radius: 3.3
+--- !u!50 &6858082878183222295
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1339216280629442508}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &1515431893220387322
 GameObject:
   m_ObjectHideFlags: 0
