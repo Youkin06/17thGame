@@ -232,7 +232,7 @@ public class HijackSystemController : MonoBehaviour
     {
         if (hijackedEnemy == null) return;
 
-        // 1. 敵を解放
+        // 1. 敵を解放 // 移動・Collider有効化により敵の位置がズレる
         hijackedEnemy.ReleaseEnemy();
 
         // 2. プレイヤーの乗っ取り用コライダーを無効化
@@ -245,6 +245,10 @@ public class HijackSystemController : MonoBehaviour
         playerController.ResetMaxSpeed();
         
         // 4. 参照をクリア
+        // 解放した敵の参照を無敵処理のためにローカル変数に保存
+        BaseEnemyController releasedEnemy = hijackedEnemy;
+        Collider2D releasedEnemyCollider = releasedEnemy.GetComponent<Collider2D>();
+        // 乗っ取り対象の参照は消す
         hijackedEnemy = null;
         hijackTimer = 0f;
         
@@ -255,26 +259,33 @@ public class HijackSystemController : MonoBehaviour
             playerController.ResetHijackVisual();
         if (playerUIController != null)
             playerUIController.ResetHijackTimer();
-        
-        StartInvincible();
+
+        Collider2D playerCollider = playerController.GetComponent<Collider2D>(); 
+        StartInvincible(enemyCollider,playerCollider);
 
     
         Debug.Log("敵を解放しました");
     }
+
     //無敵時間開始の関数
-    public void StartInvincible()
+    public void StartInvincible(Collider2D enemyCollider=null, Collider2D playerCollider=null)
     {
         // すでに動いている場合は一度止めてから再開始
         if (invincibleCoroutine != null)
         {
             StopCoroutine(invincibleCoroutine);
         }
-        invincibleCoroutine = StartCoroutine(InvincibleRoutine());
+        invincibleCoroutine = StartCoroutine(InvincibleRoutine(enemyCollider,playerCollider));
     }
 
-    private IEnumerator InvincibleRoutine()
+    // 一時的に無敵にするためのコルーチン
+    private IEnumerator InvincibleRoutine(Collider2D enemyCollider=null, Collider2D playerCollider=null)
     {
         isInvincible = true;
+        if(playerCollider != null && enemyCollider != null)
+        {
+            Physics2D.IgnoreCollision(playerCollider,enemyCollider,true);
+        }
         float elapsed = 0f;
 
         while (elapsed < invincibleDuration)
@@ -296,6 +307,10 @@ public class HijackSystemController : MonoBehaviour
         }
 
         isInvincible = false;
+        if(playerCollider != null && enemyCollider != null)
+        {
+            Physics2D.IgnoreCollision(playerCollider,enemyCollider,false);
+        }
         invincibleCoroutine = null;
     }
 
