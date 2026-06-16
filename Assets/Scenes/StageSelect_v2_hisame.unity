@@ -199,7 +199,10 @@ MonoBehaviour:
   lockedStageSprite: {fileID: 21300000, guid: eed199923d6944a7a8b66946c1a6962b, type: 3}
   lineMoveDuration: 1
   decideButton: {fileID: 1900215389}
-  decideButtonOffsetX: 2
+  decideButtonScaleDuration: 0.5
+  decideButtonStartScale: 0.5
+  decideButtonScaleEase: 27
+  decideButtonOffsetX: 1
   decideButtonOffsetY: 0.5
   decideButtonPrefRight: {fileID: 6568425060670133483, guid: 9e04b4edf02914faebf8afc2608eecbe, type: 3}
   decideButtonPrefUp: {fileID: 6819796275270655104, guid: 1f5e7572d434949af94afa9bd0d7cc27, type: 3}
@@ -217,6 +220,37 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 142.03714, y: -1.8544921, z: -1.4731051}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &161805380
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 161805381}
+  m_Layer: 0
+  m_Name: DecideButton_left_Grp
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &161805381
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 161805380}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.24, y: -6.9105115, z: 0.10537114}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1597,7 +1631,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 4671322370383038647}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
@@ -1921,7 +1955,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 110}
-  m_LocalScale: {x: 0.29039177, y: 0.29039177, z: 0.29039177}
+  m_LocalScale: {x: 0.4957278, y: 0.4957278, z: 0.4957278}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1130666799}
@@ -2400,3 +2434,4 @@ SceneRoots:
   - {fileID: 50024203}
   - {fileID: 261645964}
   - {fileID: 221561957}
+  - {fileID: 161805381}

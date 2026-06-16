@@ -55,7 +55,12 @@ public class StageSelecUIController : MonoBehaviour
     [SerializeField] private float lineMoveDuration = 0.2f;
 
     [Header("決定ボタンのボタンオブジェクト(初期)")]
-    [SerializeField]private Button decideButton;
+    [SerializeField] private Button decideButton;
+
+    [Header("決定ボタンの出現アニメーション")]
+    [SerializeField] private float decideButtonScaleDuration = 0.2f;
+    [SerializeField] private float decideButtonStartScale = 0.8f;
+    [SerializeField] private Ease decideButtonScaleEase = Ease.OutBack;
 
     [Header("決定ボタンのステージボタンに対するオフセット値")]
     [SerializeField] private float decideButtonOffsetX;
@@ -287,12 +292,14 @@ public class StageSelecUIController : MonoBehaviour
             Destroy(decideButton.gameObject);
             this.decideButton = Instantiate(decideButtonPrefRight, instantiatePos, instantiateRot, instantiateParent);
             this.decideButton.onClick.AddListener(DecideStage);
+            PlayDecideButtonScaleAnimation();
         }
         else if(targetPosition.x <= moonPos.x - sideLength)
         {
             Destroy(decideButton.gameObject);
             this.decideButton=Instantiate(decideButtonPrefLeft, instantiatePos, instantiateRot, instantiateParent);
             this.decideButton.onClick.AddListener(DecideStage);
+            PlayDecideButtonScaleAnimation();
         }
         else
         {
@@ -301,12 +308,14 @@ public class StageSelecUIController : MonoBehaviour
                 Destroy(decideButton.gameObject);
                 this.decideButton=Instantiate(decideButtonPrefUp, instantiatePos, instantiateRot, instantiateParent);
                 this.decideButton.onClick.AddListener(DecideStage);
+                PlayDecideButtonScaleAnimation();
             }
             else if(targetPosition.y <= moonPos.y - sideLength)
             {
                 Destroy(decideButton.gameObject);
                 this.decideButton=Instantiate(decideButtonPrefDown, instantiatePos, instantiateRot, instantiateParent);
                 this.decideButton.onClick.AddListener(DecideStage);
+                PlayDecideButtonScaleAnimation();
             }
             else
             {
@@ -314,6 +323,18 @@ public class StageSelecUIController : MonoBehaviour
                 return;
             }
         }
+    }
+
+    //決定ボタンの出現アニメーション
+    private void PlayDecideButtonScaleAnimation()
+    {
+        if (decideButton == null) return;
+
+        Transform decideButtonTransform = decideButton.transform;
+        decideButtonTransform.DOKill();
+        decideButtonTransform.localScale = Vector3.one * decideButtonStartScale;
+        decideButtonTransform.DOScale(Vector3.one, decideButtonScaleDuration)
+            .SetEase(decideButtonScaleEase);
     }
 
     //決定ボタン移動メソッド
