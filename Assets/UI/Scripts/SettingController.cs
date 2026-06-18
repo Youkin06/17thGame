@@ -126,9 +126,6 @@ public class SettingController : MonoBehaviour
         yesButton.onClick.AddListener(PushYesButton);
         noButton.onClick.AddListener(PushNoButton);
 
-        //いったん起動
-        settingContainer.SetActive(true);
-
         // オンオフボタンにそれぞれのメソッドを紐付ける
         muteButton.Setup(MuteChanged);
         displayButton.Setup(DisplayChanged);

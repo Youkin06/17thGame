@@ -53,9 +53,16 @@ public class SettingTabController : MonoBehaviour
         CreateRuntimeMaterialTargets();
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        SelectTab(initialTab, animateMaterial: false);
+        if (hasActiveTab)
+        {
+            ApplyTabState();
+        }
+        else
+        {
+            SelectTab(initialTab, animateMaterial: false);
+        }
     }
 
     private void OnDestroy()

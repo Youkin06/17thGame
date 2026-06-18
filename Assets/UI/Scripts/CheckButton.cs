@@ -101,6 +101,11 @@ public class CheckButton : MonoBehaviour
             return;
         }
 
+        if (!gameObject.activeInHierarchy)
+        {
+            return;
+        }
+
         if (syncVisualRoutine != null)
         {
             StopCoroutine(syncVisualRoutine);
