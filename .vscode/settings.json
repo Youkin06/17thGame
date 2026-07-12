@@ -59,5 +59,6 @@
     "dotrush.roslyn.projectOrSolutionFiles": [
         "c:\\UnityProjects\\17thGame-develop\\17thGame-develop.sln",
         "c:\\UnityProjects\\17thGame-develop\\Assembly-CSharp-Editor.csproj"
-    ]
+    ],
+    "dotnet.defaultSolution": "HijackGame.slnx"
 }
