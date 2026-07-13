@@ -26,6 +26,7 @@ public abstract class BaseEnemyController : MonoBehaviour
     protected Coroutine wanderCo;
 
     protected Animator animator;
+    protected Collider2D enemyCollider;
 
     protected virtual void Start()
     {
@@ -44,6 +45,7 @@ public abstract class BaseEnemyController : MonoBehaviour
         }
         enemyRb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        enemyCollider = GetComponent<Collider2D>();
     }
 
     void Update()
@@ -197,38 +199,82 @@ public abstract class BaseEnemyController : MonoBehaviour
         return false;
     }
 
+    /* 乗っ取り時に自立追跡を停止するメソッド */
     public virtual void StopTracking()
     {
+        //乗っ取り状態に設定
         isHijacked = true;
-        animator.SetBool("isHijacked", true);
-        if (agent != null)
-            agent.enabled = false;
-        if (enemyRb != null)
-            enemyRb.simulated = false;
-        Collider2D col = GetComponent<Collider2D>();
-        if (col != null)
-            col.enabled = false;
-        StopAllCoroutines();
-        isAttacking = false;
-        StopWander();
+        //乗っ取りの見た目に変更
+        SetHijackedVisual(true);
+        //移動を無効に設定
+        SetMovementSystemsEnabled(false);
+        //攻撃を停止
+        StopCombatSystems();
+        //コライダーを無効化
+        SetEnemyColliderEnabled(false);
     }
 
-    public void ReleaseEnemy()
+    /* 敵の乗っ取りを解放するメソッド */
+    public virtual void ReleaseEnemy()
     {
+        //乗っ取り状態を解除
         isHijacked = false;
-        animator.SetBool("isHijacked", false);
+        //通常の見た目に変更
+        SetHijackedVisual(false);
+        //乗っ取り元との親子関係を解除
         transform.SetParent(null);
+        //移動を有効に設定
+        SetMovementSystemsEnabled(true);
+        //コライダーを有効化
+        SetEnemyColliderEnabled(true);
+    }
 
+    /*　見た目を乗っ取り状態に変更するメソッド　*/
+    protected virtual void SetHijackedVisual(bool isHijacked)
+    {
+        if (animator != null)
+        {
+            animator.SetBool("isHijacked", isHijacked);
+        }
+    }
+
+    /* 移動の有効無効を切り替えるメソッド */
+    protected virtual void SetMovementSystemsEnabled(bool enabled)
+    {
         if (agent != null)
         {
-            agent.enabled = true;
-            if (!agent.isOnNavMesh)
+            agent.enabled = enabled;
+
+            if (enabled && !agent.isOnNavMesh)
+            {
                 agent.Warp(transform.position);
+            }
         }
+
         if (enemyRb != null)
-            enemyRb.simulated = true;
-        Collider2D col = GetComponent<Collider2D>();
-        if (col != null)
-            col.enabled = true;
+        {
+            enemyRb.simulated = enabled;
+        }
+
+        if (!enabled)
+        {
+            StopWander();
+        }
+    }
+
+    /* 攻撃を停止するメソッド */
+    protected virtual void StopCombatSystems()
+    {
+        StopAllCoroutines();
+        isAttacking = false;
+    }
+
+    /* コライダーの有効無効を切り替えるメソッド */
+    protected void SetEnemyColliderEnabled(bool enabled)
+    {
+        if (enemyCollider != null)
+        {
+            enemyCollider.enabled = enabled;
+        }
     }
 }
